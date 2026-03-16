@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>사업자 계산기 — 개인vs법인·손익분기·부가세·배달앱 수수료 | shakilabs</title>
+    <meta
+      name="description"
+      content="개인사업자 vs 법인 세후소득 비교, 손익분기점 계산, 간이과세 vs 일반과세 부가세, 배달앱 수수료 비교를 무료로 계산하세요."
+    />
+    <link rel="canonical" href="https://biz.shakilabs.com/" />
+
+    <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
+    <link rel="preconnect" href="https://www.google-analytics.com" crossorigin />
+
+    <link
+      rel="preload"
+      href="/fonts/Pretendard-Regular-subset.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/Pretendard-Bold-subset.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+
+    <meta
+      property="og:title"
+      content="사업자 계산기 — 개인vs법인·손익분기·부가세·배달앱 수수료 | shakilabs"
+    />
+    <meta
+      property="og:description"
+      content="개인사업자 vs 법인 세후소득, 손익분기점, 부가세, 배달앱 수수료를 빠르게 비교하세요."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="ko_KR" />
+    <meta property="og:site_name" content="biz.shakilabs.com" />
+    <meta property="og:url" content="https://biz.shakilabs.com/" />
+    <meta property="og:image" content="https://biz.shakilabs.com/og-image.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="사업자 계산기 — 개인vs법인·손익분기·부가세·배달앱 수수료 | shakilabs"
+    />
+    <meta
+      name="twitter:description"
+      content="개인사업자 vs 법인, 손익분기점, 부가세, 배달앱 수수료를 한 번에 확인하세요."
+    />
+    <meta name="twitter:image" content="https://biz.shakilabs.com/og-image.png" />
+    <meta name="content-language" content="ko" />
+    <meta name="geo.region" content="KR" />
+    <meta name="geo.placename" content="대한민국" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="theme-color" content="#059669" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "사업자 계산기",
+        "url": "https://biz.shakilabs.com",
+        "applicationCategory": "FinanceApplication",
+        "operatingSystem": "Web",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "KRW" },
+        "inLanguage": "ko"
+      }
+    </script>
+
+    <script>
+      (() => {
+        try {
+          const key = "biz-calculator:theme:v1";
+          const saved = localStorage.getItem(key);
+          const prefersDark =
+            typeof window.matchMedia === "function" &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches;
+          const theme =
+            saved === "dark" || saved === "light"
+              ? saved
+              : prefersDark
+                ? "dark"
+                : "light";
+
+          if (theme === "dark") {
+            document.documentElement.classList.add("dark");
+          }
+        } catch {
+          // no-op
+        }
+      })();
+    </script>
+    <style>
+      :root {
+        --background: 210 40% 98%;
+        --foreground: 222 47% 11%;
+        --muted: 210 40% 96%;
+        --muted-foreground: 215 16% 37%;
+        --card: 0 0% 100%;
+        --card-foreground: 222 47% 11%;
+        --primary: 160 84% 39%;
+        --primary-foreground: 0 0% 100%;
+        --secondary: 152 100% 97%;
+        --secondary-foreground: 222 47% 11%;
+        --accent: 152 95% 95%;
+        --accent-foreground: 160 74% 26%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 222 47% 11%;
+        --destructive: 0 72% 52%;
+        --destructive-foreground: 210 40% 98%;
+        --border: 214 16% 85%;
+        --input: 214 16% 85%;
+        --ring: 160 84% 39%;
+        --radius: 0.4rem;
+        --profit: 151 64% 37%;
+        --profit-foreground: 0 0% 100%;
+        --fee: 0 72% 52%;
+        --fee-foreground: 0 0% 100%;
+      }
+
+      .dark {
+        --background: 222 47% 11%;
+        --foreground: 210 40% 96%;
+        --muted: 217 33% 17%;
+        --muted-foreground: 215 20% 72%;
+        --card: 217 33% 17%;
+        --card-foreground: 210 40% 96%;
+        --primary: 160 72% 47%;
+        --primary-foreground: 160 90% 8%;
+        --secondary: 216 28% 18%;
+        --secondary-foreground: 210 40% 96%;
+        --accent: 216 26% 20%;
+        --accent-foreground: 152 100% 79%;
+        --popover: 217 33% 17%;
+        --popover-foreground: 210 40% 96%;
+        --destructive: 0 72% 58%;
+        --destructive-foreground: 0 0% 100%;
+        --border: 214 16% 26%;
+        --input: 214 16% 30%;
+        --ring: 160 72% 47%;
+        --profit: 151 60% 54%;
+        --profit-foreground: 0 0% 100%;
+        --fee: 0 62% 58%;
+        --fee-foreground: 0 0% 100%;
+      }
+
+      html {
+        scroll-behavior: auto;
+        font-size: 16px;
+      }
+
+      body {
+        background: hsl(var(--background));
+        color: hsl(var(--foreground));
+        font-family: "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", "Segoe UI", sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        overflow-x: hidden;
+        margin: 0;
+        color-scheme: light dark;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <noscript>
+      <section style="max-width:920px;margin:0 auto;padding:20px 16px;line-height:1.6;">
+        <h1 style="font-size:28px;line-height:1.3;margin:0 0 12px;">사업자 계산기</h1>
+        <p style="margin:0 0 10px;">개인 vs 법인, 손익분기점, 부가세, 배달앱 수수료를 무료로 계산하세요.</p>
+        <ul style="margin:0;padding-left:20px;">
+          <li><a href="/individual-vs-corp">개인 vs 법인 세후소득</a></li>
+          <li><a href="/break-even">손익분기점 계산</a></li>
+          <li><a href="/vat-compare">간이과세 vs 일반과세</a></li>
+          <li><a href="/delivery-fee">배달앱 수수료 비교</a></li>
+          <li><a href="/about">서비스 안내</a></li>
+        </ul>
+      </section>
+    </noscript>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

@@ -1,0 +1,379 @@
+/* Critical CSS는 index.html에 inline으로 이동 */
+
+/* 로컬 폰트 — CDN 의존 없이 /public/fonts/ 서빙 */
+@font-face {
+  font-family: "Pretendard";
+  src: url("/fonts/Pretendard-Regular-subset.woff2") format("woff2"),
+       url("/fonts/Pretendard-Regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("/fonts/Pretendard-SemiBold-subset.woff2") format("woff2"),
+       url("/fonts/Pretendard-SemiBold.woff") format("woff");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("/fonts/Pretendard-Bold-subset.woff2") format("woff2"),
+       url("/fonts/Pretendard-Bold.woff") format("woff");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "GmarketSans";
+  src: url("/fonts/GmarketSansBold.woff") format("woff");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --status-success: 148 61% 36%;
+    --status-warning: 43 88% 43%;
+    --status-caution: 28 82% 48%;
+    --status-danger: 0 70% 52%;
+    --status-info: 212 83% 45%;
+  }
+
+  .dark {
+    --status-success: 148 63% 66%;
+    --status-warning: 43 95% 70%;
+    --status-caution: 28 91% 66%;
+    --status-danger: 0 86% 73%;
+    --status-info: 205 90% 72%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  :where(
+      a,
+      button,
+      input,
+      select,
+      textarea,
+      summary,
+      [role="button"],
+      [tabindex]:not([tabindex="-1"])
+    ):focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+    border-radius: 3px;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  .retro-panel-content {
+    @apply px-4 py-3 sm:px-5 sm:py-4;
+  }
+
+  .retro-panel {
+    @apply rounded-2xl border border-border bg-card shadow-sm;
+  }
+
+  .retro-panel-muted {
+    @apply rounded-2xl border border-border bg-muted/30 shadow-sm;
+  }
+
+  .retro-step {
+    @apply flex items-center gap-2 rounded-xl border border-border/70 bg-background/65 px-3 py-2;
+  }
+
+  .retro-step-index {
+    @apply inline-flex h-5 w-5 items-center justify-center rounded-full bg-primary text-tiny font-bold text-primary-foreground;
+  }
+
+  .retro-titlebar {
+    @apply flex items-center justify-between gap-3 border-b border-border/70 bg-muted/35 px-4 py-3 sm:px-5 sm:py-3.5 text-foreground;
+  }
+
+  .retro-title {
+    @apply text-heading font-semibold tracking-normal font-brand;
+  }
+
+  .retro-kbd {
+    @apply shrink-0 inline-flex items-center rounded-full border border-border/80 bg-background/60 px-2.5 py-1 text-caption font-semibold text-muted-foreground;
+  }
+
+  .retro-link {
+    @apply font-semibold text-primary hover:text-primary/80 hover:underline underline-offset-2;
+  }
+
+  .retro-input {
+    @apply w-full rounded-xl border border-input bg-card dark:bg-background px-3 py-2.5 text-body placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors;
+    box-shadow: inset 0 1px 2px hsl(var(--foreground) / 0.04);
+  }
+
+  .retro-details {
+    @apply overflow-hidden rounded-xl border border-border/60 bg-muted/20;
+  }
+
+  .retro-details-summary {
+    @apply touch-target flex list-none cursor-pointer items-center justify-between gap-2 px-3 py-2 text-caption font-semibold text-foreground transition-colors;
+  }
+
+  .retro-details-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .retro-details-summary:hover {
+    @apply bg-background/40;
+  }
+
+  .retro-details-chevron {
+    @apply text-tiny text-muted-foreground transition-transform duration-200;
+  }
+
+  details[open] > .retro-details-summary {
+    @apply border-b border-border/60 bg-background/35;
+  }
+
+  details[open] > .retro-details-summary .retro-details-chevron {
+    @apply rotate-180;
+  }
+
+  .retro-checkbox {
+    -webkit-appearance: none;
+    appearance: none;
+    @apply inline-grid h-4 w-4 shrink-0 place-content-center rounded-md border border-input bg-background align-middle transition-colors;
+  }
+
+  .retro-checkbox::before {
+    content: "";
+    width: 0.6rem;
+    height: 0.6rem;
+    transform: scale(0);
+    transition: transform 0.16s ease-in-out;
+    clip-path: polygon(14% 52%, 0 66%, 40% 100%, 100% 18%, 84% 4%, 38% 68%);
+    background: hsl(var(--primary-foreground));
+  }
+
+  .retro-checkbox:checked {
+    border-color: hsl(var(--primary));
+    background: hsl(var(--primary));
+  }
+
+  .retro-checkbox:checked::before {
+    transform: scale(1);
+  }
+
+  .retro-checkbox:hover:not(:disabled) {
+    border-color: hsl(var(--primary) / 0.65);
+  }
+
+  .retro-checkbox:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
+
+  .retro-checkbox:disabled {
+    @apply cursor-not-allowed opacity-45;
+  }
+
+  .retro-radio {
+    -webkit-appearance: none;
+    appearance: none;
+    @apply inline-grid h-4 w-4 shrink-0 place-content-center rounded-full border border-input bg-background align-middle transition-colors;
+  }
+
+  .retro-radio::before {
+    content: "";
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 9999px;
+    transform: scale(0);
+    transition: transform 0.16s ease-in-out;
+    background: hsl(var(--primary-foreground));
+  }
+
+  .retro-radio:checked {
+    border-color: hsl(var(--primary));
+    background: hsl(var(--primary));
+  }
+
+  .retro-radio:checked::before {
+    transform: scale(1);
+  }
+
+  .retro-radio:hover:not(:disabled) {
+    border-color: hsl(var(--primary) / 0.65);
+  }
+
+  .retro-radio:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
+
+  .retro-radio:disabled {
+    @apply cursor-not-allowed opacity-45;
+  }
+
+  .touch-target {
+    @apply min-h-11 min-w-11;
+  }
+
+  .scroll-hint {
+    @apply px-3 py-1 text-tiny text-muted-foreground sm:hidden;
+  }
+
+  .retro-chip {
+    @apply inline-flex items-center text-caption font-medium text-muted-foreground;
+  }
+
+  .compare-hover-row > td {
+    @apply transition-colors;
+  }
+
+  .compare-hover-row:hover > td {
+    @apply bg-accent/30;
+  }
+
+  .compare-hover-row-best:hover > td {
+    @apply bg-emerald-100/70 dark:bg-emerald-950/25;
+  }
+
+  .compare-hover-row-muted:hover > td {
+    @apply bg-muted/80;
+  }
+
+  .compare-cell-highlight {
+    @apply bg-emerald-50/70 dark:bg-emerald-950/15;
+  }
+
+  .compare-cell-caution {
+    @apply bg-orange-50/70 dark:bg-orange-950/15;
+  }
+
+  .compare-cell-value {
+    @apply text-caption font-semibold text-foreground;
+    word-break: keep-all;
+    text-wrap: balance;
+  }
+
+
+  .retro-stat-grid {
+    @apply grid grid-cols-2 gap-2 sm:grid-cols-4;
+  }
+
+  .retro-stat {
+    @apply retro-panel-muted p-3.5;
+  }
+
+  .retro-stat-label {
+    @apply text-caption uppercase tracking-wide text-muted-foreground;
+  }
+
+  .retro-stat-value {
+    @apply mt-1 text-heading font-bold tabular-nums;
+  }
+
+  .retro-board-list {
+    @apply overflow-hidden divide-y divide-border/80 rounded-xl border border-border/70 bg-background;
+  }
+
+  .retro-board-item {
+    @apply flex items-center justify-between gap-3 px-4 py-2 sm:px-5 sm:py-2.5 text-body transition-colors hover:bg-accent/25;
+  }
+
+}
+
+/* Vue Transition — 공통 전환 애니메이션 */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.15s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.slide-fade-enter-active,
+.slide-fade-leave-active {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.slide-fade-enter-from {
+  opacity: 0;
+  transform: translateY(-6px);
+}
+
+.slide-fade-leave-to {
+  opacity: 0;
+  transform: translateY(6px);
+}
+
+@media (max-width: 639px) {
+  .text-display {
+    font-size: 1.5rem;
+    line-height: 1.15;
+  }
+
+  .text-heading,
+  .retro-title {
+    font-size: 0.9375rem;
+    line-height: 1.3;
+  }
+
+  .text-body {
+    font-size: 0.8125rem;
+    line-height: 1.45;
+  }
+
+  .text-caption {
+    font-size: 0.75rem;
+    line-height: 1.4;
+  }
+
+  .text-tiny {
+    font-size: 0.65625rem;
+    line-height: 1.3;
+  }
+
+  .retro-titlebar {
+    padding-left: 0.875rem;
+    padding-right: 0.875rem;
+    gap: 0.625rem;
+  }
+
+  .retro-panel-content {
+    padding-left: 0.875rem;
+    padding-right: 0.875rem;
+  }
+
+  .retro-board-item {
+    padding-left: 0.875rem;
+    padding-right: 0.875rem;
+    gap: 0.625rem;
+  }
+}
