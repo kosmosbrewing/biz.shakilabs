@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import SEOHead from "@/components/common/SEOHead.vue";
-import { calcBreakEven } from "@/utils/bizCalc";
+import { calcBreakEven } from "@/utils/bizBreakEvenCalc";
 import { INDUSTRY_EXPENSE_RATIOS } from "@/data/bizConstants";
 import { formatWon } from "@/lib/utils";
 

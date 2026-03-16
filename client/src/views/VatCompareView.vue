@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import SEOHead from "@/components/common/SEOHead.vue";
-import { calcVatCompare } from "@/utils/bizCalc";
+import { calcVatCompare } from "@/utils/bizVatCalc";
 import { SIMPLIFIED_VAT_RATES } from "@/data/bizConstants";
 import { formatWon } from "@/lib/utils";
 
@@ -119,7 +119,7 @@ const presets = [
     <div class="retro-panel p-4 sm:p-5 mb-6">
       <!-- 간이과세 적격 여부 -->
       <div v-if="!result.isSimplifiedEligible" class="mb-4 rounded-lg bg-destructive/10 p-3 text-caption text-destructive font-medium">
-        연 매출 1억 800만원 이상으로 간이과세 적용이 불가합니다. 일반과세만 가능합니다.
+        선택한 업종은 연 매출 {{ formatWon(result.simplifiedThreshold) }} 이상이면 간이과세 적용이 불가합니다. 일반과세만 가능합니다.
       </div>
 
       <div v-if="result.isSimplifiedExempt && result.isSimplifiedEligible" class="mb-4 rounded-lg bg-primary/10 p-3 text-caption text-primary font-medium">
@@ -162,7 +162,8 @@ const presets = [
     <div class="retro-panel p-4 text-tiny text-muted-foreground space-y-1">
       <p class="font-semibold text-foreground">과세 유형 기준 (2026년)</p>
       <ul class="list-disc pl-4 space-y-0.5">
-        <li>간이과세: 연 매출 1억 800만원 미만 (부동산임대·유흥업 제외 시 4,800만원 미만 납부 면제)</li>
+        <li>간이과세 적용 기준: 연 매출 1억 400만원 미만, 다만 부동산임대업·과세유흥장소는 4,800만원 미만</li>
+        <li>간이과세 납부의무 면제: 연 매출 4,800만원 미만</li>
         <li>일반과세: 부가세 = 매출세액(10%) - 매입세액</li>
         <li>간이과세: 부가세 = 매출액 × 업종별 부가가치율 × 10%</li>
       </ul>

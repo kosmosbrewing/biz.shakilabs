@@ -44,19 +44,49 @@ export const SOCIAL_INSURANCE = {
   industrialAccident: { employer: 0.0147 },
 } as const;
 
-// 간이과세 업종별 부가가치율 (2026년 기준)
-export const SIMPLIFIED_VAT_RATES: Record<string, { label: string; rate: number }> = {
-  retail: { label: "소매업", rate: 0.15 },
-  manufacturing: { label: "제조업·농림어업", rate: 0.20 },
-  food: { label: "음식점업", rate: 0.40 },
-  service: { label: "서비스업", rate: 0.30 },
-  realestate: { label: "부동산임대업", rate: 0.40 },
-  entertainment: { label: "유흥업", rate: 0.40 },
-};
+export const DEFAULT_SIMPLIFIED_TAX_THRESHOLD = 104_000_000;
+export const SPECIAL_SIMPLIFIED_TAX_THRESHOLD = 48_000_000;
+export const SIMPLIFIED_TAX_EXEMPT_THRESHOLD = 48_000_000;
 
-// 간이과세 기준 (2026년)
-export const SIMPLIFIED_TAX_THRESHOLD = 108_000_000; // 연 매출 1억 800만원 미만
-export const SIMPLIFIED_TAX_EXEMPT_THRESHOLD = 48_000_000; // 연 매출 4,800만원 미만 → 납부 면제
+export interface SimplifiedVatRateInfo {
+  label: string;
+  rate: number;
+  eligibilityThreshold: number;
+}
+
+// 간이과세 업종별 부가가치율 (2026년 기준)
+export const SIMPLIFIED_VAT_RATES: Record<string, SimplifiedVatRateInfo> = {
+  retail: {
+    label: "소매업",
+    rate: 0.15,
+    eligibilityThreshold: DEFAULT_SIMPLIFIED_TAX_THRESHOLD,
+  },
+  manufacturing: {
+    label: "제조업·농림어업",
+    rate: 0.20,
+    eligibilityThreshold: DEFAULT_SIMPLIFIED_TAX_THRESHOLD,
+  },
+  food: {
+    label: "음식점업",
+    rate: 0.15,
+    eligibilityThreshold: DEFAULT_SIMPLIFIED_TAX_THRESHOLD,
+  },
+  service: {
+    label: "그 밖의 서비스업",
+    rate: 0.30,
+    eligibilityThreshold: DEFAULT_SIMPLIFIED_TAX_THRESHOLD,
+  },
+  realestate: {
+    label: "부동산임대업",
+    rate: 0.40,
+    eligibilityThreshold: SPECIAL_SIMPLIFIED_TAX_THRESHOLD,
+  },
+  entertainment: {
+    label: "과세유흥장소",
+    rate: 0.40,
+    eligibilityThreshold: SPECIAL_SIMPLIFIED_TAX_THRESHOLD,
+  },
+};
 
 // 배달앱 수수료율 (2026년 기준)
 export interface DeliveryAppFee {

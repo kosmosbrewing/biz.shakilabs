@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import SEOHead from "@/components/common/SEOHead.vue";
-import { calcDeliveryFees } from "@/utils/bizCalc";
+import { calcDeliveryFees } from "@/utils/bizDeliveryCalc";
 import { formatWon, formatPercent } from "@/lib/utils";
 
 const orderAmount = ref(20_000);

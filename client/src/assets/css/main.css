@@ -290,7 +290,7 @@
   }
 
   .retro-stat-label {
-    @apply text-caption uppercase tracking-wide text-muted-foreground;
+    @apply whitespace-nowrap truncate text-caption uppercase tracking-wide text-muted-foreground;
   }
 
   .retro-stat-value {
