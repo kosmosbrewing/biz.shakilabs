@@ -36,7 +36,7 @@ onMounted(() => {
           <div class="flex h-full w-full items-center gap-2.5 sm:gap-4">
             <RouterLink
               to="/"
-              aria-label="biz.shakilabs.com 홈"
+              aria-label="ShakiLabs 홈"
               class="inline-flex h-8 w-8 shrink-0 items-center justify-center gap-1 px-0.5 text-muted-foreground transition-colors hover:text-foreground sm:w-auto sm:justify-start sm:gap-1.5"
             >
               <span
@@ -46,7 +46,7 @@ onMounted(() => {
                 <img src="/favicon.png" alt="" class="h-4 w-4 shrink-0" />
               </span>
               <span class="hidden sm:inline font-brand text-tiny font-semibold tracking-wide text-foreground/90">
-                Biz by ShakiLabs
+                ShakiLabs
               </span>
             </RouterLink>
             <div class="flex h-full flex-1 items-center justify-center overflow-hidden text-center font-brand text-tiny sm:text-body">

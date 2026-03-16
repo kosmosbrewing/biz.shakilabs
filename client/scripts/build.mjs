@@ -15,9 +15,10 @@ const viteSsgBin = resolve(
 
 const sitemapRoutes = [
   { path: "/", changefreq: "weekly", priority: "1.0" },
-  { path: "/delay-interest", changefreq: "monthly", priority: "0.8" },
-  { path: "/jeonse-vs-wolse", changefreq: "monthly", priority: "0.8" },
-  { path: "/brokerage-fee", changefreq: "monthly", priority: "0.8" },
+  { path: "/individual-vs-corp", changefreq: "monthly", priority: "0.8" },
+  { path: "/break-even", changefreq: "monthly", priority: "0.8" },
+  { path: "/vat-compare", changefreq: "monthly", priority: "0.8" },
+  { path: "/delivery-fee", changefreq: "monthly", priority: "0.8" },
   { path: "/about", changefreq: "monthly", priority: "0.4" },
   { path: "/terms", changefreq: "yearly", priority: "0.3" },
   { path: "/privacy", changefreq: "yearly", priority: "0.3" },
@@ -33,7 +34,7 @@ function resolveBuildDate() {
 }
 
 function renderSitemap(buildDate) {
-  const baseUrl = "https://house.shakilabs.com";
+  const baseUrl = "https://biz.shakilabs.com";
   const urls = sitemapRoutes
     .map(
       ({ path, changefreq, priority }) => `  <url>

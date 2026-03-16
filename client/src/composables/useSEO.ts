@@ -3,9 +3,12 @@ import { toValue, type MaybeRefOrGetter } from "vue";
 import { useRoute } from "vue-router";
 import { getSiteUrl } from "@/lib/site";
 
-const TITLE_SUFFIX = " | 오픈마켓 수수료 계산기";
+const TITLE_SUFFIX = " | 사업자 계산기";
+const DEFAULT_TITLE = "사업자 계산기";
 const LEGACY_TITLE_SUFFIXES = [
+  " | biz.shakilabs.com",
   " | 오픈마켓 수수료 비교 계산기",
+  " | 오픈마켓 수수료 계산기",
   " | ShakiLabs",
   TITLE_SUFFIX,
 ] as const;
@@ -32,10 +35,10 @@ function normalizeTitle(rawTitle: string): string {
   }
 
   if (!baseTitle) {
-    return `오픈마켓 수수료 비교${TITLE_SUFFIX}`;
+    return DEFAULT_TITLE;
   }
 
-  return `${baseTitle}${TITLE_SUFFIX}`;
+  return baseTitle.includes(" | ") ? baseTitle : `${baseTitle}${TITLE_SUFFIX}`;
 }
 
 export function useSEO({

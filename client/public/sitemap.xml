@@ -1,43 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://house.shakilabs.com/</loc>
+    <loc>https://biz.shakilabs.com/</loc>
     <lastmod>2026-03-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://house.shakilabs.com/delay-interest</loc>
+    <loc>https://biz.shakilabs.com/individual-vs-corp</loc>
     <lastmod>2026-03-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://house.shakilabs.com/jeonse-vs-wolse</loc>
+    <loc>https://biz.shakilabs.com/break-even</loc>
     <lastmod>2026-03-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://house.shakilabs.com/brokerage-fee</loc>
+    <loc>https://biz.shakilabs.com/vat-compare</loc>
     <lastmod>2026-03-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://house.shakilabs.com/about</loc>
+    <loc>https://biz.shakilabs.com/delivery-fee</loc>
+    <lastmod>2026-03-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://biz.shakilabs.com/about</loc>
     <lastmod>2026-03-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://house.shakilabs.com/terms</loc>
+    <loc>https://biz.shakilabs.com/terms</loc>
     <lastmod>2026-03-16</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://house.shakilabs.com/privacy</loc>
+    <loc>https://biz.shakilabs.com/privacy</loc>
     <lastmod>2026-03-16</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
