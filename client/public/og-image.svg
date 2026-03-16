@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0%" x2="100%" y1="0%" y2="100%">
+      <stop offset="0%" stop-color="#064E3B" />
+      <stop offset="100%" stop-color="#059669" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)" />
+  <circle cx="1030" cy="98" r="180" fill="rgba(255,255,255,0.08)" />
+  <circle cx="180" cy="560" r="220" fill="rgba(255,255,255,0.06)" />
+  <rect x="72" y="64" width="104" height="44" rx="14" fill="#ffffff" fill-opacity="0.12" />
+  <text x="124" y="92" fill="#ffffff" font-family="Pretendard, sans-serif" font-size="24" font-weight="800" text-anchor="middle">BIZ</text>
+  <text x="72" y="210" fill="#ffffff" font-family="Pretendard, sans-serif" font-size="62" font-weight="800">사업자 비교 계산기</text>
+  <text x="72" y="278" fill="#A7F3D0" font-family="Pretendard, sans-serif" font-size="28" font-weight="500">
+    개인 vs 법인 · 손익분기점 · 부가세 · 배달앱 수수료
+  </text>
+  <g transform="translate(72 356)">
+    <rect width="220" height="62" rx="22" fill="#ffffff" fill-opacity="0.12" />
+    <text x="110" y="39" fill="#ffffff" font-family="Pretendard, sans-serif" font-size="26" font-weight="700" text-anchor="middle">개인 vs 법인</text>
+  </g>
+  <g transform="translate(312 356)">
+    <rect width="200" height="62" rx="22" fill="#ffffff" fill-opacity="0.12" />
+    <text x="100" y="39" fill="#ffffff" font-family="Pretendard, sans-serif" font-size="26" font-weight="700" text-anchor="middle">손익분기점</text>
+  </g>
+  <g transform="translate(532 356)">
+    <rect width="200" height="62" rx="22" fill="#ffffff" fill-opacity="0.12" />
+    <text x="100" y="39" fill="#ffffff" font-family="Pretendard, sans-serif" font-size="26" font-weight="700" text-anchor="middle">부가세 비교</text>
+  </g>
+  <g transform="translate(752 356)">
+    <rect width="260" height="62" rx="22" fill="#ffffff" fill-opacity="0.12" />
+    <text x="130" y="39" fill="#ffffff" font-family="Pretendard, sans-serif" font-size="26" font-weight="700" text-anchor="middle">배달앱 수수료</text>
+  </g>
+  <text x="72" y="550" fill="#D1FAE5" font-family="Pretendard, sans-serif" font-size="24" font-weight="600">
+    biz.shakilabs.com
+  </text>
+</svg>
