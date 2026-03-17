@@ -10,6 +10,9 @@ const tabs = [
   { key: "break-even", label: "손익분기점", to: "/break-even" },
   { key: "vat-compare", label: "부가세 비교", to: "/vat-compare" },
   { key: "delivery-fee", label: "배달앱 수수료", to: "/delivery-fee" },
+  { key: "corp-tax", label: "법인세 계산", to: "/corp-tax" },
+  { key: "car-expense", label: "차량 경비", to: "/car-expense" },
+  { key: "meeting-cost", label: "회의 비용", to: "/meeting-cost" },
 ] as const;
 
 const activePath = computed(() => route.path);

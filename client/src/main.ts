@@ -4,6 +4,7 @@ import App from "./App.vue";
 import { createScrollBehavior, routes, setupRouterGuards } from "./router";
 import "./assets/css/main.css";
 import { initAnalytics, trackEvent } from "./lib/analytics";
+import { initSentry } from "./lib/sentry";
 import { useConstantsStore } from "@/stores/constants";
 
 let hasRegisteredGlobalErrorTracking = false;
@@ -77,6 +78,7 @@ export const createApp = ViteSSG(
     registerGlobalErrorTracking();
 
     if (isClient) {
+      initSentry(app);
       const constantsStore = useConstantsStore(pinia);
       try {
         await constantsStore.loadConstants();

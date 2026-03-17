@@ -1,0 +1,57 @@
+<script setup lang="ts">
+import { computed, ref } from "vue";
+import FreshBadge from "@/components/common/FreshBadge.vue";
+import SEOHead from "@/components/common/SEOHead.vue";
+import { BIZ_SERVICE_UPDATED_AT } from "@/data/bizExpansionData";
+import { formatPercent, formatWon } from "@/lib/utils";
+import { calculateCarExpenseDeduction } from "@/utils/bizExpansionCalc";
+
+const seoTitle = "업무용 차량 경비 처리 계산기 | 업무 사용비율 기준 손금";
+const seoDescription = "업무용 차량 관련 비용과 업무 사용비율을 넣으면 손금 인정액과 절세 효과를 계산합니다.";
+
+const annualCost = ref(12_000_000);
+const businessUseRate = ref(0.8);
+const taxRate = ref(0.24);
+const result = computed(() => calculateCarExpenseDeduction({
+  annualCost: annualCost.value,
+  businessUseRate: businessUseRate.value,
+  taxRate: taxRate.value,
+}));
+</script>
+
+<template>
+  <SEOHead :title="seoTitle" :description="seoDescription" />
+
+  <div class="container space-y-5 py-5 max-w-4xl">
+    <div class="retro-panel overflow-hidden">
+      <div class="retro-titlebar rounded-t-2xl">
+        <h1 class="retro-title">업무용 차량 경비 처리</h1>
+        <FreshBadge :message="`${BIZ_SERVICE_UPDATED_AT} 기준`" />
+      </div>
+      <div class="retro-panel-content grid gap-3 md:grid-cols-3">
+        <input v-model.number="annualCost" type="number" min="100000" class="retro-input" placeholder="연간 차량비" />
+        <input v-model.number="businessUseRate" type="number" min="0.1" max="1" step="0.05" class="retro-input" placeholder="업무 사용비율" />
+        <input v-model.number="taxRate" type="number" min="0.06" max="0.5" step="0.01" class="retro-input" placeholder="법인세율" />
+      </div>
+    </div>
+
+    <div class="grid gap-3 md:grid-cols-3">
+      <div class="retro-panel-muted px-4 py-4">
+        <p class="text-tiny text-muted-foreground">손금 인정액</p>
+        <p class="mt-2 text-h2 font-bold text-primary">{{ formatWon(result.deductibleAmount) }}</p>
+      </div>
+      <div class="retro-panel-muted px-4 py-4">
+        <p class="text-tiny text-muted-foreground">사적 사용분</p>
+        <p class="mt-2 text-h2 font-bold text-foreground">{{ formatWon(result.nonDeductibleAmount) }}</p>
+      </div>
+      <div class="retro-panel-muted px-4 py-4">
+        <p class="text-tiny text-muted-foreground">예상 절세 효과</p>
+        <p class="mt-2 text-h2 font-bold text-foreground">{{ formatWon(result.taxSaving) }}</p>
+      </div>
+    </div>
+
+    <div class="retro-panel px-4 py-4 text-caption text-foreground">
+      업무 사용비율 {{ formatPercent(businessUseRate, 0) }} 기준입니다. {{ result.logbookAdvice }}.
+    </div>
+  </div>
+</template>

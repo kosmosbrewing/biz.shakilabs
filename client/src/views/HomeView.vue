@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { RouterLink } from "vue-router";
-import { Building2, TrendingUp, Receipt, Truck } from "lucide-vue-next";
+import { Building2, TrendingUp, Receipt, Truck, CarFront, Calculator, HandCoins } from "lucide-vue-next";
+import RelatedServices from "@/components/common/RelatedServices.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 
 const tools = [
@@ -28,13 +29,60 @@ const tools = [
     to: "/delivery-fee",
     icon: Truck,
   },
+  {
+    title: "법인세 계산",
+    desc: "과세표준 기준 예상 법인세와 실효세율을 빠르게 계산합니다.",
+    to: "/corp-tax",
+    icon: Calculator,
+  },
+  {
+    title: "업무용 차량 경비",
+    desc: "업무 사용비율에 따라 차량비 손금 인정액을 계산합니다.",
+    to: "/car-expense",
+    icon: CarFront,
+  },
+  {
+    title: "회의 비용 계산",
+    desc: "회의 인원과 빈도를 기준으로 연간 예산을 계산합니다.",
+    to: "/meeting-cost",
+    icon: HandCoins,
+  },
 ] as const;
+
+const faqItems = [
+  {
+    q: "biz.shakilabs.com에서는 어떤 계산기를 제공하나요?",
+    a: "개인사업자 vs 법인 비교, 손익분기점 계산, 부가세 비교, 배달앱 수수료 비교, 법인세 계산, 차량 경비와 회의비 계산까지 제공합니다.",
+  },
+  {
+    q: "개인사업자와 법인 비교 결과는 실제 신고액과 같나요?",
+    a: "아닙니다. 대표적인 세율과 비용 구조를 기준으로 단순화한 참고용 계산이며 실제 공제와 감면에 따라 달라질 수 있습니다.",
+  },
+  {
+    q: "배달앱 수수료 비교는 어떤 상황에서 유용한가요?",
+    a: "플랫폼별 수수료 차이로 같은 매출에서도 남는 금액이 어떻게 달라지는지 빠르게 가늠할 때 유용합니다.",
+  },
+] as const;
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqItems.map((faq) => ({
+    "@type": "Question",
+    name: faq.q,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: faq.a,
+    },
+  })),
+};
 </script>
 
 <template>
   <SEOHead
     title="사업자 계산기 — 개인vs법인·손익분기·부가세·배달앱 수수료"
     description="개인사업자 vs 법인 세후소득, 손익분기점, 간이과세 vs 일반과세, 배달앱 수수료를 무료로 계산하세요."
+    :json-ld="faqJsonLd"
   />
 
   <div class="container py-8 sm:py-12">
@@ -77,6 +125,32 @@ const tools = [
           <li>법적 효력이 없는 참고용 계산입니다. 정확한 세무는 세무사 상담을 권장합니다.</li>
         </ul>
       </div>
+    </section>
+
+    <section class="mt-6 max-w-3xl mx-auto">
+      <div class="retro-panel overflow-hidden">
+        <div class="retro-titlebar rounded-t-2xl">
+          <h2 class="retro-title">자주 묻는 질문</h2>
+        </div>
+        <div class="retro-panel-content space-y-3">
+          <details
+            v-for="faq in faqItems"
+            :key="faq.q"
+            class="retro-panel-muted p-4"
+          >
+            <summary class="cursor-pointer list-none text-body font-semibold text-foreground">
+              {{ faq.q }}
+            </summary>
+            <p class="mt-2 text-caption leading-relaxed text-muted-foreground">
+              {{ faq.a }}
+            </p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section class="mt-6 max-w-3xl mx-auto">
+      <RelatedServices />
     </section>
   </div>
 </template>
