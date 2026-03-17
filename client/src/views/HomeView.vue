@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { RouterLink } from "vue-router";
-import { Building2, TrendingUp, Receipt, Truck, CarFront, Calculator, HandCoins } from "lucide-vue-next";
+import { Building2, TrendingUp, Receipt, Truck, CarFront, Calculator, HandCoins, ArrowRight, AlertCircle } from "lucide-vue-next";
+import { ActionCard } from "@/components/ui/action-card";
+import { Card, CardContent } from "@/components/ui/card";
 import RelatedServices from "@/components/common/RelatedServices.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 
@@ -96,35 +98,47 @@ const faqJsonLd = {
     </section>
 
     <div class="grid gap-4 sm:grid-cols-2 max-w-3xl mx-auto">
-      <RouterLink
+      <ActionCard
         v-for="tool in tools"
         :key="tool.to"
-        :to="tool.to"
-        class="group retro-panel p-5 sm:p-6 flex gap-4 items-start hover:border-primary/40 transition-colors"
+        as-child
       >
-        <span class="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary group-hover:bg-primary/20 transition-colors">
-          <component :is="tool.icon" class="h-5 w-5" />
-        </span>
-        <div class="min-w-0">
-          <h2 class="text-heading font-semibold text-foreground group-hover:text-primary transition-colors">
-            {{ tool.title }}
-          </h2>
-          <p class="mt-1 text-caption text-muted-foreground">
-            {{ tool.desc }}
-          </p>
-        </div>
-      </RouterLink>
+        <RouterLink :to="tool.to" class="flex gap-4 items-start">
+          <span class="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary group-hover:bg-primary/20 transition-colors">
+            <component :is="tool.icon" class="h-5 w-5" />
+          </span>
+          <div class="min-w-0">
+            <h2 class="text-heading font-semibold text-foreground group-hover:text-primary transition-colors">
+              {{ tool.title }}
+            </h2>
+            <p class="mt-1 text-caption text-muted-foreground">
+              {{ tool.desc }}
+            </p>
+            <p class="mt-2 inline-flex items-center gap-1 text-caption font-semibold text-primary">
+              계산하기
+              <ArrowRight class="h-3.5 w-3.5" />
+            </p>
+          </div>
+        </RouterLink>
+      </ActionCard>
     </div>
 
     <section class="mt-12 max-w-3xl mx-auto">
-      <div class="retro-panel p-5">
-        <h2 class="text-heading font-semibold text-foreground mb-3">안내사항</h2>
-        <ul class="space-y-1.5 text-caption text-muted-foreground list-disc pl-4">
-          <li>2026년 세법 기준으로 계산합니다.</li>
-          <li>실제 세액은 개인 상황(공제, 감면 등)에 따라 달라질 수 있습니다.</li>
-          <li>법적 효력이 없는 참고용 계산입니다. 정확한 세무는 세무사 상담을 권장합니다.</li>
-        </ul>
-      </div>
+      <Card class="border-border/60">
+        <CardContent class="p-5">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground">
+              <AlertCircle class="h-3.5 w-3.5" />
+            </span>
+            <h2 class="text-heading font-semibold text-foreground">안내사항</h2>
+          </div>
+          <ul class="space-y-1.5 text-caption text-muted-foreground list-disc pl-4">
+            <li>2026년 세법 기준으로 계산합니다.</li>
+            <li>실제 세액은 개인 상황(공제, 감면 등)에 따라 달라질 수 있습니다.</li>
+            <li>법적 효력이 없는 참고용 계산입니다. 정확한 세무는 세무사 상담을 권장합니다.</li>
+          </ul>
+        </CardContent>
+      </Card>
     </section>
 
     <section class="mt-6 max-w-3xl mx-auto">

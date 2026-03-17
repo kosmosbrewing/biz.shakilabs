@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
+import { Store, Receipt, AlertCircle } from "lucide-vue-next";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import SEOHead from "@/components/common/SEOHead.vue";
 import { calcVatCompare } from "@/utils/bizVatCalc";
 import { SIMPLIFIED_VAT_RATES } from "@/data/bizConstants";
@@ -116,57 +119,84 @@ const presets = [
     </div>
 
     <!-- 결과 -->
-    <div class="retro-panel p-4 sm:p-5 mb-6">
-      <!-- 간이과세 적격 여부 -->
-      <div v-if="!result.isSimplifiedEligible" class="mb-4 rounded-lg bg-destructive/10 p-3 text-caption text-destructive font-medium">
-        선택한 업종은 연 매출 {{ formatWon(result.simplifiedThreshold) }} 이상이면 간이과세 적용이 불가합니다. 일반과세만 가능합니다.
-      </div>
-
-      <div v-if="result.isSimplifiedExempt && result.isSimplifiedEligible" class="mb-4 rounded-lg bg-primary/10 p-3 text-caption text-primary font-medium">
-        연 매출 4,800만원 미만 — 간이과세 납부 면제 대상입니다.
-      </div>
-
-      <div class="text-center mb-4">
-        <span
-          v-if="result.isSimplifiedEligible"
-          :class="[
-            'inline-block px-3 py-1 rounded-full text-caption font-bold',
-            result.recommendation === 'simplified'
-              ? 'bg-primary/15 text-primary'
-              : 'bg-blue-500/15 text-blue-600 dark:text-blue-400',
-          ]"
-        >
-          {{ result.recommendation === 'simplified' ? '간이과세' : '일반과세' }}가
-          {{ formatWon(Math.abs(result.difference)) }} 유리
-        </span>
-      </div>
-
-      <div class="grid grid-cols-2 gap-4">
-        <div class="text-center space-y-2">
-          <h3 class="text-caption font-bold text-blue-600 dark:text-blue-400">일반과세</h3>
-          <p class="text-h1 font-bold text-foreground">{{ formatWon(result.generalVat) }}</p>
-          <p class="text-tiny text-muted-foreground">연간 부가세</p>
+    <Card class="mb-6">
+      <CardContent class="p-4 sm:p-5">
+        <!-- 간이과세 적격 여부 -->
+        <div v-if="!result.isSimplifiedEligible" class="mb-4 rounded-lg bg-destructive/10 p-3 text-caption text-destructive font-medium">
+          선택한 업종은 연 매출 {{ formatWon(result.simplifiedThreshold) }} 이상이면 간이과세 적용이 불가합니다. 일반과세만 가능합니다.
         </div>
-        <div class="text-center space-y-2">
-          <h3 class="text-caption font-bold text-primary">간이과세</h3>
-          <p class="text-h1 font-bold text-foreground">
-            {{ result.isSimplifiedEligible ? formatWon(result.simplifiedVat) : '-' }}
-          </p>
-          <p class="text-tiny text-muted-foreground">
-            {{ result.isSimplifiedExempt ? '납부 면제' : '연간 부가세' }}
-          </p>
-        </div>
-      </div>
-    </div>
 
-    <div class="retro-panel p-4 text-tiny text-muted-foreground space-y-1">
-      <p class="font-semibold text-foreground">과세 유형 기준 (2026년)</p>
-      <ul class="list-disc pl-4 space-y-0.5">
-        <li>간이과세 적용 기준: 연 매출 1억 400만원 미만, 다만 부동산임대업·과세유흥장소는 4,800만원 미만</li>
-        <li>간이과세 납부의무 면제: 연 매출 4,800만원 미만</li>
-        <li>일반과세: 부가세 = 매출세액(10%) - 매입세액</li>
-        <li>간이과세: 부가세 = 매출액 × 업종별 부가가치율 × 10%</li>
-      </ul>
-    </div>
+        <div v-if="result.isSimplifiedExempt && result.isSimplifiedEligible" class="mb-4 rounded-lg bg-primary/10 p-3 text-caption text-primary font-medium">
+          연 매출 4,800만원 미만 — 간이과세 납부 면제 대상입니다.
+        </div>
+
+        <div class="text-center mb-4">
+          <Badge
+            v-if="result.isSimplifiedEligible"
+            :class="[
+              'rounded-full px-3 py-1 text-caption border-transparent',
+              result.recommendation === 'simplified'
+                ? 'bg-primary/15 text-primary'
+                : 'bg-blue-500/15 text-blue-600 dark:text-blue-400',
+            ]"
+          >
+            {{ result.recommendation === 'simplified' ? '간이과세' : '일반과세' }}가
+            {{ formatWon(Math.abs(result.difference)) }} 유리
+          </Badge>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <!-- 일반과세 -->
+          <Card class="border-blue-200/50 dark:border-blue-800/50">
+            <CardContent class="p-4 text-center space-y-2">
+              <div class="flex items-center justify-center gap-2">
+                <span class="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400">
+                  <Receipt class="h-3.5 w-3.5" />
+                </span>
+                <h3 class="text-caption font-bold text-blue-600 dark:text-blue-400">일반과세</h3>
+              </div>
+              <p class="text-h1 font-bold text-foreground">{{ formatWon(result.generalVat) }}</p>
+              <p class="text-tiny text-muted-foreground">연간 부가세</p>
+            </CardContent>
+          </Card>
+
+          <!-- 간이과세 -->
+          <Card class="border-primary/25">
+            <CardContent class="p-4 text-center space-y-2">
+              <div class="flex items-center justify-center gap-2">
+                <span class="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                  <Store class="h-3.5 w-3.5" />
+                </span>
+                <h3 class="text-caption font-bold text-primary">간이과세</h3>
+              </div>
+              <p class="text-h1 font-bold text-foreground">
+                {{ result.isSimplifiedEligible ? formatWon(result.simplifiedVat) : '-' }}
+              </p>
+              <p class="text-tiny text-muted-foreground">
+                {{ result.isSimplifiedExempt ? '납부 면제' : '연간 부가세' }}
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+      </CardContent>
+    </Card>
+
+    <!-- 과세 유형 기준 -->
+    <Card class="border-border/60">
+      <CardContent class="p-4">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground">
+            <AlertCircle class="h-3.5 w-3.5" />
+          </span>
+          <p class="text-tiny font-semibold text-foreground">과세 유형 기준 (2026년)</p>
+        </div>
+        <ul class="list-disc pl-4 space-y-0.5 text-tiny text-muted-foreground">
+          <li>간이과세 적용 기준: 연 매출 1억 400만원 미만, 다만 부동산임대업·과세유흥장소는 4,800만원 미만</li>
+          <li>간이과세 납부의무 면제: 연 매출 4,800만원 미만</li>
+          <li>일반과세: 부가세 = 매출세액(10%) - 매입세액</li>
+          <li>간이과세: 부가세 = 매출액 × 업종별 부가가치율 × 10%</li>
+        </ul>
+      </CardContent>
+    </Card>
   </div>
 </template>

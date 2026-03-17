@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 const props = withDefaults(
   defineProps<{
     variant?: BadgeVariants["variant"];
-    class?: string;
+    class?: string | string[] | Record<string, boolean>;
   }>(),
   {
     variant: "default",

@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
+import { User, Building2, AlertCircle } from "lucide-vue-next";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import SEOHead from "@/components/common/SEOHead.vue";
 import { calcIndividualAfterTax, calcCorpAfterTax } from "@/utils/bizCalc";
 import { formatWon, formatPercent } from "@/lib/utils";
@@ -114,111 +117,135 @@ const presets = [
     </div>
 
     <!-- 결과 비교 -->
-    <div class="retro-panel p-4 sm:p-5 mb-6">
-      <div class="text-center mb-4">
-        <span
-          :class="[
-            'inline-block px-3 py-1 rounded-full text-caption font-bold',
-            betterOption === '법인'
-              ? 'bg-primary/15 text-primary'
-              : betterOption === '개인'
-                ? 'bg-blue-500/15 text-blue-600 dark:text-blue-400'
-                : 'bg-muted text-muted-foreground',
-          ]"
-        >
-          {{ betterOption === '동일' ? '세후소득 동일' : `${betterOption}이 ${formatWon(Math.abs(difference))} 유리` }}
-        </span>
-      </div>
-
-      <div class="grid grid-cols-2 gap-4">
-        <!-- 개인사업자 -->
-        <div class="space-y-2">
-          <h3 class="text-caption font-bold text-blue-600 dark:text-blue-400 text-center">개인사업자</h3>
-          <div class="text-center">
-            <p class="text-h1 font-bold text-foreground">{{ formatWon(individual.afterTaxIncome) }}</p>
-            <p class="text-tiny text-muted-foreground">세후소득</p>
-          </div>
-          <div class="space-y-1 text-tiny">
-            <div class="flex justify-between">
-              <span class="text-muted-foreground">과세소득</span>
-              <span class="text-foreground">{{ formatWon(individual.taxableIncome) }}</span>
-            </div>
-            <div class="flex justify-between">
-              <span class="text-muted-foreground">소득세</span>
-              <span class="text-destructive">{{ formatWon(individual.incomeTax) }}</span>
-            </div>
-            <div class="flex justify-between">
-              <span class="text-muted-foreground">지방소득세</span>
-              <span class="text-destructive">{{ formatWon(individual.localTax) }}</span>
-            </div>
-            <div class="flex justify-between">
-              <span class="text-muted-foreground">국민연금</span>
-              <span class="text-destructive">{{ formatWon(individual.nationalPension) }}</span>
-            </div>
-            <div class="flex justify-between">
-              <span class="text-muted-foreground">건강+장기요양</span>
-              <span class="text-destructive">{{ formatWon(individual.healthInsurance + individual.longTermCare) }}</span>
-            </div>
-            <div class="flex justify-between border-t border-border pt-1 font-semibold">
-              <span class="text-muted-foreground">총 세금·보험</span>
-              <span class="text-destructive">{{ formatWon(individual.totalTax) }}</span>
-            </div>
-            <div class="flex justify-between">
-              <span class="text-muted-foreground">실효세율</span>
-              <span class="text-foreground">{{ individual.taxableIncome > 0 ? formatPercent(individual.totalTax / individual.taxableIncome) : '-' }}</span>
-            </div>
-          </div>
+    <Card class="mb-6">
+      <CardContent class="p-4 sm:p-5">
+        <div class="text-center mb-4">
+          <Badge
+            :variant="betterOption === '동일' ? 'secondary' : 'default'"
+            :class="[
+              'rounded-full px-3 py-1 text-caption',
+              betterOption === '법인'
+                ? 'bg-primary/15 text-primary border-transparent'
+                : betterOption === '개인'
+                  ? 'bg-blue-500/15 text-blue-600 dark:text-blue-400 border-transparent'
+                  : '',
+            ]"
+          >
+            {{ betterOption === '동일' ? '세후소득 동일' : `${betterOption}이 ${formatWon(Math.abs(difference))} 유리` }}
+          </Badge>
         </div>
 
-        <!-- 법인 -->
-        <div class="space-y-2">
-          <h3 class="text-caption font-bold text-primary text-center">법인</h3>
-          <div class="text-center">
-            <p class="text-h1 font-bold text-foreground">{{ formatWon(corp.afterTaxIncome) }}</p>
-            <p class="text-tiny text-muted-foreground">세후소득</p>
-          </div>
-          <div class="space-y-1 text-tiny">
-            <div class="flex justify-between">
-              <span class="text-muted-foreground">영업이익</span>
-              <span class="text-foreground">{{ formatWon(corp.operatingProfit) }}</span>
-            </div>
-            <div class="flex justify-between">
-              <span class="text-muted-foreground">법인세</span>
-              <span class="text-destructive">{{ formatWon(corp.corpTax + corp.corpLocalTax) }}</span>
-            </div>
-            <div class="flex justify-between">
-              <span class="text-muted-foreground">급여 소득세</span>
-              <span class="text-destructive">{{ formatWon(corp.salaryIncomeTax + corp.salaryLocalTax) }}</span>
-            </div>
-            <div class="flex justify-between">
-              <span class="text-muted-foreground">4대보험</span>
-              <span class="text-destructive">{{ formatWon(corp.socialInsurance) }}</span>
-            </div>
-            <div class="flex justify-between">
-              <span class="text-muted-foreground">배당소득세</span>
-              <span class="text-destructive">{{ formatWon(corp.dividendTax) }}</span>
-            </div>
-            <div class="flex justify-between border-t border-border pt-1 font-semibold">
-              <span class="text-muted-foreground">총 세금·보험</span>
-              <span class="text-destructive">{{ formatWon(corp.totalTax) }}</span>
-            </div>
-            <div class="flex justify-between">
-              <span class="text-muted-foreground">실효세율</span>
-              <span class="text-foreground">{{ corp.operatingProfit > 0 ? formatPercent(corp.totalTax / corp.operatingProfit) : '-' }}</span>
-            </div>
-          </div>
+        <div class="grid grid-cols-2 gap-4">
+          <!-- 개인사업자 -->
+          <Card class="border-blue-200/50 dark:border-blue-800/50">
+            <CardContent class="p-4 space-y-2">
+              <div class="flex items-center justify-center gap-2">
+                <span class="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400">
+                  <User class="h-3.5 w-3.5" />
+                </span>
+                <h3 class="text-caption font-bold text-blue-600 dark:text-blue-400">개인사업자</h3>
+              </div>
+              <div class="text-center">
+                <p class="text-h1 font-bold text-foreground">{{ formatWon(individual.afterTaxIncome) }}</p>
+                <p class="text-tiny text-muted-foreground">세후소득</p>
+              </div>
+              <div class="space-y-1 text-tiny">
+                <div class="flex justify-between">
+                  <span class="text-muted-foreground">과세소득</span>
+                  <span class="text-foreground">{{ formatWon(individual.taxableIncome) }}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-muted-foreground">소득세</span>
+                  <span class="text-destructive">{{ formatWon(individual.incomeTax) }}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-muted-foreground">지방소득세</span>
+                  <span class="text-destructive">{{ formatWon(individual.localTax) }}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-muted-foreground">국민연금</span>
+                  <span class="text-destructive">{{ formatWon(individual.nationalPension) }}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-muted-foreground">건강+장기요양</span>
+                  <span class="text-destructive">{{ formatWon(individual.healthInsurance + individual.longTermCare) }}</span>
+                </div>
+                <div class="flex justify-between border-t border-border pt-1 font-semibold">
+                  <span class="text-muted-foreground">총 세금·보험</span>
+                  <span class="text-destructive">{{ formatWon(individual.totalTax) }}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-muted-foreground">실효세율</span>
+                  <span class="text-foreground">{{ individual.taxableIncome > 0 ? formatPercent(individual.totalTax / individual.taxableIncome) : '-' }}</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <!-- 법인 -->
+          <Card class="border-primary/25">
+            <CardContent class="p-4 space-y-2">
+              <div class="flex items-center justify-center gap-2">
+                <span class="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                  <Building2 class="h-3.5 w-3.5" />
+                </span>
+                <h3 class="text-caption font-bold text-primary">법인</h3>
+              </div>
+              <div class="text-center">
+                <p class="text-h1 font-bold text-foreground">{{ formatWon(corp.afterTaxIncome) }}</p>
+                <p class="text-tiny text-muted-foreground">세후소득</p>
+              </div>
+              <div class="space-y-1 text-tiny">
+                <div class="flex justify-between">
+                  <span class="text-muted-foreground">영업이익</span>
+                  <span class="text-foreground">{{ formatWon(corp.operatingProfit) }}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-muted-foreground">법인세</span>
+                  <span class="text-destructive">{{ formatWon(corp.corpTax + corp.corpLocalTax) }}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-muted-foreground">급여 소득세</span>
+                  <span class="text-destructive">{{ formatWon(corp.salaryIncomeTax + corp.salaryLocalTax) }}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-muted-foreground">4대보험</span>
+                  <span class="text-destructive">{{ formatWon(corp.socialInsurance) }}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-muted-foreground">배당소득세</span>
+                  <span class="text-destructive">{{ formatWon(corp.dividendTax) }}</span>
+                </div>
+                <div class="flex justify-between border-t border-border pt-1 font-semibold">
+                  <span class="text-muted-foreground">총 세금·보험</span>
+                  <span class="text-destructive">{{ formatWon(corp.totalTax) }}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-muted-foreground">실효세율</span>
+                  <span class="text-foreground">{{ corp.operatingProfit > 0 ? formatPercent(corp.totalTax / corp.operatingProfit) : '-' }}</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
 
     <!-- 유의사항 -->
-    <div class="retro-panel p-4 text-tiny text-muted-foreground space-y-1">
-      <p class="font-semibold text-foreground">유의사항</p>
-      <ul class="list-disc pl-4 space-y-0.5">
-        <li>개인사업자는 종합소득세(6~45%), 법인은 법인세(9~24%) + 배당소득세(15.4%) 구조입니다.</li>
-        <li>법인 설립비·세무기장료·4대보험 사업주 부담 등 간접비용은 별도입니다.</li>
-        <li>각종 공제·감면(중소기업 특별세액감면 등)은 반영되지 않았습니다.</li>
-      </ul>
-    </div>
+    <Card class="border-border/60">
+      <CardContent class="p-4">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground">
+            <AlertCircle class="h-3.5 w-3.5" />
+          </span>
+          <p class="text-tiny font-semibold text-foreground">유의사항</p>
+        </div>
+        <ul class="list-disc pl-4 space-y-0.5 text-tiny text-muted-foreground">
+          <li>개인사업자는 종합소득세(6~45%), 법인은 법인세(9~24%) + 배당소득세(15.4%) 구조입니다.</li>
+          <li>법인 설립비·세무기장료·4대보험 사업주 부담 등 간접비용은 별도입니다.</li>
+          <li>각종 공제·감면(중소기업 특별세액감면 등)은 반영되지 않았습니다.</li>
+        </ul>
+      </CardContent>
+    </Card>
   </div>
 </template>
