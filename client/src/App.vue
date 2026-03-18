@@ -7,17 +7,19 @@ import LoadingSpinner from "@/components/ui/loading/LoadingSpinner.vue";
 <template>
   <AppLayout>
     <RouterView v-slot="{ Component, route }">
-      <Suspense :key="route.path" timeout="0">
-        <component :is="Component" />
-        <template #fallback>
-          <div class="container py-10">
-            <LoadingSpinner
-              variant="spinner"
-              message="화면을 불러오는 중입니다."
-            />
-          </div>
-        </template>
-      </Suspense>
+      <Transition name="page-fade" mode="out-in">
+        <Suspense :key="route.path" timeout="0">
+          <component :is="Component" />
+          <template #fallback>
+            <div class="container py-10">
+              <LoadingSpinner
+                variant="spinner"
+                message="화면을 불러오는 중입니다."
+              />
+            </div>
+          </template>
+        </Suspense>
+      </Transition>
     </RouterView>
     <AlertHost />
   </AppLayout>

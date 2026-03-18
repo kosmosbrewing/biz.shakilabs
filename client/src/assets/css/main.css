@@ -308,6 +308,16 @@
 }
 
 /* Vue Transition — 공통 전환 애니메이션 */
+.page-fade-enter-active,
+.page-fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.page-fade-enter-from,
+.page-fade-leave-to {
+  opacity: 0;
+}
+
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.15s ease;
