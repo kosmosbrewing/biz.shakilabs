@@ -59,10 +59,10 @@ watch(
 
 <template>
   <nav class="sticky top-0 z-50 border-b border-primary/20 bg-primary shadow-sm" aria-label="주요 메뉴">
-    <div class="container relative py-2 sm:py-0">
+    <div class="container relative px-3 py-1.5 sm:px-4 sm:py-0">
       <div
         ref="scrollEl"
-        class="tab-scroll grid grid-cols-3 gap-2 sm:flex sm:h-12 sm:items-center sm:gap-2 sm:overflow-x-auto sm:py-0"
+        class="tab-scroll grid grid-cols-3 gap-x-1 gap-y-0.5 sm:flex sm:h-12 sm:items-center sm:gap-2 sm:overflow-x-auto sm:py-0"
       >
         <RouterLink
           v-for="tab in tabs"
@@ -70,10 +70,11 @@ watch(
           :to="tab.to"
           :aria-current="isActiveTab(tab.key) ? 'page' : undefined"
           :class="[
-            'touch-target relative inline-flex min-w-0 items-center justify-center rounded-xl border px-2 py-2 text-center text-[0.78rem] font-semibold leading-tight transition-all duration-200 sm:h-12 sm:shrink-0 sm:rounded-none sm:border-transparent sm:px-3 sm:py-0 sm:text-body',
+            'relative flex items-center justify-center rounded-lg px-1 py-2 text-center text-[0.7rem] font-medium leading-tight transition-colors duration-150',
+            'sm:h-12 sm:shrink-0 sm:rounded-none sm:px-3 sm:py-0 sm:text-body sm:font-semibold',
             isActiveTab(tab.key)
-              ? 'border-white/60 bg-white text-primary shadow-sm sm:bg-transparent sm:text-white sm:shadow-none'
-              : 'border-white/15 bg-white/5 text-white/88 hover:bg-white/10 hover:text-white sm:bg-transparent sm:text-white/70',
+              ? 'bg-white/20 font-semibold text-white sm:bg-transparent sm:text-white sm:shadow-none'
+              : 'text-white/70 active:bg-white/10 sm:bg-transparent sm:hover:text-white',
           ]"
         >
           <span class="break-keep">{{ tab.label }}</span>
