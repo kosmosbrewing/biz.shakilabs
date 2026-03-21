@@ -49,7 +49,7 @@ onMounted(() => {
                 ShakiLabs
               </span>
             </RouterLink>
-            <div class="flex h-full flex-1 items-center justify-center overflow-hidden text-center font-brand text-tiny sm:text-body">
+            <div class="flex h-full flex-1 items-center justify-center overflow-hidden text-center font-brand text-caption sm:text-body">
               <TickerBar :messages="tickerMessages" />
             </div>
             <Button
