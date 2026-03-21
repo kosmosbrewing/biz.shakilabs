@@ -44,6 +44,18 @@ export function formatPercent(rate: number | null | undefined, decimals = 1): st
   return `${(rate * 100).toFixed(decimals)}%`;
 }
 
+// 만원 단위 → 한국어 라벨: 10000 → "1억", 5000 → "5천만", 7200 → "7,200만"
+export function formatManWon(manWon: number): string {
+  if (manWon >= 10000) {
+    const eok = manWon / 10000;
+    return Number.isInteger(eok) ? `${eok}억` : `${eok}억`;
+  }
+  if (manWon >= 1000 && manWon % 1000 === 0) {
+    return `${manWon / 1000}천만`;
+  }
+  return `${manWon.toLocaleString("ko-KR")}만`;
+}
+
 // 통화 포맷: (14900, "KRW") → "₩14,900"
 export function formatCurrency(amount: number | null | undefined, currency: string): string {
   if (amount == null) return "-";

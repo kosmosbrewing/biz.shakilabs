@@ -13,7 +13,7 @@ const items: RelatedServiceItem[] = [
   {
     title: "종합소득세 계산",
     description: "사업소득과 필요경비를 넣어 예상 세금을 먼저 가늠해 볼 수 있습니다.",
-    href: "https://finance.shakilabs.com/comprehensive-tax",
+    href: "/finance/comprehensive-tax",
     icon: Calculator,
   },
 ];

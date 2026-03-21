@@ -5,9 +5,22 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import SEOHead from "@/components/common/SEOHead.vue";
 import { calcIndividualAfterTax, calcCorpAfterTax } from "@/utils/bizCalc";
-import { formatWon, formatPercent } from "@/lib/utils";
+import { formatWon, formatPercent, formatManWon } from "@/lib/utils";
 
-const revenue = ref(100_000_000);
+const props = defineProps<{ initialRevenue?: number }>();
+const amountLabel = computed(() => props.initialRevenue ? formatManWon(props.initialRevenue / 10000) : null);
+const seoTitle = computed(() =>
+  amountLabel.value
+    ? `매출 ${amountLabel.value} 개인사업자 vs 법인 비교 | shakilabs.com/biz`
+    : "개인사업자 vs 법인 세후소득 비교 | shakilabs.com/biz",
+);
+const seoDesc = computed(() =>
+  amountLabel.value
+    ? `연 매출 ${amountLabel.value}원 기준, 개인사업자와 법인 중 어느 쪽이 세후소득이 많은지 비교합니다.`
+    : "동일 매출 기준, 개인사업자와 법인 중 어느 쪽이 세후소득이 많은지 비교해보세요.",
+);
+
+const revenue = ref(props.initialRevenue ?? 100_000_000);
 const expenseRate = ref(0.40);
 const corpSalary = ref(36_000_000);
 
@@ -43,8 +56,8 @@ const presets = [
 
 <template>
   <SEOHead
-    title="개인사업자 vs 법인 세후소득 비교 | biz.shakilabs.com"
-    description="동일 매출 기준, 개인사업자와 법인 중 어느 쪽이 세후소득이 많은지 비교해보세요."
+    :title="seoTitle"
+    :description="seoDesc"
   />
 
   <div class="container py-6 sm:py-8 max-w-3xl">

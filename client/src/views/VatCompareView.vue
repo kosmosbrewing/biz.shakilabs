@@ -6,9 +6,22 @@ import { Badge } from "@/components/ui/badge";
 import SEOHead from "@/components/common/SEOHead.vue";
 import { calcVatCompare } from "@/utils/bizVatCalc";
 import { SIMPLIFIED_VAT_RATES } from "@/data/bizConstants";
-import { formatWon } from "@/lib/utils";
+import { formatWon, formatManWon } from "@/lib/utils";
 
-const annualRevenue = ref(80_000_000);
+const props = defineProps<{ initialRevenue?: number }>();
+const amountLabel = computed(() => props.initialRevenue ? formatManWon(props.initialRevenue / 10000) : null);
+const seoTitle = computed(() =>
+  amountLabel.value
+    ? `매출 ${amountLabel.value} 간이과세 vs 일반과세 비교 | shakilabs.com/biz`
+    : "간이과세 vs 일반과세 부가세 비교 | shakilabs.com/biz",
+);
+const seoDesc = computed(() =>
+  amountLabel.value
+    ? `연 매출 ${amountLabel.value}원 기준, 간이과세와 일반과세 중 어느 쪽이 부가세가 적은지 비교합니다.`
+    : "연 매출 기준, 간이과세와 일반과세 중 어느 쪽이 부가세가 적은지 비교합니다.",
+);
+
+const annualRevenue = ref(props.initialRevenue ?? 80_000_000);
 const industryKey = ref("food");
 const purchaseRate = ref(0.40);
 
@@ -40,8 +53,8 @@ const presets = [
 
 <template>
   <SEOHead
-    title="간이과세 vs 일반과세 부가세 비교 | biz.shakilabs.com"
-    description="연 매출 기준, 간이과세와 일반과세 중 어느 쪽이 부가세가 적은지 비교합니다."
+    :title="seoTitle"
+    :description="seoDesc"
   />
 
   <div class="container py-6 sm:py-8 max-w-3xl">

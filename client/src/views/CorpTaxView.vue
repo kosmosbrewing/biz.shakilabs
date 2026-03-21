@@ -3,13 +3,23 @@ import { computed, ref } from "vue";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import { BIZ_SERVICE_UPDATED_AT } from "@/data/bizExpansionData";
-import { formatPercent, formatWon } from "@/lib/utils";
+import { formatPercent, formatWon, formatManWon } from "@/lib/utils";
 import { calculateCorpTax } from "@/utils/bizExpansionCalc";
 
-const seoTitle = "법인세 계산기 | 과세표준 기준 예상 세액";
-const seoDescription = "법인 과세표준을 입력하면 누진세율 기준 예상 법인세와 실효세율을 계산합니다.";
+const props = defineProps<{ initialTaxableIncome?: number }>();
+const amountLabel = computed(() => props.initialTaxableIncome ? formatManWon(props.initialTaxableIncome / 10000) : null);
+const seoTitle = computed(() =>
+  amountLabel.value
+    ? `과세표준 ${amountLabel.value} 법인세 계산기 | shakilabs.com/biz`
+    : "법인세 계산기 | 과세표준 기준 예상 세액",
+);
+const seoDescription = computed(() =>
+  amountLabel.value
+    ? `과세표준 ${amountLabel.value}원 기준 예상 법인세와 실효세율을 계산합니다.`
+    : "법인 과세표준을 입력하면 누진세율 기준 예상 법인세와 실효세율을 계산합니다.",
+);
 
-const taxableIncome = ref(500_000_000);
+const taxableIncome = ref(props.initialTaxableIncome ?? 500_000_000);
 const result = computed(() => calculateCorpTax({ taxableIncome: taxableIncome.value }));
 </script>
 

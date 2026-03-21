@@ -1,6 +1,6 @@
 # 디자인/UX 이슈 목록
 
-seller.shakilabs.com 전체 UI를 점검한 결과입니다.
+shakilabs.com/biz 전체 UI를 점검한 결과입니다.
 심각도: P0(치명) > P1(높음) > P2(중간) > P3(낮음)
 
 ---

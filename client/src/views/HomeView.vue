@@ -53,7 +53,7 @@ const tools = [
 
 const faqItems = [
   {
-    q: "biz.shakilabs.com에서는 어떤 계산기를 제공하나요?",
+    q: "shakilabs.com/biz에서는 어떤 계산기를 제공하나요?",
     a: "개인사업자 vs 법인 비교, 손익분기점 계산, 부가세 비교, 배달앱 수수료 비교, 법인세 계산, 차량 경비와 회의비 계산까지 제공합니다.",
   },
   {

@@ -6,7 +6,7 @@ import { getSiteUrl } from "@/lib/site";
 const TITLE_SUFFIX = " | 사업자 계산기";
 const DEFAULT_TITLE = "사업자 계산기";
 const LEGACY_TITLE_SUFFIXES = [
-  " | biz.shakilabs.com",
+  " | shakilabs.com/biz",
   " | 오픈마켓 수수료 비교 계산기",
   " | 오픈마켓 수수료 계산기",
   " | ShakiLabs",

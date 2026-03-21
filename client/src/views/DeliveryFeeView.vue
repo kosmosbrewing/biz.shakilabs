@@ -34,7 +34,7 @@ const presets = [
 
 <template>
   <SEOHead
-    title="배달앱 수수료 비교 — 배민·쿠팡이츠·요기요 | biz.shakilabs.com"
+    title="배달앱 수수료 비교 — 배민·쿠팡이츠·요기요 | shakilabs.com/biz"
     description="배달의민족, 쿠팡이츠, 요기요 수수료를 주문 금액과 건수 기준으로 비교합니다."
   />
 

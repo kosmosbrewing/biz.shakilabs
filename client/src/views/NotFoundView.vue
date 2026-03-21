@@ -7,7 +7,7 @@ import { buttonVariants } from "@/components/ui/button";
 <template>
   <SEOHead
     title="페이지를 찾을 수 없습니다"
-    description="biz.shakilabs.com에서 요청한 페이지를 찾을 수 없습니다."
+    description="shakilabs.com/biz에서 요청한 페이지를 찾을 수 없습니다."
     :noindex="true"
   />
 

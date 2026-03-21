@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://biz.shakilabs.com/sitemap.xml
+Host: https://shakilabs.com
+Sitemap: https://shakilabs.com/biz/sitemap.xml

@@ -16,6 +16,12 @@ export const routes: RouteRecordRaw[] = [
     component: () => import("@/views/IndividualVsCorpView.vue"),
   },
   {
+    path: "/individual-vs-corp/:amount(\\d+)",
+    name: "IndividualVsCorpAmount",
+    component: () => import("@/views/IndividualVsCorpView.vue"),
+    props: (route) => ({ initialRevenue: Number(route.params.amount) * 10000 }),
+  },
+  {
     path: "/break-even",
     name: "BreakEven",
     component: () => import("@/views/BreakEvenView.vue"),
@@ -24,6 +30,12 @@ export const routes: RouteRecordRaw[] = [
     path: "/vat-compare",
     name: "VatCompare",
     component: () => import("@/views/VatCompareView.vue"),
+  },
+  {
+    path: "/vat-compare/:amount(\\d+)",
+    name: "VatCompareAmount",
+    component: () => import("@/views/VatCompareView.vue"),
+    props: (route) => ({ initialRevenue: Number(route.params.amount) * 10000 }),
   },
   {
     path: "/delivery-fee",
@@ -36,6 +48,12 @@ export const routes: RouteRecordRaw[] = [
     component: () => import("@/views/CorpTaxView.vue"),
   },
   {
+    path: "/corp-tax/:amount(\\d+)",
+    name: "CorpTaxAmount",
+    component: () => import("@/views/CorpTaxView.vue"),
+    props: (route) => ({ initialTaxableIncome: Number(route.params.amount) * 10000 }),
+  },
+  {
     path: "/car-expense",
     name: "CarExpense",
     component: () => import("@/views/CarExpenseView.vue"),
@@ -44,6 +62,28 @@ export const routes: RouteRecordRaw[] = [
     path: "/meeting-cost",
     name: "MeetingCost",
     component: () => import("@/views/MeetingCostView.vue"),
+  },
+  {
+    path: "/standard-expense-rate",
+    name: "StandardExpenseRate",
+    component: () => import("@/views/StandardExpenseRateView.vue"),
+  },
+  {
+    path: "/standard-expense-rate/:amount(\\d+)",
+    name: "StandardExpenseRateAmount",
+    component: () => import("@/views/StandardExpenseRateView.vue"),
+    props: (route) => ({ initialRevenue: Number(route.params.amount) * 10000 }),
+  },
+  {
+    path: "/labor-cost",
+    name: "LaborCost",
+    component: () => import("@/views/LaborCostView.vue"),
+  },
+  {
+    path: "/labor-cost/:amount(\\d+)",
+    name: "LaborCostAmount",
+    component: () => import("@/views/LaborCostView.vue"),
+    props: (route) => ({ initialSalary: Number(route.params.amount) * 10000 }),
   },
   {
     path: "/about",

@@ -6,7 +6,7 @@ const constantsStore = useConstantsStore();
 </script>
 
 <template>
-  <SEOHead title="이용약관" description="biz.shakilabs.com의 서비스 이용약관입니다." />
+  <SEOHead title="이용약관" description="shakilabs.com/biz의 서비스 이용약관입니다." />
 
   <div class="container py-5">
     <div class="retro-panel">
@@ -16,7 +16,7 @@ const constantsStore = useConstantsStore();
 
       <div class="retro-panel-content space-y-4">
         <p class="text-body text-muted-foreground">
-          biz.shakilabs.com(이하 "본 서비스")을 이용해 주셔서 감사합니다.
+          shakilabs.com/biz(이하 "본 서비스")을 이용해 주셔서 감사합니다.
           본 서비스를 이용함으로써 아래 약관에 동의하게 됩니다.
         </p>
 
