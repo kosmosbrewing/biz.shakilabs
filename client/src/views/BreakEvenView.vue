@@ -37,12 +37,38 @@ function fmtInput(val: number): string {
 function parseInput(v: string): number {
   return Number(v.replace(/[^0-9]/g, "")) || 0;
 }
+
+const faqItems = [
+  {
+    q: "손익분기점(BEP)이란 무엇인가요?",
+    a: "매출에서 고정비와 변동비를 모두 충당해 이익이 0원이 되는 매출 지점입니다. BEP 이상 매출을 올려야 흑자 전환이 가능합니다.",
+  },
+  {
+    q: "변동비율은 어떻게 정하나요?",
+    a: "변동비율은 매출 대비 재료비·포장비·카드수수료 등 매출에 비례하는 비용의 비중입니다. 업종 평균을 참고하되, 실제 매입 비율로 조정하면 더 정확합니다.",
+  },
+  {
+    q: "고정비에 어떤 항목을 포함해야 하나요?",
+    a: "임대료, 인건비, 보험료, 감가상각비, 통신비 등 매출과 관계없이 매월 고정 지출되는 비용을 모두 포함합니다.",
+  },
+] as const;
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqItems.map((faq) => ({
+    "@type": "Question",
+    name: faq.q,
+    acceptedAnswer: { "@type": "Answer", text: faq.a },
+  })),
+};
 </script>
 
 <template>
   <SEOHead
     title="소상공인 손익분기점(BEP) 계산기 | shakilabs.com/biz"
     description="고정비와 변동비를 입력하면 월 매출 손익분기점을 계산합니다."
+    :json-ld="faqJsonLd"
   />
 
   <div class="container py-6 sm:py-8 max-w-3xl">
@@ -175,6 +201,18 @@ function parseInput(v: string): number {
       <p class="font-semibold text-foreground">계산 방법</p>
       <p>BEP = 고정비 ÷ (1 - 변동비율)</p>
       <p>변동비율은 매출 대비 재료비·포장비·카드수수료 등의 비중입니다.</p>
+    </div>
+
+    <div class="retro-panel overflow-hidden">
+      <div class="retro-titlebar rounded-t-2xl">
+        <h2 class="retro-title">자주 묻는 질문</h2>
+      </div>
+      <div class="retro-panel-content space-y-3">
+        <details v-for="faq in faqItems" :key="faq.q" class="retro-panel-muted p-4">
+          <summary class="cursor-pointer list-none text-body font-semibold text-foreground">{{ faq.q }}</summary>
+          <p class="mt-2 text-caption leading-relaxed text-muted-foreground">{{ faq.a }}</p>
+        </details>
+      </div>
     </div>
   </div>
 </template>

@@ -21,10 +21,35 @@ const seoDescription = computed(() =>
 
 const taxableIncome = ref(props.initialTaxableIncome ?? 500_000_000);
 const result = computed(() => calculateCorpTax({ taxableIncome: taxableIncome.value }));
+
+const faqItems = [
+  {
+    q: "2026년 법인세율 구간은 어떻게 되나요?",
+    a: "과세표준 2억 이하 9%, 2억~200억 19%, 200억~3,000억 21%, 3,000억 초과 24%의 4단계 누진세율이 적용됩니다.",
+  },
+  {
+    q: "법인세 실효세율과 한계세율의 차이는 무엇인가요?",
+    a: "한계세율은 추가 1원에 적용되는 세율이고, 실효세율은 전체 과세표준 대비 실제 납부 세액의 비율입니다. 누진세 구조이므로 실효세율은 한계세율보다 항상 낮습니다.",
+  },
+  {
+    q: "법인세 외에 추가로 내야 하는 세금이 있나요?",
+    a: "법인세의 10%에 해당하는 지방소득세를 추가로 납부해야 합니다. 또한 이익을 배당할 경우 배당소득세(15.4%)가 별도로 부과됩니다.",
+  },
+] as const;
+
+const faqJsonLd = computed(() => ({
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqItems.map((faq) => ({
+    "@type": "Question",
+    name: faq.q,
+    acceptedAnswer: { "@type": "Answer", text: faq.a },
+  })),
+}));
 </script>
 
 <template>
-  <SEOHead :title="seoTitle" :description="seoDescription" />
+  <SEOHead :title="seoTitle" :description="seoDescription" :json-ld="faqJsonLd" />
 
   <div class="container space-y-5 py-5 max-w-4xl">
     <div class="retro-panel overflow-hidden">
@@ -54,6 +79,18 @@ const result = computed(() => calculateCorpTax({ taxableIncome: taxableIncome.va
 
     <div class="retro-panel px-4 py-4 text-caption text-foreground">
       현재 과세 구간은 {{ result.bracketLabel }}이며 한계세율은 {{ formatPercent(result.marginalRate, 1) }}입니다.
+    </div>
+
+    <div class="retro-panel overflow-hidden">
+      <div class="retro-titlebar rounded-t-2xl">
+        <h2 class="retro-title">자주 묻는 질문</h2>
+      </div>
+      <div class="retro-panel-content space-y-3">
+        <details v-for="faq in faqItems" :key="faq.q" class="retro-panel-muted p-4">
+          <summary class="cursor-pointer list-none text-body font-semibold text-foreground">{{ faq.q }}</summary>
+          <p class="mt-2 text-caption leading-relaxed text-muted-foreground">{{ faq.a }}</p>
+        </details>
+      </div>
     </div>
   </div>
 </template>

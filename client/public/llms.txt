@@ -1,0 +1,32 @@
+# 사업자 비용 계산기 — shakilabs.com/biz
+
+> 개인사업자·법인 세금 비교, 손익분기점, 부가세, 배달 수수료, 법인세, 업무용 차량 경비, 접대비, 경비율, 인건비 등 사업 운영 비용을 계산하는 무료 서비스입니다.
+
+## 사이트 정보
+
+- URL: https://shakilabs.com/biz
+- 언어: 한국어
+- 데이터 기준: 2026년 세법·사업자 정책
+
+## 주요 계산기
+
+- [개인사업자 vs 법인 비교](https://shakilabs.com/biz/individual-vs-corp): 소득 구간별 개인·법인 세금 차이 비교
+- [손익분기점 계산기](https://shakilabs.com/biz/break-even): 매출·고정비·변동비 기반 BEP 계산
+- [부가세 비교 계산기](https://shakilabs.com/biz/vat-compare): 일반·간이과세자 부가세 비교
+- [배달 수수료 계산기](https://shakilabs.com/biz/delivery-fee): 배민·쿠팡이츠·요기요 수수료 비교
+- [법인세 계산기](https://shakilabs.com/biz/corp-tax): 법인 소득별 법인세 계산
+- [업무용 차량 경비 계산기](https://shakilabs.com/biz/car-expense): 업무용 차량 비용 처리 한도 계산
+- [접대비 한도 계산기](https://shakilabs.com/biz/meeting-cost): 매출 기준 접대비 손금 한도 계산
+- [기준경비율 계산기](https://shakilabs.com/biz/standard-expense-rate): 단순·기준경비율 소득 계산
+- [인건비 계산기](https://shakilabs.com/biz/labor-cost): 직원 1인당 총 인건비(4대보험 포함) 계산
+
+## 데이터 출처
+
+- 법인세: 법인세법 제55조 (9%~24%, 4구간)
+- 부가가치세: 부가가치세법 제29조, 제61조
+- 접대비: 법인세법 시행령 제41조
+- 배달 수수료: 각 플랫폼 공식 수수료 안내
+
+## 연락처
+
+- 이메일: skdba1313@gmail.com

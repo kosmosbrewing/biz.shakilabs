@@ -30,12 +30,38 @@ const presets = [
   { label: "2.5만", value: 25_000 },
   { label: "3만", value: 30_000 },
 ];
+
+const faqItems = [
+  {
+    q: "배달앱 수수료는 어떤 항목으로 구성되나요?",
+    a: "일반적으로 중개수수료(광고·리스팅비), 결제수수료(PG 대행), 배달대행료 세 가지로 나뉩니다. 앱마다 명칭이 다르고 결제수수료가 중개수수료에 포함되기도 합니다.",
+  },
+  {
+    q: "배달의민족 오픈리스트와 울트라콜 차이는 무엇인가요?",
+    a: "오픈리스트는 건당 중개수수료(6.8%)를 부과하고, 울트라콜은 월 정액(88,000원)을 내고 상위 노출됩니다. 주문 건수가 적으면 울트라콜, 많으면 오픈리스트가 유리합니다.",
+  },
+  {
+    q: "배달대행료를 줄이는 방법이 있나요?",
+    a: "자체배달 인력을 두거나, 픽업 주문 비중을 높이면 배달대행료를 절감할 수 있습니다. 또한 배달대행사마다 요금 체계가 다르므로 비교 후 계약하는 것이 좋습니다.",
+  },
+] as const;
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqItems.map((faq) => ({
+    "@type": "Question",
+    name: faq.q,
+    acceptedAnswer: { "@type": "Answer", text: faq.a },
+  })),
+};
 </script>
 
 <template>
   <SEOHead
     title="배달앱 수수료 비교 — 배민·쿠팡이츠·요기요 | shakilabs.com/biz"
     description="배달의민족, 쿠팡이츠, 요기요 수수료를 주문 금액과 건수 기준으로 비교합니다."
+    :json-ld="faqJsonLd"
   />
 
   <div class="container py-6 sm:py-8 max-w-3xl">
@@ -164,6 +190,18 @@ const presets = [
         <li>배달대행료는 평균값이며, 거리·시간대에 따라 달라집니다.</li>
         <li>2026년 3월 기준 수수료이며, 변동될 수 있습니다.</li>
       </ul>
+    </div>
+
+    <div class="retro-panel overflow-hidden">
+      <div class="retro-titlebar rounded-t-2xl">
+        <h2 class="retro-title">자주 묻는 질문</h2>
+      </div>
+      <div class="retro-panel-content space-y-3">
+        <details v-for="faq in faqItems" :key="faq.q" class="retro-panel-muted p-4">
+          <summary class="cursor-pointer list-none text-body font-semibold text-foreground">{{ faq.q }}</summary>
+          <p class="mt-2 text-caption leading-relaxed text-muted-foreground">{{ faq.a }}</p>
+        </details>
+      </div>
     </div>
   </div>
 </template>

@@ -52,12 +52,38 @@ const presets = [
   { label: "2억", value: 200_000_000 },
   { label: "5억", value: 500_000_000 },
 ];
+
+const faqItems = [
+  {
+    q: "개인사업자에서 법인으로 전환하면 무조건 유리한가요?",
+    a: "반드시 그렇지는 않습니다. 법인 설립비·세무기장료·4대보험 사업주 부담 등 간접비용이 추가되고, 법인에서 이익을 꺼낼 때 배당소득세가 발생합니다. 일반적으로 과세소득이 연 5,000만원 이상부터 법인이 유리해지는 경우가 많습니다.",
+  },
+  {
+    q: "법인 대표이사 연봉은 어떻게 정하나요?",
+    a: "대표이사 급여는 법인 비용으로 처리되어 법인세 과세표준을 줄여줍니다. 다만 급여에는 소득세와 4대보험이 부과되므로, 법인세율과 소득세율의 균형점을 찾아 설정하는 것이 절세에 유리합니다.",
+  },
+  {
+    q: "경비율(필요경비)은 어떤 의미인가요?",
+    a: "매출에서 차감하는 사업 관련 비용(재료비·임대료·인건비 등)의 비율입니다. 경비율이 높을수록 과세소득이 줄어 세금이 줄지만, 실제 발생한 비용만 인정됩니다.",
+  },
+] as const;
+
+const faqJsonLd = computed(() => ({
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqItems.map((faq) => ({
+    "@type": "Question",
+    name: faq.q,
+    acceptedAnswer: { "@type": "Answer", text: faq.a },
+  })),
+}));
 </script>
 
 <template>
   <SEOHead
     :title="seoTitle"
     :description="seoDesc"
+    :json-ld="faqJsonLd"
   />
 
   <div class="container py-6 sm:py-8 max-w-3xl">
@@ -260,5 +286,17 @@ const presets = [
         </ul>
       </CardContent>
     </Card>
+
+    <div class="retro-panel overflow-hidden">
+      <div class="retro-titlebar rounded-t-2xl">
+        <h2 class="retro-title">자주 묻는 질문</h2>
+      </div>
+      <div class="retro-panel-content space-y-3">
+        <details v-for="faq in faqItems" :key="faq.q" class="retro-panel-muted p-4">
+          <summary class="cursor-pointer list-none text-body font-semibold text-foreground">{{ faq.q }}</summary>
+          <p class="mt-2 text-caption leading-relaxed text-muted-foreground">{{ faq.a }}</p>
+        </details>
+      </div>
+    </div>
   </div>
 </template>

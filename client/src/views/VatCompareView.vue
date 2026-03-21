@@ -49,12 +49,38 @@ const presets = [
   { label: "8천만", value: 80_000_000 },
   { label: "1억", value: 100_000_000 },
 ];
+
+const faqItems = [
+  {
+    q: "간이과세자와 일반과세자의 기준은 무엇인가요?",
+    a: "직전연도 매출이 1억 400만원 미만이면 간이과세를 선택할 수 있습니다. 다만 부동산임대업·과세유흥장소는 4,800만원 미만이 기준이며, 간이과세 납부 면제는 연 매출 4,800만원 미만에 해당합니다.",
+  },
+  {
+    q: "간이과세자도 세금계산서를 발행할 수 있나요?",
+    a: "연 매출 4,800만원 이상의 간이과세자는 세금계산서를 발행할 수 있습니다. 다만 4,800만원 미만(납부 면제 대상)은 세금계산서 발행이 불가하며, 영수증만 발행 가능합니다.",
+  },
+  {
+    q: "매입 비율이 높으면 어느 쪽이 유리한가요?",
+    a: "매입(세금계산서 매입)이 많을수록 일반과세가 유리합니다. 일반과세는 매출세액에서 매입세액을 공제받지만, 간이과세는 매입세액 공제가 제한적이기 때문입니다.",
+  },
+] as const;
+
+const faqJsonLd = computed(() => ({
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqItems.map((faq) => ({
+    "@type": "Question",
+    name: faq.q,
+    acceptedAnswer: { "@type": "Answer", text: faq.a },
+  })),
+}));
 </script>
 
 <template>
   <SEOHead
     :title="seoTitle"
     :description="seoDesc"
+    :json-ld="faqJsonLd"
   />
 
   <div class="container py-6 sm:py-8 max-w-3xl">
@@ -211,5 +237,17 @@ const presets = [
         </ul>
       </CardContent>
     </Card>
+
+    <div class="retro-panel overflow-hidden">
+      <div class="retro-titlebar rounded-t-2xl">
+        <h2 class="retro-title">자주 묻는 질문</h2>
+      </div>
+      <div class="retro-panel-content space-y-3">
+        <details v-for="faq in faqItems" :key="faq.q" class="retro-panel-muted p-4">
+          <summary class="cursor-pointer list-none text-body font-semibold text-foreground">{{ faq.q }}</summary>
+          <p class="mt-2 text-caption leading-relaxed text-muted-foreground">{{ faq.a }}</p>
+        </details>
+      </div>
+    </div>
   </div>
 </template>
