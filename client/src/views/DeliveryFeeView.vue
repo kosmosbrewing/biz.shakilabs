@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import SEOHead from "@/components/common/SEOHead.vue";
+import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
+import { BIZ_HOME_GUIDE } from "@/data/seoGuides";
 import { calcDeliveryFees } from "@/utils/bizDeliveryCalc";
 import { formatWon, formatPercent } from "@/lib/utils";
 
@@ -203,5 +205,13 @@ const faqJsonLd = {
         </details>
       </div>
     </div>
+
+    <SeoRichGuide
+      :title="BIZ_HOME_GUIDE.title"
+      :intro="BIZ_HOME_GUIDE.intro"
+      :sections="BIZ_HOME_GUIDE.sections"
+      :faqs="BIZ_HOME_GUIDE.faqs"
+      :disclaimer="BIZ_HOME_GUIDE.disclaimer"
+    />
   </div>
 </template>

@@ -4,6 +4,8 @@ import { Store, Receipt, AlertCircle } from "lucide-vue-next";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import SEOHead from "@/components/common/SEOHead.vue";
+import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
+import { BIZ_VAT_GUIDE } from "@/data/seoGuides";
 import { calcVatCompare } from "@/utils/bizVatCalc";
 import { SIMPLIFIED_VAT_RATES } from "@/data/bizConstants";
 import { formatWon, formatManWon } from "@/lib/utils";
@@ -249,5 +251,13 @@ const faqJsonLd = computed(() => ({
         </details>
       </div>
     </div>
+
+    <SeoRichGuide
+      :title="BIZ_VAT_GUIDE.title"
+      :intro="BIZ_VAT_GUIDE.intro"
+      :sections="BIZ_VAT_GUIDE.sections"
+      :faqs="BIZ_VAT_GUIDE.faqs"
+      :disclaimer="BIZ_VAT_GUIDE.disclaimer"
+    />
   </div>
 </template>

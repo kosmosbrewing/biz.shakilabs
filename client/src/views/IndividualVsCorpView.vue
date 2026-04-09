@@ -4,6 +4,8 @@ import { User, Building2, AlertCircle } from "lucide-vue-next";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import SEOHead from "@/components/common/SEOHead.vue";
+import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
+import { BIZ_INDIVIDUAL_VS_CORP_GUIDE } from "@/data/seoGuides";
 import { calcIndividualAfterTax, calcCorpAfterTax } from "@/utils/bizCalc";
 import { formatWon, formatPercent, formatManWon } from "@/lib/utils";
 
@@ -298,5 +300,14 @@ const faqJsonLd = computed(() => ({
         </details>
       </div>
     </div>
+
+    <SeoRichGuide
+      :title="BIZ_INDIVIDUAL_VS_CORP_GUIDE.title"
+      :intro="BIZ_INDIVIDUAL_VS_CORP_GUIDE.intro"
+      :sections="BIZ_INDIVIDUAL_VS_CORP_GUIDE.sections"
+      :checklist="BIZ_INDIVIDUAL_VS_CORP_GUIDE.checklist"
+      :faqs="BIZ_INDIVIDUAL_VS_CORP_GUIDE.faqs"
+      :disclaimer="BIZ_INDIVIDUAL_VS_CORP_GUIDE.disclaimer"
+    />
   </div>
 </template>

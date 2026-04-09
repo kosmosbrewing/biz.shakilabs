@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import SEOHead from "@/components/common/SEOHead.vue";
+import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
+import { BIZ_ABOUT_GUIDE, BIZ_HOME_GUIDE } from "@/data/seoGuides";
 import { RouterLink } from "vue-router";
 import { buttonVariants } from "@/components/ui/button";
 import { useConstantsStore } from "@/stores/constants";
@@ -59,5 +61,18 @@ const constantsStore = useConstantsStore();
         홈으로 돌아가기
       </RouterLink>
     </div>
+
+    <SeoRichGuide
+      :title="BIZ_ABOUT_GUIDE.title"
+      :intro="BIZ_ABOUT_GUIDE.intro"
+      :sections="BIZ_ABOUT_GUIDE.sections"
+      :disclaimer="BIZ_ABOUT_GUIDE.disclaimer"
+    />
+    <SeoRichGuide
+      :title="BIZ_HOME_GUIDE.title"
+      :intro="BIZ_HOME_GUIDE.intro"
+      :sections="BIZ_HOME_GUIDE.sections"
+      :faqs="BIZ_HOME_GUIDE.faqs"
+    />
   </div>
 </template>

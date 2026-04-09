@@ -2,6 +2,8 @@
 import { computed, ref } from "vue";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
+import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
+import { BIZ_CORP_TAX_GUIDE } from "@/data/seoGuides";
 import { BIZ_SERVICE_UPDATED_AT } from "@/data/bizExpansionData";
 import { formatPercent, formatWon, formatManWon } from "@/lib/utils";
 import { calculateCorpTax } from "@/utils/bizExpansionCalc";
@@ -92,5 +94,13 @@ const faqJsonLd = computed(() => ({
         </details>
       </div>
     </div>
+
+    <SeoRichGuide
+      :title="BIZ_CORP_TAX_GUIDE.title"
+      :intro="BIZ_CORP_TAX_GUIDE.intro"
+      :sections="BIZ_CORP_TAX_GUIDE.sections"
+      :faqs="BIZ_CORP_TAX_GUIDE.faqs"
+      :disclaimer="BIZ_CORP_TAX_GUIDE.disclaimer"
+    />
   </div>
 </template>

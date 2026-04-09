@@ -2,6 +2,8 @@
 import { computed, ref } from "vue";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
+import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
+import { BIZ_HOME_GUIDE } from "@/data/seoGuides";
 import { BIZ_SERVICE_UPDATED_AT } from "@/data/bizExpansionData";
 import { formatWon } from "@/lib/utils";
 import { calculateMeetingCost } from "@/utils/bizExpansionCalc";
@@ -100,5 +102,13 @@ const result = computed(() => calculateMeetingCost({
         </details>
       </div>
     </div>
+
+    <SeoRichGuide
+      :title="BIZ_HOME_GUIDE.title"
+      :intro="BIZ_HOME_GUIDE.intro"
+      :sections="BIZ_HOME_GUIDE.sections"
+      :faqs="BIZ_HOME_GUIDE.faqs"
+      :disclaimer="BIZ_HOME_GUIDE.disclaimer"
+    />
   </div>
 </template>

@@ -5,6 +5,8 @@ import { ActionCard } from "@/components/ui/action-card";
 import { Card, CardContent } from "@/components/ui/card";
 import RelatedServices from "@/components/common/RelatedServices.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
+import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
+import { BIZ_HOME_GUIDE } from "@/data/seoGuides";
 
 const tools = [
   {
@@ -165,6 +167,16 @@ const faqJsonLd = {
 
     <section class="mt-6 max-w-3xl mx-auto">
       <RelatedServices />
+    </section>
+
+    <section class="mt-6 max-w-3xl mx-auto">
+      <SeoRichGuide
+        :title="BIZ_HOME_GUIDE.title"
+        :intro="BIZ_HOME_GUIDE.intro"
+        :sections="BIZ_HOME_GUIDE.sections"
+        :faqs="BIZ_HOME_GUIDE.faqs"
+        :disclaimer="BIZ_HOME_GUIDE.disclaimer"
+      />
     </section>
   </div>
 </template>

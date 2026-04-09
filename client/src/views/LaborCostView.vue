@@ -2,6 +2,8 @@
 import { computed, ref } from "vue";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
+import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
+import { BIZ_LABOR_COST_GUIDE } from "@/data/seoGuides";
 import {
   INDUSTRY_ACCIDENT_RATES,
   LABOR_COST_FAQS,
@@ -214,5 +216,13 @@ const faqJsonLd = computed(() => ({
         </details>
       </div>
     </div>
+
+    <SeoRichGuide
+      :title="BIZ_LABOR_COST_GUIDE.title"
+      :intro="BIZ_LABOR_COST_GUIDE.intro"
+      :sections="BIZ_LABOR_COST_GUIDE.sections"
+      :faqs="BIZ_LABOR_COST_GUIDE.faqs"
+      :disclaimer="BIZ_LABOR_COST_GUIDE.disclaimer"
+    />
   </div>
 </template>

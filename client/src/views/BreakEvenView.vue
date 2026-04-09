@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import SEOHead from "@/components/common/SEOHead.vue";
+import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
+import { BIZ_BREAK_EVEN_GUIDE } from "@/data/seoGuides";
 import { calcBreakEven } from "@/utils/bizBreakEvenCalc";
 import { INDUSTRY_EXPENSE_RATIOS } from "@/data/bizConstants";
 import { formatWon } from "@/lib/utils";
@@ -214,5 +216,13 @@ const faqJsonLd = {
         </details>
       </div>
     </div>
+
+    <SeoRichGuide
+      :title="BIZ_BREAK_EVEN_GUIDE.title"
+      :intro="BIZ_BREAK_EVEN_GUIDE.intro"
+      :sections="BIZ_BREAK_EVEN_GUIDE.sections"
+      :faqs="BIZ_BREAK_EVEN_GUIDE.faqs"
+      :disclaimer="BIZ_BREAK_EVEN_GUIDE.disclaimer"
+    />
   </div>
 </template>
