@@ -19,8 +19,8 @@ import { buttonVariants } from "@/components/ui/button";
       <RouterLink :class="buttonVariants({ variant: 'default' })" to="/">
         홈으로 돌아가기
       </RouterLink>
-      <RouterLink :class="buttonVariants({ variant: 'outline' })" to="/delay-interest">
-        지연이자 계산
+      <RouterLink :class="buttonVariants({ variant: 'outline' })" to="/individual-vs-corp">
+        개인사업자 vs 법인 비교
       </RouterLink>
     </div>
   </div>

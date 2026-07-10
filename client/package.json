@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "node scripts/build.mjs",
+    "verify:static": "node scripts/validate-static-output.mjs",
     "sbom:prod": "node scripts/sbom.mjs",
     "typecheck": "vue-tsc --noEmit -p tsconfig.json",
     "test": "vitest run",

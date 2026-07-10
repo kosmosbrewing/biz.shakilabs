@@ -54,7 +54,7 @@ export default defineConfig({
   },
   ssgOptions: {
     includedRoutes() {
-      return SEO_ROUTES;
+      return [...SEO_ROUTES, "/404"];
     },
   },
 });

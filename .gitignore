@@ -34,3 +34,5 @@ coverage/
 
 # Vite
 *.local
+.vercel/
+client/.vercel/
