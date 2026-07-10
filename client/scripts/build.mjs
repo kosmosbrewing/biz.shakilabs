@@ -101,8 +101,17 @@ const result = spawnSync(viteSsgBin, ["build"], {
   },
 });
 
-if (typeof result.status === "number") {
-  process.exit(result.status);
+if (result.status !== 0) {
+  process.exit(result.status ?? 1);
 }
 
-process.exit(1);
+const validationResult = spawnSync(
+  process.execPath,
+  [resolve(projectRoot, "scripts", "validate-static-output.mjs")],
+  {
+    cwd: projectRoot,
+    stdio: "inherit",
+  }
+);
+
+process.exit(validationResult.status ?? 1);

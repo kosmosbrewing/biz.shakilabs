@@ -1,7 +1,9 @@
 {
+  "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
+  "cleanUrls": true,
   "headers": [
     {
       "source": "/(.*)",
@@ -34,6 +36,6 @@
     }
   ],
   "rewrites": [
-    { "source": "/((?!assets|fonts|favicon|sitemap|robots).*)", "destination": "/index.html" }
+    { "source": "/biz/:path*", "destination": "/:path*" }
   ]
 }
