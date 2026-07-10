@@ -2,8 +2,8 @@
 import { onMounted, ref } from "vue";
 import { Moon, Sun } from "lucide-vue-next";
 import { RouterLink } from "vue-router";
+import { ShButton } from "@shakilabs/ui";
 import TickerBar from "@/components/common/TickerBar.vue";
-import { Button } from "@/components/ui/button";
 import { tickerMessages } from "@/data/tickerMessages";
 
 const THEME_STORAGE_KEY = "biz-calculator:theme:v1";
@@ -52,17 +52,17 @@ onMounted(() => {
             <div class="flex h-full flex-1 items-center justify-center overflow-hidden text-center font-brand text-caption sm:text-body">
               <TickerBar :messages="tickerMessages" />
             </div>
-            <Button
+            <ShButton
               type="button"
-              variant="outline"
-              size="iconSm"
-              class="shrink-0 border-border/70 bg-transparent text-muted-foreground hover:border-primary hover:text-primary"
+              variant="secondary"
+              size="sm"
+              class="design-system-theme-toggle shrink-0 text-muted-foreground"
               :aria-label="theme === 'dark' ? '라이트 모드로 전환' : '다크 모드로 전환'"
               @click="toggleTheme"
             >
               <Moon v-if="theme === 'dark'" class="h-4 w-4" />
               <Sun v-else class="h-4 w-4" />
-            </Button>
+            </ShButton>
           </div>
         </div>
       </div>

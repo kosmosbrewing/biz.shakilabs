@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { RouterLink } from "vue-router";
 import { Building2, TrendingUp, Receipt, Truck, CarFront, Calculator, HandCoins, ArrowRight, AlertCircle } from "lucide-vue-next";
+import { ShText } from "@shakilabs/ui";
 import { ActionCard } from "@/components/ui/action-card";
 import { Card, CardContent } from "@/components/ui/card";
 import RelatedServices from "@/components/common/RelatedServices.vue";
@@ -90,13 +91,11 @@ const faqJsonLd = {
   />
 
   <div class="container py-8 sm:py-12">
-    <section class="text-center mb-10">
-      <h1 class="text-display sm:text-[2rem] font-bold text-foreground mb-3">
-        사업자 계산기
-      </h1>
-      <p class="text-body text-muted-foreground max-w-xl mx-auto">
+    <section class="mx-auto mb-10 max-w-3xl border-b border-border pb-6">
+      <ShText as="h1" variant="title">사업자 계산기</ShText>
+      <ShText class="mt-2 max-w-xl" variant="body" tone="muted">
         창업 준비부터 운영까지, 사업에 필요한 세금·손익·수수료를 빠르게 계산하세요.
-      </p>
+      </ShText>
     </section>
 
     <div class="grid gap-4 sm:grid-cols-2 max-w-3xl mx-auto">
