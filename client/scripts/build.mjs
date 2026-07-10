@@ -73,7 +73,7 @@ function renderSitemap(buildDate) {
   const urls = SEO_ROUTES.map((path) => {
     const { changefreq, priority } = getRouteConfig(path);
     return `  <url>
-    <loc>${path === "/" ? `${baseUrl}/` : `${baseUrl}${path}`}</loc>
+    <loc>${path === "/" ? baseUrl : `${baseUrl}${path}`}</loc>
     <lastmod>${buildDate}</lastmod>
     <changefreq>${changefreq}</changefreq>
     <priority>${priority}</priority>
