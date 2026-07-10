@@ -1,7 +1,7 @@
 /** 2026년 기준 사업자 관련 세율·요율 상수 */
 
-export const BIZ_DATA_UPDATED = "2026-03-15";
-export const BIZ_DATA_VERIFIED = "2026-03-15";
+export const BIZ_DATA_UPDATED = "2026-07-10";
+export const BIZ_DATA_VERIFIED = "2026-07-10";
 
 // 소득세 누진세율 (종합소득세 = 개인사업자)
 export const INCOME_TAX_BRACKETS = [
@@ -17,10 +17,10 @@ export const INCOME_TAX_BRACKETS = [
 
 // 법인세율 (2026년 기준)
 export const CORP_TAX_BRACKETS = [
-  { min: 0, max: 200_000_000, rate: 0.09, deduction: 0 },
-  { min: 200_000_000, max: 20_000_000_000, rate: 0.19, deduction: 20_000_000 },
-  { min: 20_000_000_000, max: 300_000_000_000, rate: 0.21, deduction: 420_000_000 },
-  { min: 300_000_000_000, max: Infinity, rate: 0.24, deduction: 9_420_000_000 },
+  { min: 0, max: 200_000_000, rate: 0.1, deduction: 0 },
+  { min: 200_000_000, max: 20_000_000_000, rate: 0.2, deduction: 20_000_000 },
+  { min: 20_000_000_000, max: 300_000_000_000, rate: 0.22, deduction: 420_000_000 },
+  { min: 300_000_000_000, max: Infinity, rate: 0.25, deduction: 9_420_000_000 },
 ] as const;
 
 // 배당소득세 (법인→대표 배당 시)
@@ -33,7 +33,7 @@ export const LOCAL_INCOME_TAX_RATE = 0.1;
 // 4대보험 요율 (2026년 기준, 사업주 부담분 포함)
 export const SOCIAL_INSURANCE = {
   // 국민연금: 사업주 4.75% + 근로자 4.75% = 9.5%
-  nationalPension: { employer: 0.0475, employee: 0.0475, upperLimit: 6_370_000 },
+  nationalPension: { employer: 0.0475, employee: 0.0475, upperLimit: 6_590_000 },
   // 건강보험: 사업주 3.595% + 근로자 3.595% = 7.19%
   healthInsurance: { employer: 0.03595, employee: 0.03595 },
   // 장기요양: 건보의 13.14%
@@ -105,36 +105,39 @@ export interface DeliveryAppFee {
   note: string;
 }
 
+export const DELIVERY_FEE_SOURCE_URL =
+  "https://www.mss.go.kr/site/smba/ex/bbs/View.do?bcIdx=1054987&cbIdx=86&parentSeq=1054987";
+
 export const DELIVERY_APPS: DeliveryAppFee[] = [
   {
     name: "배달의민족",
     key: "baemin",
     color: "#2AC1BC",
-    commissionRate: 0.066,
-    adFeeDesc: "울트라콜 월 88,000원 / 오픈리스트 6.8%",
+    commissionRate: 0.068,
+    adFeeDesc: "상생요금제 대표값 6.8% 가정",
     paymentFeeRate: 0.033,
     avgDeliveryFee: 3500,
-    note: "울트라콜+오픈리스트 병행 가장 흔함",
+    note: "실제 중개수수료 2.0~7.8% 구간 중 6.8% 가정",
   },
   {
     name: "쿠팡이츠",
     key: "coupangeats",
     color: "#E84C3D",
-    commissionRate: 0.099,
+    commissionRate: 0.068,
     adFeeDesc: "없음 (수수료 포함)",
     paymentFeeRate: 0.0,
     avgDeliveryFee: 3300,
-    note: "중개수수료에 결제수수료 포함",
+    note: "실제 중개수수료 2.0~7.8% 구간 중 6.8% 가정",
   },
   {
     name: "요기요",
     key: "yogiyo",
     color: "#FA0050",
-    commissionRate: 0.125,
+    commissionRate: 0.078,
     adFeeDesc: "없음 (수수료 포함)",
     paymentFeeRate: 0.0,
     avgDeliveryFee: 3400,
-    note: "2024년 수수료 인하 (15.7→12.5%)",
+    note: "상생안의 배달 수수료 최대 인하폭을 반영한 상한 가정",
   },
 ];
 
