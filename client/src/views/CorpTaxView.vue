@@ -4,7 +4,7 @@ import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
 import { BIZ_CORP_TAX_GUIDE } from "@/data/seoGuides";
-import { BIZ_SERVICE_UPDATED_AT } from "@/data/bizExpansionData";
+import { BIZ_SERVICE_UPDATED_AT, CORP_TAX_SOURCE_URL } from "@/data/bizExpansionData";
 import { formatPercent, formatWon, formatManWon } from "@/lib/utils";
 import { calculateCorpTax } from "@/utils/bizExpansionCalc";
 
@@ -17,8 +17,8 @@ const seoTitle = computed(() =>
 );
 const seoDescription = computed(() =>
   amountLabel.value
-    ? `과세표준 ${amountLabel.value}원 기준 예상 법인세와 실효세율을 계산합니다.`
-    : "법인 과세표준을 입력하면 누진세율 기준 예상 법인세와 실효세율을 계산합니다.",
+    ? `과세표준 ${amountLabel.value}원 기준 예상 법인세·지방소득세와 실효세율을 계산합니다.`
+    : "법인 과세표준을 입력하면 누진세율 기준 예상 법인세·지방소득세와 실효세율을 계산합니다.",
 );
 
 const taxableIncome = ref(props.initialTaxableIncome ?? 500_000_000);
@@ -27,7 +27,7 @@ const result = computed(() => calculateCorpTax({ taxableIncome: taxableIncome.va
 const faqItems = [
   {
     q: "2026년 법인세율 구간은 어떻게 되나요?",
-    a: "과세표준 2억 이하 9%, 2억~200억 19%, 200억~3,000억 21%, 3,000억 초과 24%의 4단계 누진세율이 적용됩니다.",
+    a: "2026년 1월 1일 이후 개시하는 사업연도는 과세표준 2억 이하 10%, 2억~200억 20%, 200억~3,000억 22%, 3,000억 초과 25%의 4단계 누진세율이 적용됩니다.",
   },
   {
     q: "법인세 실효세율과 한계세율의 차이는 무엇인가요?",
@@ -35,7 +35,7 @@ const faqItems = [
   },
   {
     q: "법인세 외에 추가로 내야 하는 세금이 있나요?",
-    a: "법인세의 10%에 해당하는 지방소득세를 추가로 납부해야 합니다. 또한 이익을 배당할 경우 배당소득세(15.4%)가 별도로 부과됩니다.",
+    a: "계산 결과에는 법인세의 10%인 지방법인소득세가 포함됩니다. 이익을 배당하면 배당소득세 등은 별도로 발생할 수 있습니다.",
   },
 ] as const;
 
@@ -66,7 +66,7 @@ const faqJsonLd = computed(() => ({
 
     <div class="grid gap-3 md:grid-cols-3">
       <div class="retro-panel-muted px-4 py-4">
-        <p class="text-tiny text-muted-foreground">예상 법인세</p>
+        <p class="text-tiny text-muted-foreground">법인세 + 지방소득세</p>
         <p class="mt-2 text-h2 font-bold text-primary">{{ formatWon(result.tax) }}</p>
       </div>
       <div class="retro-panel-muted px-4 py-4">
@@ -79,8 +79,12 @@ const faqJsonLd = computed(() => ({
       </div>
     </div>
 
-    <div class="retro-panel px-4 py-4 text-caption text-foreground">
-      현재 과세 구간은 {{ result.bracketLabel }}이며 한계세율은 {{ formatPercent(result.marginalRate, 1) }}입니다.
+    <div class="retro-panel px-4 py-4 text-caption text-foreground space-y-1">
+      <p>현재 과세 구간은 {{ result.bracketLabel }}이며 지방소득세 포함 한계세율은 {{ formatPercent(result.marginalRate, 1) }}입니다.</p>
+      <p class="text-muted-foreground">
+        공식 근거:
+        <a :href="CORP_TAX_SOURCE_URL" target="_blank" rel="noopener noreferrer" class="retro-link">국세청 법인세 세율</a>
+      </p>
     </div>
 
     <div class="retro-panel overflow-hidden">

@@ -39,7 +39,7 @@ const constantsStore = useConstantsStore();
         <h2 class="text-heading font-bold">데이터 기준</h2>
         <ul class="text-body text-muted-foreground space-y-1 list-disc list-inside">
           <li>세법 확인일: {{ constantsStore.feeDataUpdated }}</li>
-          <li>소득세 6~45% 8단계, 법인세 9~24% 4단계 (2026년 기준)</li>
+          <li>소득세 6~45% 8단계, 법인세 10~25% 4단계 (2026년 기준)</li>
           <li>4대보험 요율 2026년 기준</li>
         </ul>
         <p class="text-body text-muted-foreground">

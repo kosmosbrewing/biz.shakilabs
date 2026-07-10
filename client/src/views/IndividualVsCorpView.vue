@@ -282,7 +282,7 @@ const faqJsonLd = computed(() => ({
           <p class="text-tiny font-semibold text-foreground">유의사항</p>
         </div>
         <ul class="list-disc pl-4 space-y-0.5 text-tiny text-muted-foreground">
-          <li>개인사업자는 종합소득세(6~45%), 법인은 법인세(9~24%) + 배당소득세(15.4%) 구조입니다.</li>
+          <li>개인사업자는 종합소득세(6~45%), 법인은 법인세(10~25%) + 배당소득세(15.4%) 구조입니다.</li>
           <li>법인 설립비·세무기장료·4대보험 사업주 부담 등 간접비용은 별도입니다.</li>
           <li>각종 공제·감면(중소기업 특별세액감면 등)은 반영되지 않았습니다.</li>
         </ul>

@@ -1,10 +1,15 @@
 // 인건비 계산기 — 2026년 기준
 // 출처: 국민연금공단, 건강보험공단, 고용노동부
 
-export const LABOR_COST_UPDATED = "2026-03-19";
+export const LABOR_COST_UPDATED = "2026-07-10";
+
+export const MINIMUM_WAGE_SOURCE_URL =
+  "https://www.moel.go.kr/news/enews/report/enewsView.do?news_seq=18144";
+export const NATIONAL_PENSION_SOURCE_URL =
+  "https://www.nps.or.kr/pnsinfo/ntpsklg/getOHAF0038M0.do?menuId=MN24001113&tab=tab5";
 
 /** 2026년 최저시급 */
-export const MINIMUM_WAGE_2026 = 10_030;
+export const MINIMUM_WAGE_2026 = 10_320;
 
 /** 주휴수당 포함 월 최저임금 (209시간 기준) */
 export const MINIMUM_MONTHLY_WAGE_2026 = Math.round(MINIMUM_WAGE_2026 * 209);
@@ -46,7 +51,7 @@ export const LABOR_COST_FAQS: readonly { q: string; a: string }[] = [
   },
   {
     q: "국민연금 상한액은 얼마인가요?",
-    a: "2026년 기준 월 기준소득월액 상한은 637만원입니다. 월급이 이를 초과하더라도 국민연금은 637만원 기준으로 산정됩니다.",
+    a: "2026년 7월부터 월 기준소득월액 상한은 659만원입니다. 월급이 이를 초과하더라도 국민연금은 659만원 기준으로 산정됩니다.",
   },
   {
     q: "퇴직급여는 어떻게 계산하나요?",

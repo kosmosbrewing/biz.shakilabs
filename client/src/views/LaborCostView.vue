@@ -9,6 +9,8 @@ import {
   LABOR_COST_FAQS,
   LABOR_COST_SALARY_PRESETS,
   LABOR_COST_UPDATED,
+  MINIMUM_WAGE_SOURCE_URL,
+  NATIONAL_PENSION_SOURCE_URL,
 } from "@/data/laborCost";
 import { formatManWon, formatPercent, formatWon } from "@/lib/utils";
 import { calculateLaborCost } from "@/utils/laborCostCalc";
@@ -196,9 +198,14 @@ const faqJsonLd = computed(() => ({
 
     <!-- 유의사항 -->
     <div class="retro-panel px-4 py-4 space-y-2 text-caption text-muted-foreground">
-      <p>국민연금은 월 기준소득월액 상한 637만원이 적용됩니다.</p>
+      <p>국민연금은 2026년 7월부터 월 기준소득월액 상한 659만원이 적용됩니다.</p>
       <p>산재보험 요율은 업종·사업장 규모·과거 재해율에 따라 달라질 수 있습니다.</p>
       <p>근로소득세(갑근세)는 별도이며, 이 계산기에는 포함되지 않습니다.</p>
+      <p class="flex flex-wrap gap-x-2">
+        <span>공식 근거:</span>
+        <a :href="MINIMUM_WAGE_SOURCE_URL" target="_blank" rel="noopener noreferrer" class="retro-link">고용노동부 2026년 최저임금</a>
+        <a :href="NATIONAL_PENSION_SOURCE_URL" target="_blank" rel="noopener noreferrer" class="retro-link">국민연금 기준소득월액</a>
+      </p>
     </div>
 
     <!-- FAQ -->
