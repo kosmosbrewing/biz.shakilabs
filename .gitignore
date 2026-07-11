@@ -36,3 +36,8 @@ coverage/
 *.local
 .vercel/
 client/.vercel/
+
+# UI audit generated evidence; keep only review documents
+/artifacts/ui-audit/*
+!/artifacts/ui-audit/report.md
+!/artifacts/ui-audit/issues.json

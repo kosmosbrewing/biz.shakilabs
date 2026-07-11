@@ -13,12 +13,12 @@ import { buttonVariants } from "@/components/ui/button";
 
   <div class="container py-20 text-center space-y-4">
     <p class="text-display text-muted-foreground">404</p>
-    <p class="text-heading font-bold text-foreground">페이지를 찾을 수 없습니다</p>
+    <h1 class="text-heading font-bold text-foreground">페이지를 찾을 수 없습니다</h1>
     <p class="text-body text-muted-foreground">입력하신 주소가 잘못되었거나 페이지가 이동되었습니다.</p>
     <div class="flex flex-wrap justify-center gap-2">
-      <RouterLink :class="buttonVariants({ variant: 'default' })" to="/">
+      <a :class="buttonVariants({ variant: 'default' })" href="/biz">
         홈으로 돌아가기
-      </RouterLink>
+      </a>
       <RouterLink :class="buttonVariants({ variant: 'outline' })" to="/individual-vs-corp">
         개인사업자 vs 법인 비교
       </RouterLink>
