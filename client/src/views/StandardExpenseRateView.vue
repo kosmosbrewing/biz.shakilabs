@@ -77,8 +77,8 @@ const faqJsonLd = computed(() => ({
     <!-- 입력 -->
     <div class="retro-panel p-4 sm:p-5 space-y-4">
       <div class="space-y-1">
-        <label class="text-tiny font-medium text-muted-foreground">연간 매출액</label>
-        <input v-model.number="revenue" aria-label="연간 매출액" type="number" min="0" class="retro-input w-full" />
+        <label for="expense-revenue" class="text-tiny font-medium text-muted-foreground">연간 매출액</label>
+        <input id="expense-revenue" v-model.number="revenue" type="number" min="0" class="retro-input w-full" />
         <div class="flex flex-wrap gap-2">
           <button
             v-for="p in EXPENSE_RATE_REVENUE_PRESETS"
@@ -98,8 +98,8 @@ const faqJsonLd = computed(() => ({
       </div>
 
       <div class="space-y-1">
-        <label class="text-tiny font-medium text-muted-foreground">업종 선택</label>
-        <select v-model="industryKey" aria-label="업종 선택" class="retro-input w-full">
+        <label for="expense-industry" class="text-tiny font-medium text-muted-foreground">업종 선택</label>
+        <select id="expense-industry" v-model="industryKey" class="retro-input w-full">
           <option v-for="ind in INDUSTRY_EXPENSE_RATES" :key="ind.key" :value="ind.key">
             {{ ind.label }} (기준 {{ ind.standardRate }}% / 단순 {{ ind.simpleRate }}%)
           </option>
@@ -110,16 +110,16 @@ const faqJsonLd = computed(() => ({
         <p class="text-tiny font-medium text-muted-foreground">주요경비 (기준경비율 적용 시)</p>
         <div class="grid gap-3 sm:grid-cols-3">
           <div>
-            <label class="text-tiny text-muted-foreground">매입비용</label>
-            <input v-model.number="purchaseCost" aria-label="매입비용" type="number" min="0" class="retro-input w-full" />
+            <label for="expense-purchase-cost" class="text-tiny text-muted-foreground">매입비용</label>
+            <input id="expense-purchase-cost" v-model.number="purchaseCost" type="number" min="0" class="retro-input w-full" />
           </div>
           <div>
-            <label class="text-tiny text-muted-foreground">임차료 (연)</label>
-            <input v-model.number="rentCost" aria-label="연간 임차료" type="number" min="0" class="retro-input w-full" />
+            <label for="expense-rent-cost" class="text-tiny text-muted-foreground">임차료 (연)</label>
+            <input id="expense-rent-cost" v-model.number="rentCost" type="number" min="0" class="retro-input w-full" />
           </div>
           <div>
-            <label class="text-tiny text-muted-foreground">인건비 (연)</label>
-            <input v-model.number="laborCost" aria-label="연간 인건비" type="number" min="0" class="retro-input w-full" />
+            <label for="expense-labor-cost" class="text-tiny text-muted-foreground">인건비 (연)</label>
+            <input id="expense-labor-cost" v-model.number="laborCost" type="number" min="0" class="retro-input w-full" />
           </div>
         </div>
       </div>

@@ -88,16 +88,16 @@ const faqJsonLd = computed(() => ({
     :json-ld="faqJsonLd"
   />
 
-  <div class="container py-6 sm:py-8 max-w-3xl">
+  <div class="text-resize-layout container max-w-3xl py-6 sm:py-8">
     <h1 class="text-h1 font-bold text-foreground mb-1">개인사업자 vs 법인 세후소득</h1>
     <p class="text-caption text-muted-foreground mb-6">
       동일 매출·경비율 기준으로 세후 실수령을 비교합니다.
     </p>
 
     <!-- 입력 섹션 -->
-    <div class="retro-panel p-4 sm:p-5 space-y-4 mb-6">
+    <div class="biz-input-panel retro-panel mb-6 space-y-4 p-4 sm:p-5">
       <div>
-        <label class="block text-caption font-semibold text-foreground mb-1.5">연 매출액</label>
+        <label for="biz-revenue" class="mb-1.5 block text-caption font-semibold text-foreground">연 매출액</label>
         <div class="flex gap-2 flex-wrap mb-2">
           <button
             v-for="p in presets"
@@ -116,7 +116,7 @@ const faqJsonLd = computed(() => ({
         </div>
         <div class="relative">
           <input
-            aria-label="연 매출액"
+            id="biz-revenue"
             v-model="revenueDisplay"
             type="text"
             inputmode="numeric"
@@ -127,11 +127,11 @@ const faqJsonLd = computed(() => ({
       </div>
 
       <div>
-        <label class="block text-caption font-semibold text-foreground mb-1.5">
+        <label for="biz-expense-rate" class="mb-1.5 block text-caption font-semibold text-foreground">
           경비율: {{ (expenseRate * 100).toFixed(0) }}%
         </label>
         <input
-          aria-label="경비율 범위"
+          id="biz-expense-rate"
           v-model.number="expenseRate"
           type="range"
           min="0.1"
@@ -146,10 +146,10 @@ const faqJsonLd = computed(() => ({
       </div>
 
       <div>
-        <label class="block text-caption font-semibold text-foreground mb-1.5">법인 대표이사 연봉</label>
+        <label for="biz-corp-salary" class="mb-1.5 block text-caption font-semibold text-foreground">법인 대표이사 연봉</label>
         <div class="relative">
           <input
-            aria-label="법인 대표이사 연봉"
+            id="biz-corp-salary"
             v-model="corpSalaryDisplay"
             type="text"
             inputmode="numeric"
@@ -162,7 +162,7 @@ const faqJsonLd = computed(() => ({
 
     <!-- 결과 비교 -->
     <Card class="mb-6">
-      <CardContent class="p-4 sm:p-5">
+      <CardContent class="biz-result-panel p-4 sm:p-5">
         <div class="text-center mb-4">
           <Badge
             :variant="betterOption === '동일' ? 'secondary' : 'default'"
@@ -179,10 +179,10 @@ const faqJsonLd = computed(() => ({
           </Badge>
         </div>
 
-        <div class="grid grid-cols-2 gap-4">
+        <div class="biz-compare-grid grid grid-cols-2 gap-4">
           <!-- 개인사업자 -->
           <Card class="border-blue-200/50 dark:border-blue-800/50">
-            <CardContent class="p-4 space-y-2">
+            <CardContent class="biz-compare-card space-y-2 p-4">
               <div class="flex items-center justify-center gap-2">
                 <span class="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400">
                   <User class="h-3.5 w-3.5" />
@@ -193,7 +193,7 @@ const faqJsonLd = computed(() => ({
                 <p class="text-h1 font-bold text-foreground">{{ formatWon(individual.afterTaxIncome) }}</p>
                 <p class="text-tiny text-muted-foreground">세후소득</p>
               </div>
-              <div class="space-y-1 text-tiny">
+              <div class="biz-metrics space-y-1 text-tiny">
                 <div class="flex justify-between">
                   <span class="text-muted-foreground">과세소득</span>
                   <span class="text-foreground">{{ formatWon(individual.taxableIncome) }}</span>
@@ -228,7 +228,7 @@ const faqJsonLd = computed(() => ({
 
           <!-- 법인 -->
           <Card class="border-primary/25">
-            <CardContent class="p-4 space-y-2">
+            <CardContent class="biz-compare-card space-y-2 p-4">
               <div class="flex items-center justify-center gap-2">
                 <span class="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 text-primary">
                   <Building2 class="h-3.5 w-3.5" />
@@ -239,7 +239,7 @@ const faqJsonLd = computed(() => ({
                 <p class="text-h1 font-bold text-foreground">{{ formatWon(corp.afterTaxIncome) }}</p>
                 <p class="text-tiny text-muted-foreground">세후소득</p>
               </div>
-              <div class="space-y-1 text-tiny">
+              <div class="biz-metrics space-y-1 text-tiny">
                 <div class="flex justify-between">
                   <span class="text-muted-foreground">영업이익</span>
                   <span class="text-foreground">{{ formatWon(corp.operatingProfit) }}</span>
@@ -277,7 +277,7 @@ const faqJsonLd = computed(() => ({
 
     <!-- 유의사항 -->
     <Card class="border-border/60">
-      <CardContent class="p-4">
+      <CardContent class="biz-note-panel p-4">
         <div class="flex items-center gap-2 mb-2">
           <span class="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground">
             <AlertCircle class="h-3.5 w-3.5" />

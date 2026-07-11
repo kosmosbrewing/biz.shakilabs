@@ -103,10 +103,10 @@ const faqJsonLd = {
 
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <div>
-          <label class="block text-tiny font-semibold text-foreground mb-1">월 임대료</label>
+          <label for="break-even-rent" class="block text-tiny font-semibold text-foreground mb-1">월 임대료</label>
           <div class="relative">
             <input
-              aria-label="월 임대료"
+              id="break-even-rent"
               :value="fmtInput(rent)"
               type="text"
               inputmode="numeric"
@@ -117,10 +117,10 @@ const faqJsonLd = {
           </div>
         </div>
         <div>
-          <label class="block text-tiny font-semibold text-foreground mb-1">월 인건비</label>
+          <label for="break-even-labor" class="block text-tiny font-semibold text-foreground mb-1">월 인건비</label>
           <div class="relative">
             <input
-              aria-label="월 인건비"
+              id="break-even-labor"
               :value="fmtInput(labor)"
               type="text"
               inputmode="numeric"
@@ -131,10 +131,10 @@ const faqJsonLd = {
           </div>
         </div>
         <div>
-          <label class="block text-tiny font-semibold text-foreground mb-1">기타 고정비</label>
+          <label for="break-even-other-fixed" class="block text-tiny font-semibold text-foreground mb-1">기타 고정비</label>
           <div class="relative">
             <input
-              aria-label="기타 고정비"
+              id="break-even-other-fixed"
               :value="fmtInput(otherFixed)"
               type="text"
               inputmode="numeric"
@@ -147,12 +147,12 @@ const faqJsonLd = {
       </div>
 
       <div>
-        <label class="block text-caption font-semibold text-foreground mb-1.5">
+        <label for="break-even-variable-rate" class="block text-caption font-semibold text-foreground mb-1.5">
           변동비율: {{ (variableCostRate * 100).toFixed(0) }}%
           <span class="text-tiny text-muted-foreground font-normal ml-1">(재료비·포장비 등)</span>
         </label>
         <input
-          aria-label="변동비율 범위"
+          id="break-even-variable-rate"
           v-model.number="variableCostRate"
           type="range"
           min="0.05"
@@ -163,9 +163,9 @@ const faqJsonLd = {
       </div>
 
       <div>
-        <label class="block text-caption font-semibold text-foreground mb-1.5">월 영업일수</label>
+        <label for="break-even-operating-days" class="block text-caption font-semibold text-foreground mb-1.5">월 영업일수</label>
         <input
-          aria-label="월 영업일수"
+          id="break-even-operating-days"
           v-model.number="operatingDays"
           type="number"
           min="1"
