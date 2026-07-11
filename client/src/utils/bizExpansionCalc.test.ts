@@ -10,7 +10,7 @@ import { calculateLaborCost } from "@/utils/laborCostCalc";
 describe("bizExpansionCalc", () => {
   it("법인세는 누진세율을 적용한다", () => {
     const result = calculateCorpTax({ taxableIncome: 500_000_000 });
-    expect(result.tax).toBe(82_500_000);
+    expect(result.tax).toBe(88_000_000);
     expect(result.bracketLabel).toBe("200억원 이하");
   });
 
@@ -105,11 +105,11 @@ describe("laborCostCalc", () => {
     expect(r.employer.industrialAccident).toBe(21_000);
   });
 
-  it("국민연금 상한액(637만원)이 적용된다", () => {
+  it("국민연금 상한액(659만원)이 적용된다", () => {
     const r = calculateLaborCost({ ...baseInput, monthlySalary: 8_000_000 });
-    // 상한 6,370,000 × 4.75% = 302,575
-    expect(r.employer.nationalPension).toBe(Math.round(6_370_000 * 0.0475));
-    expect(r.employee.nationalPension).toBe(Math.round(6_370_000 * 0.0475));
+    // 상한 6,590,000 × 4.75%
+    expect(r.employer.nationalPension).toBe(Math.round(6_590_000 * 0.0475));
+    expect(r.employee.nationalPension).toBe(Math.round(6_590_000 * 0.0475));
   });
 
   it("퇴직급여 포함/미포함이 정확하다", () => {

@@ -3,6 +3,7 @@ import { ref, computed } from "vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
 import { BIZ_HOME_GUIDE } from "@/data/seoGuides";
+import { BIZ_DATA_VERIFIED, DELIVERY_FEE_SOURCE_URL } from "@/data/bizConstants";
 import { calcDeliveryFees } from "@/utils/bizDeliveryCalc";
 import { formatWon, formatPercent } from "@/lib/utils";
 
@@ -39,8 +40,8 @@ const faqItems = [
     a: "일반적으로 중개수수료(광고·리스팅비), 결제수수료(PG 대행), 배달대행료 세 가지로 나뉩니다. 앱마다 명칭이 다르고 결제수수료가 중개수수료에 포함되기도 합니다.",
   },
   {
-    q: "배달의민족 오픈리스트와 울트라콜 차이는 무엇인가요?",
-    a: "오픈리스트는 건당 중개수수료(6.8%)를 부과하고, 울트라콜은 월 정액(88,000원)을 내고 상위 노출됩니다. 주문 건수가 적으면 울트라콜, 많으면 오픈리스트가 유리합니다.",
+    q: "상생요금제 수수료는 모든 매장에 같은가요?",
+    a: "아닙니다. 배달의민족과 쿠팡이츠의 중개수수료는 매출 구간 등에 따라 2.0~7.8%로 달라집니다. 이 계산기는 비교를 위해 6.8%를 대표값으로 사용합니다.",
   },
   {
     q: "배달대행료를 줄이는 방법이 있나요?",
@@ -127,7 +128,7 @@ const faqJsonLd = {
       <div class="text-center">
         <p class="text-caption text-muted-foreground mb-1">월 매출 {{ formatWon(totalRevenue) }} 기준</p>
         <span class="inline-block px-3 py-1 rounded-full text-caption font-bold bg-primary/15 text-primary">
-          {{ bestApp.appName }}이 수수료 가장 적음
+          입력한 가정에서는 {{ bestApp.appName }} 총비용이 가장 적음
         </span>
       </div>
     </div>
@@ -187,10 +188,14 @@ const faqJsonLd = {
     <div class="retro-panel p-4 text-tiny text-muted-foreground space-y-1">
       <p class="font-semibold text-foreground">유의사항</p>
       <ul class="list-disc pl-4 space-y-0.5">
-        <li>배달의민족 중개수수료는 오픈리스트 6.8% 기준이며, 울트라콜(월 88,000원) 별도입니다.</li>
-        <li>쿠팡이츠·요기요는 중개수수료에 결제수수료가 포함되어 있습니다.</li>
+        <li>배달의민족·쿠팡이츠는 2.0~7.8% 차등 수수료 중 6.8%를 대표값으로 계산합니다.</li>
+        <li>요기요는 상생안의 최대 인하폭을 반영한 7.8%를 비교 가정으로 사용합니다.</li>
+        <li>결제수수료·배달대행료는 공개된 단일 확정값이 아닌 비교 가정입니다.</li>
         <li>배달대행료는 평균값이며, 거리·시간대에 따라 달라집니다.</li>
-        <li>2026년 3월 기준 수수료이며, 변동될 수 있습니다.</li>
+        <li>
+          {{ BIZ_DATA_VERIFIED }} 확인 ·
+          <a :href="DELIVERY_FEE_SOURCE_URL" target="_blank" rel="noopener noreferrer" class="retro-link">중소벤처기업부 상생방안</a>
+        </li>
       </ul>
     </div>
 
