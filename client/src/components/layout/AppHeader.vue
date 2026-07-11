@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { Moon, Sun } from "lucide-vue-next";
-import { RouterLink } from "vue-router";
 import { ShButton } from "@shakilabs/ui";
 import TickerBar from "@/components/common/TickerBar.vue";
 import { tickerMessages } from "@/data/tickerMessages";
@@ -34,8 +33,8 @@ onMounted(() => {
       <div class="overflow-hidden">
         <div class="retro-titlebar h-11 border-b-0 bg-transparent px-1.5 sm:px-2">
           <div class="flex h-full w-full items-center gap-2.5 sm:gap-4">
-            <RouterLink
-              to="/"
+            <a
+              href="/biz"
               aria-label="ShakiLabs 홈"
               class="inline-flex h-8 w-8 shrink-0 items-center justify-center gap-1 px-0.5 text-muted-foreground transition-colors hover:text-foreground sm:w-auto sm:justify-start sm:gap-1.5"
             >
@@ -48,7 +47,7 @@ onMounted(() => {
               <span class="hidden sm:inline font-brand text-tiny font-semibold tracking-wide text-foreground/90">
                 ShakiLabs
               </span>
-            </RouterLink>
+            </a>
             <div class="flex h-full flex-1 items-center justify-center overflow-hidden text-center font-brand text-caption sm:text-body">
               <TickerBar :messages="tickerMessages" />
             </div>
