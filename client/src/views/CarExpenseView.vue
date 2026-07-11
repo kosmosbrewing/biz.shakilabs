@@ -56,9 +56,9 @@ const result = computed(() => calculateCarExpenseDeduction({
         <FreshBadge :message="`${BIZ_SERVICE_UPDATED_AT} 기준`" />
       </div>
       <div class="retro-panel-content grid gap-3 md:grid-cols-3">
-        <input v-model.number="annualCost" type="number" min="100000" class="retro-input" placeholder="연간 차량비" />
-        <input v-model.number="businessUseRate" type="number" min="0.1" max="1" step="0.05" class="retro-input" placeholder="업무 사용비율" />
-        <input v-model.number="taxRate" type="number" min="0.06" max="0.5" step="0.01" class="retro-input" placeholder="법인세율" />
+        <input v-model.number="annualCost" aria-label="연간 차량비" type="number" min="100000" class="retro-input" placeholder="연간 차량비" />
+        <input v-model.number="businessUseRate" aria-label="업무 사용비율" type="number" min="0.1" max="1" step="0.05" class="retro-input" placeholder="업무 사용비율" />
+        <input v-model.number="taxRate" aria-label="법인세율" type="number" min="0.06" max="0.5" step="0.01" class="retro-input" placeholder="법인세율" />
       </div>
     </div>
 

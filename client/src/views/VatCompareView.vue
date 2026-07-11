@@ -113,6 +113,7 @@ const faqJsonLd = computed(() => ({
         </div>
         <div class="relative">
           <input
+            aria-label="연 매출액"
             v-model="revenueDisplay"
             type="text"
             inputmode="numeric"
@@ -149,6 +150,7 @@ const faqJsonLd = computed(() => ({
           <span class="text-tiny text-muted-foreground font-normal ml-1">(세금계산서 매입분)</span>
         </label>
         <input
+          aria-label="매입 비율 범위"
           v-model.number="purchaseRate"
           type="range"
           min="0.05"

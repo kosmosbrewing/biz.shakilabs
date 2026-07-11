@@ -60,7 +60,7 @@ const faqJsonLd = computed(() => ({
         <FreshBadge :message="`${BIZ_SERVICE_UPDATED_AT} 기준`" />
       </div>
       <div class="retro-panel-content space-y-4">
-        <input v-model.number="taxableIncome" type="number" min="1000000" class="retro-input w-full" placeholder="과세표준" />
+        <input v-model.number="taxableIncome" aria-label="과세표준" type="number" min="1000000" class="retro-input w-full" placeholder="과세표준" />
       </div>
     </div>
 
