@@ -95,6 +95,7 @@ const faqJsonLd = {
         </div>
         <div class="relative">
           <input
+            aria-label="건당 주문 금액"
             v-model="orderDisplay"
             type="text"
             inputmode="numeric"
@@ -109,6 +110,7 @@ const faqJsonLd = {
           월 주문 건수: {{ monthlyOrders.toLocaleString('ko-KR') }}건
         </label>
         <input
+          aria-label="월 주문 건수 범위"
           v-model.number="monthlyOrders"
           type="range"
           min="50"
@@ -136,15 +138,15 @@ const faqJsonLd = {
     <!-- 비교 테이블 -->
     <div class="retro-panel overflow-hidden mb-6">
       <div class="overflow-x-auto">
-        <table class="w-full text-tiny">
+        <table aria-label="배달앱 수수료 비교" class="w-full text-tiny">
           <thead>
             <tr class="border-b border-border bg-muted/30">
-              <th class="text-left p-3 font-semibold text-foreground">배달앱</th>
-              <th class="text-right p-3 font-semibold text-foreground">중개 수수료</th>
-              <th class="text-right p-3 font-semibold text-foreground">결제 수수료</th>
-              <th class="text-right p-3 font-semibold text-foreground">배달대행</th>
-              <th class="text-right p-3 font-semibold text-foreground">총 수수료</th>
-              <th class="text-right p-3 font-semibold text-foreground">순수익</th>
+              <th scope="col" class="text-left p-3 font-semibold text-foreground">배달앱</th>
+              <th scope="col" class="text-right p-3 font-semibold text-foreground">중개 수수료</th>
+              <th scope="col" class="text-right p-3 font-semibold text-foreground">결제 수수료</th>
+              <th scope="col" class="text-right p-3 font-semibold text-foreground">배달대행</th>
+              <th scope="col" class="text-right p-3 font-semibold text-foreground">총 수수료</th>
+              <th scope="col" class="text-right p-3 font-semibold text-foreground">순수익</th>
             </tr>
           </thead>
           <tbody>

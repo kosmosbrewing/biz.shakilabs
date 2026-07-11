@@ -73,7 +73,7 @@ const faqJsonLd = computed(() => ({
     <div class="retro-panel p-4 sm:p-5 space-y-4">
       <div class="space-y-1">
         <label class="text-tiny font-medium text-muted-foreground">월 급여 (세전)</label>
-        <input v-model.number="monthlySalary" type="number" min="100000" class="retro-input w-full" />
+        <input v-model.number="monthlySalary" aria-label="월 급여" type="number" min="100000" class="retro-input w-full" />
         <div class="flex flex-wrap gap-2">
           <button
             v-for="p in LABOR_COST_SALARY_PRESETS"
@@ -95,11 +95,11 @@ const faqJsonLd = computed(() => ({
       <div class="grid gap-3 sm:grid-cols-3">
         <div class="space-y-1">
           <label class="text-tiny font-medium text-muted-foreground">직원 수</label>
-          <input v-model.number="employeeCount" type="number" min="1" max="10000" class="retro-input w-full" />
+          <input v-model.number="employeeCount" aria-label="직원 수" type="number" min="1" max="10000" class="retro-input w-full" />
         </div>
         <div class="space-y-1">
           <label class="text-tiny font-medium text-muted-foreground">업종 (산재보험)</label>
-          <select v-model="industryKey" class="retro-input w-full">
+          <select v-model="industryKey" aria-label="업종" class="retro-input w-full">
             <option v-for="ind in INDUSTRY_ACCIDENT_RATES" :key="ind.key" :value="ind.key">
               {{ ind.label }} ({{ formatPercent(ind.rate * 100, 1) }})
             </option>
@@ -107,7 +107,7 @@ const faqJsonLd = computed(() => ({
         </div>
         <div class="space-y-1">
           <label class="text-tiny font-medium text-muted-foreground">퇴직급여 포함</label>
-          <select v-model="includeRetirement" class="retro-input w-full">
+          <select v-model="includeRetirement" aria-label="퇴직급여 포함 여부" class="retro-input w-full">
             <option :value="true">포함 (1/12)</option>
             <option :value="false">미포함</option>
           </select>
@@ -146,12 +146,12 @@ const faqJsonLd = computed(() => ({
       </div>
       <div class="retro-panel-content p-0">
         <div class="overflow-x-auto">
-          <table class="w-full text-left text-caption">
+          <table aria-label="4대보험 사업주·근로자 부담 비교" class="w-full text-left text-caption">
             <thead class="bg-muted/40 text-muted-foreground">
               <tr>
-                <th class="px-3 py-2">항목</th>
-                <th class="px-3 py-2 text-right">사업주 부담</th>
-                <th class="px-3 py-2 text-right">근로자 부담</th>
+                <th scope="col" class="px-3 py-2">항목</th>
+                <th scope="col" class="px-3 py-2 text-right">사업주 부담</th>
+                <th scope="col" class="px-3 py-2 text-right">근로자 부담</th>
               </tr>
             </thead>
             <tbody>

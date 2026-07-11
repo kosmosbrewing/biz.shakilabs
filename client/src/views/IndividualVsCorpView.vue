@@ -116,6 +116,7 @@ const faqJsonLd = computed(() => ({
         </div>
         <div class="relative">
           <input
+            aria-label="연 매출액"
             v-model="revenueDisplay"
             type="text"
             inputmode="numeric"
@@ -130,6 +131,7 @@ const faqJsonLd = computed(() => ({
           경비율: {{ (expenseRate * 100).toFixed(0) }}%
         </label>
         <input
+          aria-label="경비율 범위"
           v-model.number="expenseRate"
           type="range"
           min="0.1"
@@ -147,6 +149,7 @@ const faqJsonLd = computed(() => ({
         <label class="block text-caption font-semibold text-foreground mb-1.5">법인 대표이사 연봉</label>
         <div class="relative">
           <input
+            aria-label="법인 대표이사 연봉"
             v-model="corpSalaryDisplay"
             type="text"
             inputmode="numeric"

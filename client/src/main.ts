@@ -4,7 +4,6 @@ import App from "./App.vue";
 import { createScrollBehavior, routes, setupRouterGuards } from "./router";
 import "./assets/css/main.css";
 import "@shakilabs/ui/styles.css";
-import "./assets/css/design-system.css";
 import { initAnalytics, trackEvent } from "./lib/analytics";
 import { initSentry } from "./lib/sentry";
 import { useConstantsStore } from "@/stores/constants";

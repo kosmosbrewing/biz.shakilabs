@@ -106,6 +106,7 @@ const faqJsonLd = {
           <label class="block text-tiny font-semibold text-foreground mb-1">월 임대료</label>
           <div class="relative">
             <input
+              aria-label="월 임대료"
               :value="fmtInput(rent)"
               type="text"
               inputmode="numeric"
@@ -119,6 +120,7 @@ const faqJsonLd = {
           <label class="block text-tiny font-semibold text-foreground mb-1">월 인건비</label>
           <div class="relative">
             <input
+              aria-label="월 인건비"
               :value="fmtInput(labor)"
               type="text"
               inputmode="numeric"
@@ -132,6 +134,7 @@ const faqJsonLd = {
           <label class="block text-tiny font-semibold text-foreground mb-1">기타 고정비</label>
           <div class="relative">
             <input
+              aria-label="기타 고정비"
               :value="fmtInput(otherFixed)"
               type="text"
               inputmode="numeric"
@@ -149,6 +152,7 @@ const faqJsonLd = {
           <span class="text-tiny text-muted-foreground font-normal ml-1">(재료비·포장비 등)</span>
         </label>
         <input
+          aria-label="변동비율 범위"
           v-model.number="variableCostRate"
           type="range"
           min="0.05"
@@ -161,6 +165,7 @@ const faqJsonLd = {
       <div>
         <label class="block text-caption font-semibold text-foreground mb-1.5">월 영업일수</label>
         <input
+          aria-label="월 영업일수"
           v-model.number="operatingDays"
           type="number"
           min="1"

@@ -61,10 +61,10 @@ const result = computed(() => calculateMeetingCost({
         <FreshBadge :message="`${BIZ_SERVICE_UPDATED_AT} 기준`" />
       </div>
       <div class="retro-panel-content grid gap-3 md:grid-cols-3">
-        <input v-model.number="attendees" type="number" min="2" class="retro-input" placeholder="참석 인원" />
-        <input v-model.number="costPerPerson" type="number" min="5000" class="retro-input" placeholder="1인당 비용" />
-        <input v-model.number="meetingsPerMonth" type="number" min="1" class="retro-input" placeholder="월 회의 횟수" />
-        <input v-model.number="months" type="number" min="1" max="12" class="retro-input" placeholder="개월 수" />
+        <input v-model.number="attendees" aria-label="참석 인원" type="number" min="2" class="retro-input" placeholder="참석 인원" />
+        <input v-model.number="costPerPerson" aria-label="1인당 비용" type="number" min="5000" class="retro-input" placeholder="1인당 비용" />
+        <input v-model.number="meetingsPerMonth" aria-label="월 회의 횟수" type="number" min="1" class="retro-input" placeholder="월 회의 횟수" />
+        <input v-model.number="months" aria-label="개월 수" type="number" min="1" max="12" class="retro-input" placeholder="개월 수" />
         <label class="retro-panel-muted flex items-center gap-2 px-3 py-3 text-caption font-semibold text-foreground md:col-span-2">
           <input v-model="vatIncluded" type="checkbox" class="h-4 w-4 rounded border-border" />
           부가세 포함 영수증 기준
