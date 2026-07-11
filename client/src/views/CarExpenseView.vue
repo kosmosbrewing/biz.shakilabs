@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { ref } from "vue";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
@@ -7,6 +7,7 @@ import { BIZ_HOME_GUIDE } from "@/data/seoGuides";
 import { BIZ_SERVICE_UPDATED_AT } from "@/data/bizExpansionData";
 import { formatPercent, formatWon } from "@/lib/utils";
 import { calculateCarExpenseDeduction } from "@/utils/bizExpansionCalc";
+import { useSafeCalculation } from "@/composables/useSafeCalculation";
 
 const seoTitle = "업무용 차량 경비 처리 계산기 | 업무 사용비율 기준 손금";
 const seoDescription = "업무용 차량 관련 비용과 업무 사용비율을 넣으면 손금 인정액과 절세 효과를 계산합니다.";
@@ -39,11 +40,14 @@ const faqJsonLd = {
 const annualCost = ref(12_000_000);
 const businessUseRate = ref(0.8);
 const taxRate = ref(0.24);
-const result = computed(() => calculateCarExpenseDeduction({
-  annualCost: annualCost.value,
-  businessUseRate: businessUseRate.value,
-  taxRate: taxRate.value,
-}));
+const { result, validationError } = useSafeCalculation(
+  () => calculateCarExpenseDeduction({
+    annualCost: annualCost.value,
+    businessUseRate: businessUseRate.value,
+    taxRate: taxRate.value,
+  }),
+  calculateCarExpenseDeduction({ annualCost: 12_000_000, businessUseRate: 0.8, taxRate: 0.24 }),
+);
 </script>
 
 <template>
@@ -55,10 +59,13 @@ const result = computed(() => calculateCarExpenseDeduction({
         <h1 class="retro-title">업무용 차량 경비 처리</h1>
         <FreshBadge :message="`${BIZ_SERVICE_UPDATED_AT} 기준`" />
       </div>
-      <div class="retro-panel-content grid gap-3 md:grid-cols-3">
+      <div class="retro-panel-content grid gap-3 md:grid-cols-3" role="group" :aria-describedby="validationError ? 'car-expense-error' : undefined">
         <input v-model.number="annualCost" aria-label="연간 차량비" type="number" min="100000" class="retro-input" placeholder="연간 차량비" />
         <input v-model.number="businessUseRate" aria-label="업무 사용비율" type="number" min="0.1" max="1" step="0.05" class="retro-input" placeholder="업무 사용비율" />
         <input v-model.number="taxRate" aria-label="법인세율" type="number" min="0.06" max="0.5" step="0.01" class="retro-input" placeholder="법인세율" />
+        <p v-if="validationError" id="car-expense-error" class="text-caption font-semibold text-destructive md:col-span-3" role="alert">
+          {{ validationError }}
+        </p>
       </div>
     </div>
 

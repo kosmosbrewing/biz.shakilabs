@@ -14,6 +14,7 @@ import {
 } from "@/data/laborCost";
 import { formatManWon, formatPercent, formatWon } from "@/lib/utils";
 import { calculateLaborCost } from "@/utils/laborCostCalc";
+import { useSafeCalculation } from "@/composables/useSafeCalculation";
 
 const props = defineProps<{ initialSalary?: number }>();
 
@@ -22,13 +23,14 @@ const employeeCount = ref(1);
 const industryKey = ref("office");
 const includeRetirement = ref(true);
 
-const result = computed(() =>
-  calculateLaborCost({
+const { result, validationError } = useSafeCalculation(
+  () => calculateLaborCost({
     monthlySalary: monthlySalary.value,
     employeeCount: employeeCount.value,
     industryKey: industryKey.value,
     includeRetirement: includeRetirement.value,
   }),
+  calculateLaborCost({ monthlySalary: 3_000_000, employeeCount: 1, industryKey: "office", includeRetirement: true }),
 );
 
 const amountLabel = computed(() => (props.initialSalary ? formatManWon(props.initialSalary / 10000) : null));
@@ -58,7 +60,6 @@ const faqJsonLd = computed(() => ({
   <SEOHead :title="seoTitle" :description="seoDescription" :json-ld="faqJsonLd" />
 
   <div class="container space-y-5 py-5 max-w-4xl">
-    <!-- 헤더 -->
     <div class="retro-panel overflow-hidden">
       <div class="retro-titlebar rounded-t-2xl">
         <h1 class="retro-title">인건비 계산기</h1>
@@ -69,8 +70,7 @@ const faqJsonLd = computed(() => ({
       </div>
     </div>
 
-    <!-- 입력 -->
-    <div class="retro-panel p-4 sm:p-5 space-y-4">
+    <div class="retro-panel p-4 sm:p-5 space-y-4" role="group" :aria-describedby="validationError ? 'labor-cost-error' : undefined">
       <div class="space-y-1">
         <label class="text-tiny font-medium text-muted-foreground">월 급여 (세전)</label>
         <input v-model.number="monthlySalary" aria-label="월 급여" type="number" min="100000" class="retro-input w-full" />
@@ -113,9 +113,11 @@ const faqJsonLd = computed(() => ({
           </select>
         </div>
       </div>
+      <p v-if="validationError" id="labor-cost-error" class="text-caption font-semibold text-destructive" role="alert">
+        {{ validationError }}
+      </p>
     </div>
 
-    <!-- 핵심 지표 -->
     <div class="grid gap-3 md:grid-cols-4">
       <div class="retro-panel-muted px-4 py-4">
         <p class="text-tiny text-muted-foreground">1인 실제 인건비</p>
@@ -139,7 +141,6 @@ const faqJsonLd = computed(() => ({
       </div>
     </div>
 
-    <!-- 4대보험 상세 -->
     <div class="retro-panel overflow-hidden">
       <div class="retro-titlebar rounded-t-2xl">
         <h2 class="retro-title">4대보험 상세 (1인 기준)</h2>
@@ -196,7 +197,6 @@ const faqJsonLd = computed(() => ({
       </div>
     </div>
 
-    <!-- 유의사항 -->
     <div class="retro-panel px-4 py-4 space-y-2 text-caption text-muted-foreground">
       <p>국민연금은 2026년 7월부터 월 기준소득월액 상한 659만원이 적용됩니다.</p>
       <p>산재보험 요율은 업종·사업장 규모·과거 재해율에 따라 달라질 수 있습니다.</p>

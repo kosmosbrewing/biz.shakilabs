@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { SOCIAL_INSURANCE } from "@/data/bizConstants";
 import { INDUSTRY_ACCIDENT_RATES } from "@/data/laborCost";
+import { calculationFailure, calculationSuccess } from "@/utils/calculationState";
 
 const schema = z.object({
   monthlySalary: z.number().min(100_000).max(100_000_000),
@@ -78,8 +79,10 @@ function calcInsurance(
   };
 }
 
-export function calculateLaborCost(input: z.input<typeof schema>): LaborCostResult {
-  const parsed = schema.parse(input);
+export function calculateLaborCost(input: z.input<typeof schema>) {
+  const parsedResult = schema.safeParse(input);
+  if (!parsedResult.success) return calculationFailure(parsedResult.error);
+  const parsed = parsedResult.data;
   const { monthlySalary, employeeCount, industryKey, includeRetirement } = parsed;
 
   const accidentRate = INDUSTRY_ACCIDENT_RATES.find((r) => r.key === industryKey)?.rate
@@ -101,7 +104,7 @@ export function calculateLaborCost(input: z.input<typeof schema>): LaborCostResu
     ? (totalCostPerEmployee - monthlySalary) / monthlySalary
     : 0;
 
-  return {
+  return calculationSuccess<LaborCostResult>({
     monthlySalary,
     employeeCount,
     employer,
@@ -112,5 +115,5 @@ export function calculateLaborCost(input: z.input<typeof schema>): LaborCostResu
     totalMonthlyCost,
     totalAnnualCost,
     overheadRate,
-  };
+  });
 }

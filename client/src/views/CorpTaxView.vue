@@ -7,6 +7,7 @@ import { BIZ_CORP_TAX_GUIDE } from "@/data/seoGuides";
 import { BIZ_SERVICE_UPDATED_AT, CORP_TAX_SOURCE_URL } from "@/data/bizExpansionData";
 import { formatPercent, formatWon, formatManWon } from "@/lib/utils";
 import { calculateCorpTax } from "@/utils/bizExpansionCalc";
+import { useSafeCalculation } from "@/composables/useSafeCalculation";
 
 const props = defineProps<{ initialTaxableIncome?: number }>();
 const amountLabel = computed(() => props.initialTaxableIncome ? formatManWon(props.initialTaxableIncome / 10000) : null);
@@ -22,7 +23,10 @@ const seoDescription = computed(() =>
 );
 
 const taxableIncome = ref(props.initialTaxableIncome ?? 500_000_000);
-const result = computed(() => calculateCorpTax({ taxableIncome: taxableIncome.value }));
+const { result, validationError } = useSafeCalculation(
+  () => calculateCorpTax({ taxableIncome: taxableIncome.value }),
+  calculateCorpTax({ taxableIncome: 500_000_000 }),
+);
 
 const faqItems = [
   {
@@ -59,8 +63,11 @@ const faqJsonLd = computed(() => ({
         <h1 class="retro-title">법인세 계산기</h1>
         <FreshBadge :message="`${BIZ_SERVICE_UPDATED_AT} 기준`" />
       </div>
-      <div class="retro-panel-content space-y-4">
+      <div class="retro-panel-content space-y-4" role="group" :aria-describedby="validationError ? 'corp-tax-error' : undefined">
         <input v-model.number="taxableIncome" aria-label="과세표준" type="number" min="1000000" class="retro-input w-full" placeholder="과세표준" />
+        <p v-if="validationError" id="corp-tax-error" class="text-caption font-semibold text-destructive" role="alert">
+          {{ validationError }}
+        </p>
       </div>
     </div>
 

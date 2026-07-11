@@ -6,30 +6,43 @@ import {
 } from "@/utils/bizExpansionCalc";
 import { calculateStandardExpenseRate } from "@/utils/standardExpenseRateCalc";
 import { calculateLaborCost } from "@/utils/laborCostCalc";
+import type { CalculationState } from "@/utils/calculationState";
+
+function expectSuccess<T>(state: CalculationState<T>): T {
+  expect(state.success).toBe(true);
+  if (!state.success) throw new Error(state.message);
+  return state.data;
+}
 
 describe("bizExpansionCalc", () => {
   it("법인세는 누진세율을 적용한다", () => {
-    const result = calculateCorpTax({ taxableIncome: 500_000_000 });
+    const result = expectSuccess(calculateCorpTax({ taxableIncome: 500_000_000 }));
     expect(result.tax).toBe(88_000_000);
     expect(result.bracketLabel).toBe("200억원 이하");
   });
 
   it("업무 사용률 80%면 업무용 차량 경비 대부분을 손금 반영한다", () => {
-    const result = calculateCarExpenseDeduction({ annualCost: 12_000_000, businessUseRate: 0.8, taxRate: 0.24 });
+    const result = expectSuccess(calculateCarExpenseDeduction({ annualCost: 12_000_000, businessUseRate: 0.8, taxRate: 0.24 }));
     expect(result.deductibleAmount).toBe(9_600_000);
     expect(result.taxSaving).toBe(2_304_000);
   });
 
   it("회의비는 인원과 빈도에 따라 연간 예산을 계산한다", () => {
-    const result = calculateMeetingCost({
+    const result = expectSuccess(calculateMeetingCost({
       attendees: 6,
       costPerPerson: 30_000,
       meetingsPerMonth: 4,
       months: 12,
       vatIncluded: true,
-    });
+    }));
     expect(result.annualBudget).toBe(8_640_000);
     expect(result.vatCredit).toBe(785_455);
+  });
+
+  it("잘못된 확장 계산 입력은 예외 없이 실패 상태를 반환한다", () => {
+    expect(calculateCorpTax({ taxableIncome: 0 }).success).toBe(false);
+    expect(calculateCarExpenseDeduction({ annualCost: 0, businessUseRate: 0.8, taxRate: 0.24 }).success).toBe(false);
+    expect(calculateMeetingCost({ attendees: 1, costPerPerson: 30_000, meetingsPerMonth: 4, months: 12, vatIncluded: true }).success).toBe(false);
   });
 });
 
@@ -44,21 +57,21 @@ describe("standardExpenseRateCalc", () => {
   };
 
   it("기준경비율 방식은 주요경비 + 매출×기준경비율%을 경비로 반영한다", () => {
-    const result = calculateStandardExpenseRate(baseInput);
+    const result = expectSuccess(calculateStandardExpenseRate(baseInput));
     // 주요경비 37,000,000 + 100,000,000 × 18.5% = 55,500,000
     expect(result.standard.expenses).toBe(55_500_000);
     expect(result.standard.taxableIncome).toBe(44_500_000);
   });
 
   it("단순경비율 방식은 매출×단순경비율%를 경비로 반영한다", () => {
-    const result = calculateStandardExpenseRate(baseInput);
+    const result = expectSuccess(calculateStandardExpenseRate(baseInput));
     // 100,000,000 × 64.1% = 64,100,000
     expect(result.simple.expenses).toBe(64_100_000);
     expect(result.simple.taxableIncome).toBe(35_900_000);
   });
 
   it("세금이 적은 방식을 추천한다", () => {
-    const result = calculateStandardExpenseRate(baseInput);
+    const result = expectSuccess(calculateStandardExpenseRate(baseInput));
     // 단순경비율이 경비가 더 많으므로 세금이 적음
     expect(result.recommendation).toBe("simple");
     // taxDifference = simple - standard → 음수면 simple이 유리
@@ -66,20 +79,24 @@ describe("standardExpenseRateCalc", () => {
   });
 
   it("주요경비가 크면 기준경비율이 유리할 수 있다", () => {
-    const result = calculateStandardExpenseRate({
+    const result = expectSuccess(calculateStandardExpenseRate({
       ...baseInput,
       purchaseCost: 30_000_000,
       rentCost: 20_000_000,
       laborCost: 20_000_000,
-    });
+    }));
     // 주요경비 70,000,000 + 18,500,000 = 88,500,000 > 64,100,000
     expect(result.recommendation).toBe("standard");
   });
 
   it("totalTax = incomeTax + localTax (양 방식 모두)", () => {
-    const result = calculateStandardExpenseRate(baseInput);
+    const result = expectSuccess(calculateStandardExpenseRate(baseInput));
     expect(result.standard.totalTax).toBe(result.standard.incomeTax + result.standard.localTax);
     expect(result.simple.totalTax).toBe(result.simple.incomeTax + result.simple.localTax);
+  });
+
+  it("음수 매출 입력은 복구 가능한 실패 상태를 반환한다", () => {
+    expect(calculateStandardExpenseRate({ ...baseInput, revenue: -1 }).success).toBe(false);
   });
 });
 
@@ -92,7 +109,7 @@ describe("laborCostCalc", () => {
   };
 
   it("사업주 4대보험 항목별 금액이 올바르다", () => {
-    const r = calculateLaborCost(baseInput);
+    const r = expectSuccess(calculateLaborCost(baseInput));
     // 국민연금: 3,000,000 × 4.75% = 142,500
     expect(r.employer.nationalPension).toBe(142_500);
     // 건강보험: 3,000,000 × 3.595% = 107,850
@@ -106,30 +123,34 @@ describe("laborCostCalc", () => {
   });
 
   it("국민연금 상한액(659만원)이 적용된다", () => {
-    const r = calculateLaborCost({ ...baseInput, monthlySalary: 8_000_000 });
+    const r = expectSuccess(calculateLaborCost({ ...baseInput, monthlySalary: 8_000_000 }));
     // 상한 6,590,000 × 4.75%
     expect(r.employer.nationalPension).toBe(Math.round(6_590_000 * 0.0475));
     expect(r.employee.nationalPension).toBe(Math.round(6_590_000 * 0.0475));
   });
 
   it("퇴직급여 포함/미포함이 정확하다", () => {
-    const withRetire = calculateLaborCost(baseInput);
-    const noRetire = calculateLaborCost({ ...baseInput, includeRetirement: false });
+    const withRetire = expectSuccess(calculateLaborCost(baseInput));
+    const noRetire = expectSuccess(calculateLaborCost({ ...baseInput, includeRetirement: false }));
     expect(withRetire.retirementReserve).toBe(250_000); // 3,000,000 / 12
     expect(noRetire.retirementReserve).toBe(0);
     expect(withRetire.totalCostPerEmployee - noRetire.totalCostPerEmployee).toBe(250_000);
   });
 
   it("직원 수 배수로 전체 인건비가 계산된다", () => {
-    const r1 = calculateLaborCost(baseInput);
-    const r3 = calculateLaborCost({ ...baseInput, employeeCount: 3 });
+    const r1 = expectSuccess(calculateLaborCost(baseInput));
+    const r3 = expectSuccess(calculateLaborCost({ ...baseInput, employeeCount: 3 }));
     expect(r3.totalMonthlyCost).toBe(r1.totalCostPerEmployee * 3);
     expect(r3.totalAnnualCost).toBe(r3.totalMonthlyCost * 12);
   });
 
   it("overheadRate = (총비용 - 급여) / 급여", () => {
-    const r = calculateLaborCost(baseInput);
+    const r = expectSuccess(calculateLaborCost(baseInput));
     const expected = (r.totalCostPerEmployee - r.monthlySalary) / r.monthlySalary;
     expect(r.overheadRate).toBeCloseTo(expected, 10);
+  });
+
+  it("급여 범위 오류는 실패 상태를 반환한다", () => {
+    expect(calculateLaborCost({ ...baseInput, monthlySalary: 0 }).success).toBe(false);
   });
 });

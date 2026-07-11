@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { CORP_TAX_BRACKETS } from "@/data/bizExpansionData";
+import { calculationFailure, calculationSuccess } from "@/utils/calculationState";
 
 const corpTaxSchema = z.object({
   taxableIncome: z.number().min(1_000_000).max(1_000_000_000_000),
@@ -20,7 +21,9 @@ const meetingCostSchema = z.object({
 });
 
 export function calculateCorpTax(input: z.input<typeof corpTaxSchema>) {
-  const parsed = corpTaxSchema.parse(input);
+  const parsedResult = corpTaxSchema.safeParse(input);
+  if (!parsedResult.success) return calculationFailure(parsedResult.error);
+  const parsed = parsedResult.data;
   let remaining = parsed.taxableIncome;
   let previousLimit = 0;
   let tax = 0;
@@ -32,45 +35,49 @@ export function calculateCorpTax(input: z.input<typeof corpTaxSchema>) {
     remaining -= taxableSlice;
     previousLimit = bracket.limit;
     if (remaining <= 0) {
-      return {
+      return calculationSuccess({
         tax: Math.round(tax),
         afterTaxIncome: Math.round(parsed.taxableIncome - tax),
         effectiveRate: tax / parsed.taxableIncome,
         marginalRate: bracket.rate,
         bracketLabel: bracket.label,
-      };
+      });
     }
   }
 
-  return { tax: 0, afterTaxIncome: parsed.taxableIncome, effectiveRate: 0, marginalRate: 0, bracketLabel: "-" };
+  return calculationSuccess({ tax: 0, afterTaxIncome: parsed.taxableIncome, effectiveRate: 0, marginalRate: 0, bracketLabel: "-" });
 }
 
 export function calculateCarExpenseDeduction(input: z.input<typeof carExpenseSchema>) {
-  const parsed = carExpenseSchema.parse(input);
+  const parsedResult = carExpenseSchema.safeParse(input);
+  if (!parsedResult.success) return calculationFailure(parsedResult.error);
+  const parsed = parsedResult.data;
   const deductibleAmount = Math.round(parsed.annualCost * parsed.businessUseRate);
   const nonDeductibleAmount = Math.round(parsed.annualCost - deductibleAmount);
   const taxSaving = Math.round(deductibleAmount * parsed.taxRate);
 
-  return {
+  return calculationSuccess({
     deductibleAmount,
     nonDeductibleAmount,
     taxSaving,
     logbookAdvice: parsed.businessUseRate >= 0.8 ? "운행기록부와 업무전용보험 유지 권장" : "업무 사용비율 근거 보관 권장",
-  };
+  });
 }
 
 export function calculateMeetingCost(input: z.input<typeof meetingCostSchema>) {
-  const parsed = meetingCostSchema.parse(input);
+  const parsedResult = meetingCostSchema.safeParse(input);
+  if (!parsedResult.success) return calculationFailure(parsedResult.error);
+  const parsed = parsedResult.data;
   const perMeeting = parsed.attendees * parsed.costPerPerson;
   const monthlyBudget = perMeeting * parsed.meetingsPerMonth;
   const annualBudget = monthlyBudget * parsed.months;
   const vatCredit = parsed.vatIncluded ? Math.round(annualBudget / 11) : 0;
 
-  return {
+  return calculationSuccess({
     perMeeting,
     monthlyBudget,
     annualBudget,
     vatCredit,
     annualPerPerson: Math.round(annualBudget / parsed.attendees),
-  };
+  });
 }

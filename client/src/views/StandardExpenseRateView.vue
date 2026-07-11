@@ -12,6 +12,7 @@ import {
 } from "@/data/standardExpenseRate";
 import { formatManWon, formatPercent, formatWon } from "@/lib/utils";
 import { calculateStandardExpenseRate } from "@/utils/standardExpenseRateCalc";
+import { useSafeCalculation } from "@/composables/useSafeCalculation";
 
 const props = defineProps<{ initialRevenue?: number }>();
 
@@ -25,8 +26,8 @@ const industry = computed(() =>
   INDUSTRY_EXPENSE_RATES.find((i) => i.key === industryKey.value) ?? INDUSTRY_EXPENSE_RATES[0],
 );
 
-const result = computed(() =>
-  calculateStandardExpenseRate({
+const { result, validationError } = useSafeCalculation(
+  () => calculateStandardExpenseRate({
     revenue: revenue.value,
     standardRate: industry.value.standardRate,
     simpleRate: industry.value.simpleRate,
@@ -34,6 +35,7 @@ const result = computed(() =>
     rentCost: rentCost.value,
     laborCost: laborCost.value,
   }),
+  calculateStandardExpenseRate({ revenue: 100_000_000, standardRate: 18.5, simpleRate: 64.1, purchaseCost: 10_000_000, rentCost: 12_000_000, laborCost: 15_000_000 }),
 );
 
 const amountLabel = computed(() => (props.initialRevenue ? formatManWon(props.initialRevenue / 10000) : null));
@@ -63,7 +65,6 @@ const faqJsonLd = computed(() => ({
   <SEOHead :title="seoTitle" :description="seoDescription" :json-ld="faqJsonLd" />
 
   <div class="container space-y-5 py-5 max-w-4xl">
-    <!-- 헤더 -->
     <div class="retro-panel overflow-hidden">
       <div class="retro-titlebar rounded-t-2xl">
         <h1 class="retro-title">기준경비율 계산기</h1>
@@ -74,8 +75,7 @@ const faqJsonLd = computed(() => ({
       </div>
     </div>
 
-    <!-- 입력 -->
-    <div class="retro-panel p-4 sm:p-5 space-y-4">
+    <div class="retro-panel p-4 sm:p-5 space-y-4" role="group" :aria-describedby="validationError ? 'expense-rate-error' : undefined">
       <div class="space-y-1">
         <label class="text-tiny font-medium text-muted-foreground">연간 매출액</label>
         <input v-model.number="revenue" aria-label="연간 매출액" type="number" min="0" class="retro-input w-full" />
@@ -123,9 +123,11 @@ const faqJsonLd = computed(() => ({
           </div>
         </div>
       </div>
+      <p v-if="validationError" id="expense-rate-error" class="text-caption font-semibold text-destructive" role="alert">
+        {{ validationError }}
+      </p>
     </div>
 
-    <!-- 비교 결과 -->
     <div class="grid gap-3 md:grid-cols-2">
       <div class="retro-panel p-4 sm:p-5 space-y-3" :class="result.recommendation === 'standard' ? 'ring-2 ring-primary/30' : ''">
         <div class="flex items-center justify-between">
@@ -168,14 +170,12 @@ const faqJsonLd = computed(() => ({
       </div>
     </div>
 
-    <!-- 차이 요약 -->
     <div class="retro-panel-muted px-4 py-4 text-center">
       <p class="text-caption text-muted-foreground">{{ result.recommendation === 'standard' ? '기준경비율' : '단순경비율' }} 방식이</p>
       <p class="text-h2 font-bold text-primary">{{ formatWon(Math.abs(result.taxDifference)) }}</p>
       <p class="text-caption text-muted-foreground">더 절세됩니다</p>
     </div>
 
-    <!-- 유의사항 -->
     <div class="retro-panel px-4 py-4 space-y-2 text-caption text-muted-foreground">
       <p>단순경비율은 직전 과세기간 수입금액이 업종별 기준({{ industry.label }}: {{ industry.simpleThreshold.toLocaleString() }}만원) 이하인 경우에만 적용 가능합니다.</p>
       <p>기준경비율 적용 시 주요경비는 세금계산서, 계산서, 신용카드 등 적격증빙이 필요합니다.</p>
