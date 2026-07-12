@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
+import { ShSlider } from "@shakilabs/ui";
 import { Store, Receipt, AlertCircle } from "lucide-vue-next";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -149,14 +150,13 @@ const faqJsonLd = computed(() => ({
           매입 비율: {{ (purchaseRate * 100).toFixed(0) }}%
           <span class="text-tiny text-muted-foreground font-normal ml-1">(세금계산서 매입분)</span>
         </label>
-        <input
-          aria-label="매입 비율 범위"
-          v-model.number="purchaseRate"
-          type="range"
-          min="0.05"
-          max="0.80"
-          step="0.05"
-          class="w-full accent-primary"
+        <ShSlider
+          v-model="purchaseRate"
+          :min="0.05"
+          :max="0.8"
+          :step="0.05"
+          :value-text="`매입 비율 ${(purchaseRate * 100).toFixed(0)}%`"
+          aria-label="매입 비율 슬라이더"
         />
       </div>
     </div>

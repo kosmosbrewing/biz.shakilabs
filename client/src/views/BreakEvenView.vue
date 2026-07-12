@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
+import { ShSlider } from "@shakilabs/ui";
 import SEOHead from "@/components/common/SEOHead.vue";
 import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
 import { BIZ_BREAK_EVEN_GUIDE } from "@/data/seoGuides";
@@ -151,14 +152,14 @@ const faqJsonLd = {
           변동비율: {{ (variableCostRate * 100).toFixed(0) }}%
           <span class="text-tiny text-muted-foreground font-normal ml-1">(재료비·포장비 등)</span>
         </label>
-        <input
+        <ShSlider
           id="break-even-variable-rate"
-          v-model.number="variableCostRate"
-          type="range"
-          min="0.05"
-          max="0.80"
-          step="0.05"
-          class="w-full accent-primary"
+          v-model="variableCostRate"
+          :min="0.05"
+          :max="0.8"
+          :step="0.05"
+          :value-text="`변동비율 ${(variableCostRate * 100).toFixed(0)}%`"
+          aria-label="변동비율 슬라이더"
         />
       </div>
 

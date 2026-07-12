@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
+import { ShSlider } from "@shakilabs/ui";
 import SEOHead from "@/components/common/SEOHead.vue";
 import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
 import { BIZ_HOME_GUIDE } from "@/data/seoGuides";
@@ -109,14 +110,13 @@ const faqJsonLd = {
         <label class="block text-caption font-semibold text-foreground mb-1.5">
           월 주문 건수: {{ monthlyOrders.toLocaleString('ko-KR') }}건
         </label>
-        <input
-          aria-label="월 주문 건수 범위"
-          v-model.number="monthlyOrders"
-          type="range"
-          min="50"
-          max="3000"
-          step="50"
-          class="w-full accent-primary"
+        <ShSlider
+          v-model="monthlyOrders"
+          :min="50"
+          :max="3000"
+          :step="50"
+          :value-text="`${monthlyOrders.toLocaleString('ko-KR')}건`"
+          aria-label="월 주문 건수 슬라이더"
         />
         <div class="grid grid-cols-2 text-tiny text-muted-foreground tabular-nums">
           <span class="justify-self-start">50건</span>
