@@ -2,6 +2,7 @@
 import { computed, ref } from "vue";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
+import CalculatorPageHeader from "@/components/biz/CalculatorPageHeader.vue";
 import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
 import { BIZ_HOME_GUIDE } from "@/data/seoGuides";
 import {
@@ -63,10 +64,12 @@ const faqJsonLd = computed(() => ({
   <SEOHead :title="seoTitle" :description="seoDescription" :json-ld="faqJsonLd" />
 
   <div class="container space-y-5 py-5 max-w-4xl">
+    <CalculatorPageHeader title="기준경비율 계산기" />
+
     <!-- 헤더 -->
     <div class="retro-panel overflow-hidden">
       <div class="retro-titlebar rounded-t-2xl">
-        <h1 class="retro-title">기준경비율 계산기</h1>
+        <h2 class="retro-title">계산 기준 안내</h2>
         <FreshBadge :message="`${BIZ_EXPENSE_RATE_UPDATED} 기준`" />
       </div>
       <div class="retro-panel-content space-y-2">

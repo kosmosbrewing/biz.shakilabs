@@ -42,10 +42,14 @@ function validateRoute(route) {
   const html = readFileSync(outputPath, "utf8");
   const expectedCanonical = route === "/" ? canonicalBase : `${canonicalBase}${route}`;
   const actualCanonical = html.match(/<link rel="canonical" href="([^"]+)"\s*\/?>/)?.[1];
+  const h1Count = html.match(/<h1\b/gi)?.length ?? 0;
 
   assert(actualCanonical === expectedCanonical,
     `Invalid canonical for ${route}: expected ${expectedCanonical}`);
   assert(/<title>[^<]+<\/title>/.test(html), `Missing title for ${route}`);
+  assert(h1Count === 1, `Expected one H1 for ${route}, found ${h1Count}`);
+  assert(!/<noscript>/i.test(html),
+    `Rendered route must not retain the shell noscript for ${route}`);
   assert(html.includes('id="app"'), `Missing app root for ${route}`);
 }
 
