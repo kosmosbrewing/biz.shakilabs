@@ -1,4 +1,4 @@
-import { mkdirSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
@@ -87,6 +87,26 @@ ${urls}
 `;
 }
 
+function routeOutputPath(route) {
+  return route === "/"
+    ? resolve(projectRoot, "dist", "index.html")
+    : resolve(projectRoot, "dist", `${route.slice(1)}.html`);
+}
+
+function removeRenderedNoscriptFallbacks() {
+  for (const route of [...SEO_ROUTES, "/404"]) {
+    const outputPath = routeOutputPath(route);
+    if (!existsSync(outputPath)) continue;
+
+    const html = readFileSync(outputPath, "utf8");
+    const nextHtml = html.replace(
+      /\n?\s*<noscript>[\s\S]*?<\/noscript>/i,
+      "",
+    );
+    writeFileSync(outputPath, nextHtml, "utf8");
+  }
+}
+
 const buildDate = resolveBuildDate();
 
 mkdirSync(dirname(sitemapPath), { recursive: true });
@@ -104,6 +124,8 @@ const result = spawnSync(viteSsgBin, ["build"], {
 if (result.status !== 0) {
   process.exit(result.status ?? 1);
 }
+
+removeRenderedNoscriptFallbacks();
 
 const validationResult = spawnSync(
   process.execPath,

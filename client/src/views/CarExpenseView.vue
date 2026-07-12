@@ -2,6 +2,7 @@
 import { computed, ref } from "vue";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
+import CalculatorPageHeader from "@/components/biz/CalculatorPageHeader.vue";
 import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
 import { BIZ_HOME_GUIDE } from "@/data/seoGuides";
 import { BIZ_SERVICE_UPDATED_AT } from "@/data/bizExpansionData";
@@ -50,9 +51,11 @@ const result = computed(() => calculateCarExpenseDeduction({
   <SEOHead :title="seoTitle" :description="seoDescription" :json-ld="faqJsonLd" />
 
   <div class="container space-y-5 py-5 max-w-4xl">
+    <CalculatorPageHeader title="업무용 차량 경비 계산기" />
+
     <div class="retro-panel overflow-hidden">
       <div class="retro-titlebar rounded-t-2xl">
-        <h1 class="retro-title">업무용 차량 경비 처리</h1>
+        <h2 class="retro-title">차량비 조건 입력</h2>
         <FreshBadge :message="`${BIZ_SERVICE_UPDATED_AT} 기준`" />
       </div>
       <div class="retro-panel-content grid gap-3 md:grid-cols-3">
