@@ -4,6 +4,7 @@ import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import CalculatorPageHeader from "@/components/biz/CalculatorPageHeader.vue";
 import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
+import BreakdownStackedBar from "@/components/result-visualization/BreakdownStackedBar.vue";
 import { BIZ_HOME_GUIDE } from "@/data/seoGuides";
 import { BIZ_SERVICE_UPDATED_AT } from "@/data/bizExpansionData";
 import { formatPercent, formatWon } from "@/lib/utils";
@@ -45,6 +46,11 @@ const result = computed(() => calculateCarExpenseDeduction({
   businessUseRate: businessUseRate.value,
   taxRate: taxRate.value,
 }));
+
+const expenseSegments = computed(() => [
+  { key: "deductible", label: "손금 인정액", value: result.value.deductibleAmount, tone: "primary" as const },
+  { key: "private", label: "사적 사용분", value: result.value.nonDeductibleAmount, tone: "fee" as const },
+]);
 </script>
 
 <template>
@@ -79,6 +85,13 @@ const result = computed(() => calculateCarExpenseDeduction({
         <p class="mt-2 text-h2 font-bold text-foreground">{{ formatWon(result.taxSaving) }}</p>
       </div>
     </div>
+
+    <BreakdownStackedBar
+      title="연간 차량비 경비 인정 구성"
+      note="입력한 업무 사용비율에 따라 연간 차량비를 손금 인정액과 사적 사용분으로 나눴습니다."
+      :segments="expenseSegments"
+      :format-value="formatWon"
+    />
 
     <div class="retro-panel px-4 py-4 text-caption text-foreground">
       업무 사용비율 {{ formatPercent(businessUseRate, 0) }} 기준입니다. {{ result.logbookAdvice }}.

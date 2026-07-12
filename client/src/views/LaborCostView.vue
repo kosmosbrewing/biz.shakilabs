@@ -4,6 +4,8 @@ import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import CalculatorPageHeader from "@/components/biz/CalculatorPageHeader.vue";
 import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
+import BreakdownStackedBar from "@/components/result-visualization/BreakdownStackedBar.vue";
+import MetricComparisonBars from "@/components/result-visualization/MetricComparisonBars.vue";
 import { BIZ_LABOR_COST_GUIDE } from "@/data/seoGuides";
 import {
   INDUSTRY_ACCIDENT_RATES,
@@ -53,6 +55,21 @@ const faqJsonLd = computed(() => ({
     acceptedAnswer: { "@type": "Answer", text: f.a },
   })),
 }));
+
+const costSegments = computed(() => [
+  { key: "salary", label: "세전 급여", value: result.value.monthlySalary, tone: "primary" as const },
+  { key: "insurance", label: "사업주 4대보험", value: result.value.employer.totalInsurance, tone: "fee" as const },
+  { key: "retirement", label: "퇴직급여 적립", value: result.value.retirementReserve, tone: "muted" as const },
+]);
+
+const insuranceMetrics = computed(() => [{
+  key: "insurance",
+  label: "월 4대보험 부담",
+  values: [
+    { key: "employer", label: "사업주", value: result.value.employer.totalInsurance, highlight: true },
+    { key: "employee", label: "근로자", value: result.value.employee.totalInsurance },
+  ],
+}]);
 </script>
 
 <template>
@@ -140,6 +157,21 @@ const faqJsonLd = computed(() => ({
         <p class="mt-2 text-h2 font-bold text-foreground">{{ formatWon(result.totalAnnualCost) }}</p>
         <p class="text-tiny text-muted-foreground">12개월 기준</p>
       </div>
+    </div>
+
+    <div class="grid gap-4 lg:grid-cols-2">
+      <BreakdownStackedBar
+        title="직원 1명 월 인건비 구성"
+        note="세전 급여에 사업주 부담 보험료와 선택한 퇴직급여 적립분을 더한 금액입니다."
+        :segments="costSegments"
+        :format-value="formatWon"
+      />
+      <MetricComparisonBars
+        title="사업주·근로자 보험료 비교"
+        note="소득세를 제외한 월 4대보험 부담액을 같은 기준으로 비교합니다."
+        :metrics="insuranceMetrics"
+        :format-value="formatWon"
+      />
     </div>
 
     <!-- 4대보험 상세 -->
