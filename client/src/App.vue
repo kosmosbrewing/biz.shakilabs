@@ -7,7 +7,7 @@ import AlertHost from "@/components/ui/alert/AlertHost.vue";
   <AppLayout>
     <RouterView v-slot="{ Component, route }">
       <Transition name="page-fade" mode="out-in">
-        <div :key="route.path">
+        <div :key="route.path" class="text-resize-layout">
           <component :is="Component" />
         </div>
       </Transition>

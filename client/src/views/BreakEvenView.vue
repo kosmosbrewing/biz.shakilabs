@@ -179,14 +179,14 @@ const faqJsonLd = {
     <div class="retro-panel p-4 sm:p-5 mb-6">
       <h2 class="text-heading font-semibold text-foreground mb-4 text-center">손익분기점</h2>
 
-      <div class="grid grid-cols-3 gap-3 text-center mb-4">
+      <div class="grid grid-cols-1 gap-3 text-center mb-4 sm:grid-cols-3">
         <div class="retro-stat">
           <p class="text-tiny text-muted-foreground">월 고정비</p>
-          <p class="text-body font-bold text-foreground">{{ formatWon(fixedCosts) }}</p>
+          <p class="text-body font-bold text-foreground tabular-nums">{{ formatWon(fixedCosts) }}</p>
         </div>
         <div class="retro-stat">
           <p class="text-tiny text-muted-foreground">BEP 월 매출</p>
-          <p class="text-body font-bold text-primary">{{ formatWon(result.breakEvenRevenue) }}</p>
+          <p class="text-body font-bold text-primary tabular-nums">{{ formatWon(result.breakEvenRevenue) }}</p>
         </div>
         <div class="retro-stat">
           <p class="text-tiny text-muted-foreground">BEP 일 매출</p>
