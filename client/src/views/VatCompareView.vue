@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import SEOHead from "@/components/common/SEOHead.vue";
 import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
+import MetricComparisonBars from "@/components/result-visualization/MetricComparisonBars.vue";
 import { BIZ_VAT_GUIDE } from "@/data/seoGuides";
 import { calcVatCompare } from "@/utils/bizVatCalc";
 import { SIMPLIFIED_VAT_RATES } from "@/data/bizConstants";
@@ -76,6 +77,26 @@ const faqJsonLd = computed(() => ({
     acceptedAnswer: { "@type": "Answer", text: faq.a },
   })),
 }));
+
+const vatMetrics = computed(() => [{
+  key: "vat",
+  label: "예상 연간 부가세",
+  values: [
+    {
+      key: "general",
+      label: "일반과세",
+      value: result.value.generalVat,
+      highlight: result.value.recommendation === "general" || !result.value.isSimplifiedEligible,
+    },
+    {
+      key: "simplified",
+      label: "간이과세",
+      value: result.value.simplifiedVat,
+      highlight: result.value.recommendation === "simplified" && result.value.isSimplifiedEligible,
+      detail: result.value.isSimplifiedEligible ? undefined : "현재 매출에서는 적용 불가",
+    },
+  ],
+}]);
 </script>
 
 <template>
@@ -223,6 +244,14 @@ const faqJsonLd = computed(() => ({
         </div>
       </CardContent>
     </Card>
+
+    <MetricComparisonBars
+      class="mb-6"
+      title="과세 유형별 부가세 비교"
+      note="같은 매출·매입 가정에서 예상되는 연간 납부액입니다. 강조 표시는 현재 조건의 권장 유형입니다."
+      :metrics="vatMetrics"
+      :format-value="formatWon"
+    />
 
     <!-- 과세 유형 기준 -->
     <Card class="border-border/60">

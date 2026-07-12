@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
-import { User, Building2, AlertCircle } from "lucide-vue-next";
+import { User, Building2 } from "lucide-vue-next";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import SEOHead from "@/components/common/SEOHead.vue";
 import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
+import IndividualCorpComparisonChart from "@/components/biz/IndividualCorpComparisonChart.vue";
+import IndividualCorpNotes from "@/components/biz/IndividualCorpNotes.vue";
 import { BIZ_INDIVIDUAL_VS_CORP_GUIDE } from "@/data/seoGuides";
 import { calcIndividualAfterTax, calcCorpAfterTax } from "@/utils/bizCalc";
 import { formatWon, formatPercent, formatManWon } from "@/lib/utils";
@@ -275,34 +277,9 @@ const faqJsonLd = computed(() => ({
       </CardContent>
     </Card>
 
-    <!-- 유의사항 -->
-    <Card class="border-border/60">
-      <CardContent class="biz-note-panel p-4">
-        <div class="flex items-center gap-2 mb-2">
-          <span class="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground">
-            <AlertCircle class="h-3.5 w-3.5" />
-          </span>
-          <p class="text-tiny font-semibold text-foreground">유의사항</p>
-        </div>
-        <ul class="list-disc pl-4 space-y-0.5 text-tiny text-muted-foreground">
-          <li>개인사업자는 종합소득세(6~45%), 법인은 법인세(10~25%) + 배당소득세(15.4%) 구조입니다.</li>
-          <li>법인 설립비·세무기장료·4대보험 사업주 부담 등 간접비용은 별도입니다.</li>
-          <li>각종 공제·감면(중소기업 특별세액감면 등)은 반영되지 않았습니다.</li>
-        </ul>
-      </CardContent>
-    </Card>
+    <IndividualCorpComparisonChart :individual="individual" :corp="corp" :better-option="betterOption" />
 
-    <div class="retro-panel overflow-hidden">
-      <div class="retro-titlebar rounded-t-2xl">
-        <h2 class="retro-title">자주 묻는 질문</h2>
-      </div>
-      <div class="retro-panel-content space-y-3">
-        <details v-for="faq in faqItems" :key="faq.q" class="retro-panel-muted p-4">
-          <summary class="cursor-pointer list-none text-body font-semibold text-foreground">{{ faq.q }}</summary>
-          <p class="mt-2 text-caption leading-relaxed text-muted-foreground">{{ faq.a }}</p>
-        </details>
-      </div>
-    </div>
+    <IndividualCorpNotes :faqs="faqItems" />
 
     <SeoRichGuide
       :title="BIZ_INDIVIDUAL_VS_CORP_GUIDE.title"

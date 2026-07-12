@@ -4,6 +4,7 @@ import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import CalculatorPageHeader from "@/components/biz/CalculatorPageHeader.vue";
 import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
+import BreakdownStackedBar from "@/components/result-visualization/BreakdownStackedBar.vue";
 import { BIZ_CORP_TAX_GUIDE } from "@/data/seoGuides";
 import { BIZ_SERVICE_UPDATED_AT, CORP_TAX_SOURCE_URL } from "@/data/bizExpansionData";
 import { formatPercent, formatWon, formatManWon } from "@/lib/utils";
@@ -24,6 +25,10 @@ const seoDescription = computed(() =>
 
 const taxableIncome = ref(props.initialTaxableIncome ?? 500_000_000);
 const result = computed(() => calculateCorpTax({ taxableIncome: taxableIncome.value }));
+const incomeSegments = computed(() => [
+  { key: "after-tax", label: "세후 이익", value: result.value.afterTaxIncome, tone: "profit" as const },
+  { key: "tax", label: "법인세", value: result.value.tax, tone: "fee" as const },
+]);
 
 const faqItems = [
   {
@@ -81,6 +86,13 @@ const faqJsonLd = computed(() => ({
         <p class="mt-2 text-h2 font-bold text-foreground">{{ formatPercent(result.effectiveRate, 1) }}</p>
       </div>
     </div>
+
+    <BreakdownStackedBar
+      title="과세표준의 세금·세후 이익 구성"
+      note="입력한 과세표준에서 예상 법인세를 제외한 금액을 한 막대에 표시합니다."
+      :segments="incomeSegments"
+      :format-value="formatWon"
+    />
 
     <div class="retro-panel px-4 py-4 text-caption text-foreground space-y-1">
       <p>현재 과세 구간은 {{ result.bracketLabel }}이며 지방소득세 포함 한계세율은 {{ formatPercent(result.marginalRate, 1) }}입니다.</p>
