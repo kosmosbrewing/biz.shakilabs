@@ -3,6 +3,8 @@ import { ref, computed } from "vue";
 import { ShSlider } from "@shakilabs/ui";
 import SEOHead from "@/components/common/SEOHead.vue";
 import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
+import BreakdownStackedBar from "@/components/result-visualization/BreakdownStackedBar.vue";
+import MetricComparisonBars from "@/components/result-visualization/MetricComparisonBars.vue";
 import { BIZ_HOME_GUIDE } from "@/data/seoGuides";
 import { BIZ_DATA_VERIFIED, DELIVERY_FEE_SOURCE_URL } from "@/data/bizConstants";
 import { calcDeliveryFees } from "@/utils/bizDeliveryCalc";
@@ -26,6 +28,40 @@ const totalRevenue = computed(() => orderAmount.value * monthlyOrders.value);
 const bestApp = computed(() => {
   if (results.value.length === 0) return null;
   return results.value.reduce((best, cur) => cur.totalFee < best.totalFee ? cur : best);
+});
+
+const deliveryMetrics = computed(() => [
+  {
+    key: "fee",
+    label: "월 총 수수료",
+    values: results.value.map((app) => ({
+      key: app.appKey,
+      label: app.appName,
+      value: app.totalFee,
+      highlight: app.appKey === bestApp.value?.appKey,
+      detail: `실질 수수료율 ${formatPercent(app.feeRate)}`,
+    })),
+  },
+  {
+    key: "net",
+    label: "월 순수익",
+    values: results.value.map((app) => ({
+      key: app.appKey,
+      label: app.appName,
+      value: app.netRevenue,
+      highlight: app.appKey === bestApp.value?.appKey,
+    })),
+  },
+]);
+
+const bestAppSegments = computed(() => {
+  const app = bestApp.value;
+  if (!app) return [];
+  return [
+    { key: "commission", label: "중개 수수료", value: app.commission, tone: "fee" as const },
+    { key: "payment", label: "결제 수수료", value: app.paymentFee, tone: "primary" as const },
+    { key: "delivery", label: "배달대행료", value: app.deliveryFee, tone: "muted" as const },
+  ];
 });
 
 const presets = [
@@ -135,6 +171,22 @@ const faqJsonLd = {
       </div>
     </div>
 
+    <div class="mb-6 grid gap-4">
+      <MetricComparisonBars
+        title="앱별 월 비용과 순수익"
+        note="각 지표는 별도 기준으로 비교하며, 강조된 앱은 입력값에서 총비용이 가장 적습니다."
+        :metrics="deliveryMetrics"
+        :format-value="formatWon"
+      />
+      <BreakdownStackedBar
+        v-if="bestApp"
+        :title="`${bestApp.appName} 수수료 구성`"
+        note="최저 비용 앱의 월 총 수수료를 항목별로 나눴습니다."
+        :segments="bestAppSegments"
+        :format-value="formatWon"
+      />
+    </div>
+
     <!-- 비교 테이블 -->
     <div class="retro-panel overflow-hidden mb-6">
       <div class="overflow-x-auto">
@@ -160,10 +212,7 @@ const faqJsonLd = {
             >
               <td class="p-3">
                 <div class="flex items-center gap-2">
-                  <span
-                    class="inline-block h-2.5 w-2.5 rounded-full shrink-0"
-                    :style="{ backgroundColor: r.color }"
-                  />
+                  <span class="inline-block h-2.5 w-2.5 shrink-0 rounded-full bg-muted-foreground/45" />
                   <span class="font-medium text-foreground">{{ r.appName }}</span>
                   <span
                     v-if="bestApp?.appKey === r.appKey"

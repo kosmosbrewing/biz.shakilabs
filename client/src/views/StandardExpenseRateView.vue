@@ -4,6 +4,7 @@ import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import CalculatorPageHeader from "@/components/biz/CalculatorPageHeader.vue";
 import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
+import MetricComparisonBars from "@/components/result-visualization/MetricComparisonBars.vue";
 import { BIZ_HOME_GUIDE } from "@/data/seoGuides";
 import {
   BIZ_EXPENSE_RATE_UPDATED,
@@ -58,6 +59,25 @@ const faqJsonLd = computed(() => ({
     acceptedAnswer: { "@type": "Answer", text: f.a },
   })),
 }));
+
+const methodMetrics = computed(() => [
+  {
+    key: "tax",
+    label: "총 세금",
+    values: [
+      { key: "standard", label: "기준경비율", value: result.value.standard.totalTax, highlight: result.value.recommendation === "standard" },
+      { key: "simple", label: "단순경비율", value: result.value.simple.totalTax, highlight: result.value.recommendation === "simple" },
+    ],
+  },
+  {
+    key: "income",
+    label: "세후 소득",
+    values: [
+      { key: "standard", label: "기준경비율", value: result.value.standard.afterTaxIncome, highlight: result.value.recommendation === "standard" },
+      { key: "simple", label: "단순경비율", value: result.value.simple.afterTaxIncome, highlight: result.value.recommendation === "simple" },
+    ],
+  },
+]);
 </script>
 
 <template>
@@ -170,6 +190,13 @@ const faqJsonLd = computed(() => ({
         </div>
       </div>
     </div>
+
+    <MetricComparisonBars
+      title="경비율 방식별 결과 비교"
+      note="총 세금과 세후 소득은 단위는 같지만 기준값이 달라 각 지표 안에서 비교합니다."
+      :metrics="methodMetrics"
+      :format-value="formatWon"
+    />
 
     <!-- 차이 요약 -->
     <div class="retro-panel-muted px-4 py-4 text-center">
