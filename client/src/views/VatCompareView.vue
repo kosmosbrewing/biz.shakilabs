@@ -188,31 +188,31 @@ const faqJsonLd = computed(() => ({
           </Badge>
         </div>
 
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <!-- 일반과세 -->
           <Card class="border-blue-200/50 dark:border-blue-800/50">
-            <CardContent class="p-4 text-center space-y-2">
+            <CardContent class="biz-compare-card p-4 text-center space-y-2">
               <div class="flex items-center justify-center gap-2">
                 <span class="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400">
                   <Receipt class="h-3.5 w-3.5" />
                 </span>
                 <h3 class="text-caption font-bold text-blue-600 dark:text-blue-400">일반과세</h3>
               </div>
-              <p class="text-h1 font-bold text-foreground">{{ formatWon(result.generalVat) }}</p>
+              <p class="text-h1 font-bold text-foreground tabular-nums">{{ formatWon(result.generalVat) }}</p>
               <p class="text-tiny text-muted-foreground">연간 부가세</p>
             </CardContent>
           </Card>
 
           <!-- 간이과세 -->
           <Card class="border-primary/25">
-            <CardContent class="p-4 text-center space-y-2">
+            <CardContent class="biz-compare-card p-4 text-center space-y-2">
               <div class="flex items-center justify-center gap-2">
                 <span class="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 text-primary">
                   <Store class="h-3.5 w-3.5" />
                 </span>
                 <h3 class="text-caption font-bold text-primary">간이과세</h3>
               </div>
-              <p class="text-h1 font-bold text-foreground">
+              <p class="text-h1 font-bold text-foreground tabular-nums">
                 {{ result.isSimplifiedEligible ? formatWon(result.simplifiedVat) : '-' }}
               </p>
               <p class="text-tiny text-muted-foreground">

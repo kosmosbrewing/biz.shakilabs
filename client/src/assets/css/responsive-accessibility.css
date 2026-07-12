@@ -9,6 +9,16 @@
   color: white;
 }
 
+.tabular-nums {
+  overflow-wrap: normal;
+  white-space: nowrap;
+}
+
+.biz-metrics > div > :last-child {
+  overflow-wrap: normal;
+  white-space: nowrap;
+}
+
 @media (max-width: 400px) {
   .text-caption,
   .text-tiny,
@@ -52,7 +62,8 @@
     min-width: 24px;
   }
 
-  .text-resize-layout.container {
+  .text-resize-layout.container,
+  .text-resize-layout .container {
     padding-inline: 12px;
   }
 
@@ -61,8 +72,20 @@
     padding-inline: 12px;
   }
 
-  .text-resize-layout :is(h1, h2, h3, p, a, button, span, strong, label, li) {
+  .text-resize-layout :is(h1, h2, h3, h4) {
     min-width: 0;
+    overflow-wrap: break-word;
+    text-wrap-style: balance;
+    word-break: keep-all;
+  }
+
+  .text-resize-layout :is(p, li, dt, dd) {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    text-wrap-style: pretty;
+  }
+
+  .retro-link[href^="mailto:"] {
     overflow-wrap: anywhere;
   }
 
@@ -77,6 +100,11 @@
 
   .text-resize-layout .biz-compare-grid {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .text-resize-layout p.text-h1.font-bold {
+    font-size: clamp(1rem, 9vw, 2rem);
+    line-height: 1.15;
   }
 
   .text-resize-layout .biz-metrics > div {

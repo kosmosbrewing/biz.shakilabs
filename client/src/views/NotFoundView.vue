@@ -19,7 +19,7 @@ import { buttonVariants } from "@/components/ui/button";
       <a :class="buttonVariants({ variant: 'default' })" href="/biz">
         홈으로 돌아가기
       </a>
-      <RouterLink :class="buttonVariants({ variant: 'outline' })" to="/individual-vs-corp">
+      <RouterLink class="max-w-full whitespace-normal text-center" :class="buttonVariants({ variant: 'outline' })" to="/individual-vs-corp">
         개인사업자 vs 법인 비교
       </RouterLink>
     </div>

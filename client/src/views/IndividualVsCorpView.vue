@@ -190,7 +190,7 @@ const faqJsonLd = computed(() => ({
                 <h3 class="text-caption font-bold text-blue-600 dark:text-blue-400">개인사업자</h3>
               </div>
               <div class="text-center">
-                <p class="text-h1 font-bold text-foreground">{{ formatWon(individual.afterTaxIncome) }}</p>
+                <p class="text-h1 font-bold text-foreground tabular-nums">{{ formatWon(individual.afterTaxIncome) }}</p>
                 <p class="text-tiny text-muted-foreground">세후소득</p>
               </div>
               <div class="biz-metrics space-y-1 text-tiny">
@@ -236,7 +236,7 @@ const faqJsonLd = computed(() => ({
                 <h3 class="text-caption font-bold text-primary">법인</h3>
               </div>
               <div class="text-center">
-                <p class="text-h1 font-bold text-foreground">{{ formatWon(corp.afterTaxIncome) }}</p>
+                <p class="text-h1 font-bold text-foreground tabular-nums">{{ formatWon(corp.afterTaxIncome) }}</p>
                 <p class="text-tiny text-muted-foreground">세후소득</p>
               </div>
               <div class="biz-metrics space-y-1 text-tiny">

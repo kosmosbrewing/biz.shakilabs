@@ -118,9 +118,9 @@ const faqJsonLd = {
           step="50"
           class="w-full accent-primary"
         />
-        <div class="flex justify-between text-tiny text-muted-foreground">
-          <span>50건</span>
-          <span>3,000건</span>
+        <div class="grid grid-cols-2 text-tiny text-muted-foreground tabular-nums">
+          <span class="justify-self-start">50건</span>
+          <span class="justify-self-end">3,000건</span>
         </div>
       </div>
     </div>
@@ -138,7 +138,7 @@ const faqJsonLd = {
     <!-- 비교 테이블 -->
     <div class="retro-panel overflow-hidden mb-6">
       <div class="overflow-x-auto">
-        <table aria-label="배달앱 수수료 비교" class="w-full text-tiny">
+        <table aria-label="배달앱 수수료 비교" class="w-max min-w-full text-tiny tabular-nums">
           <thead>
             <tr class="border-b border-border bg-muted/30">
               <th scope="col" class="text-left p-3 font-semibold text-foreground">배달앱</th>
