@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
+import { ShSlider } from "@shakilabs/ui";
 import { User, Building2, AlertCircle } from "lucide-vue-next";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -130,14 +131,14 @@ const faqJsonLd = computed(() => ({
         <label for="biz-expense-rate" class="mb-1.5 block text-caption font-semibold text-foreground">
           경비율: {{ (expenseRate * 100).toFixed(0) }}%
         </label>
-        <input
+        <ShSlider
           id="biz-expense-rate"
-          v-model.number="expenseRate"
-          type="range"
-          min="0.1"
-          max="0.8"
-          step="0.05"
-          class="w-full accent-primary"
+          v-model="expenseRate"
+          :min="0.1"
+          :max="0.8"
+          :step="0.05"
+          :value-text="`경비율 ${(expenseRate * 100).toFixed(0)}%`"
+          aria-label="경비율 슬라이더"
         />
         <div class="flex justify-between text-tiny text-muted-foreground">
           <span>10%</span>
