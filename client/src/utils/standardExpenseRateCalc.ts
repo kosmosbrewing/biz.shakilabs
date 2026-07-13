@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { INCOME_TAX_BRACKETS, LOCAL_INCOME_TAX_RATE } from "@/data/bizConstants";
+import { calculationFailure, calculationSuccess } from "@/utils/calculationState";
 
 const schema = z.object({
   revenue: z.number().min(0).max(10_000_000_000),
@@ -59,10 +60,10 @@ function buildMethodResult(
   return { expenses, taxableIncome, incomeTax, localTax, totalTax, afterTaxIncome, effectiveRate };
 }
 
-export function calculateStandardExpenseRate(
-  input: StandardExpenseRateInput
-): StandardExpenseRateResult {
-  const parsed = schema.parse(input);
+export function calculateStandardExpenseRate(input: StandardExpenseRateInput) {
+  const parsedResult = schema.safeParse(input);
+  if (!parsedResult.success) return calculationFailure(parsedResult.error);
+  const parsed = parsedResult.data;
 
   const majorExpenses = parsed.purchaseCost + parsed.rentCost + parsed.laborCost;
 
@@ -77,5 +78,11 @@ export function calculateStandardExpenseRate(
   const taxDifference = simple.totalTax - standard.totalTax;
   const recommendation = standard.totalTax <= simple.totalTax ? "standard" : "simple";
 
-  return { standard, simple, taxDifference, recommendation, majorExpenses };
+  return calculationSuccess<StandardExpenseRateResult>({
+    standard,
+    simple,
+    taxDifference,
+    recommendation,
+    majorExpenses,
+  });
 }
