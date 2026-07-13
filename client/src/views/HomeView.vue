@@ -6,6 +6,7 @@ import { ActionCard } from "@/components/ui/action-card";
 import { Card, CardContent } from "@/components/ui/card";
 import RelatedServices from "@/components/common/RelatedServices.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
+import FaqAccordionPanel from "@/components/common/FaqAccordionPanel.vue";
 import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
 import { BIZ_HOME_GUIDE } from "@/data/seoGuides";
 
@@ -143,25 +144,7 @@ const faqJsonLd = {
     </section>
 
     <section class="mt-6 max-w-3xl mx-auto">
-      <div class="retro-panel overflow-hidden">
-        <div class="retro-titlebar rounded-t-2xl">
-          <h2 class="retro-title">자주 묻는 질문</h2>
-        </div>
-        <div class="retro-panel-content space-y-3">
-          <details
-            v-for="faq in faqItems"
-            :key="faq.q"
-            class="retro-panel-muted p-4"
-          >
-            <summary class="cursor-pointer list-none text-body font-semibold text-foreground">
-              {{ faq.q }}
-            </summary>
-            <p class="mt-2 text-caption leading-relaxed text-muted-foreground">
-              {{ faq.a }}
-            </p>
-          </details>
-        </div>
-      </div>
+      <FaqAccordionPanel :items="faqItems" />
     </section>
 
     <section class="mt-6 max-w-3xl mx-auto">
