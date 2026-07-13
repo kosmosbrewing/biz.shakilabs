@@ -8,7 +8,7 @@ import {
 
 const route = useRoute();
 const tabs: readonly PrimaryNavigationItem[] = [
-  { key: "home", label: "홈", to: "/", href: "/biz" },
+  { key: "home", label: "사업 도구", to: "/", href: "/biz" },
   { key: "individual-vs-corp", label: "개인 vs 법인", to: "/individual-vs-corp" },
   { key: "break-even", label: "손익분기점", to: "/break-even" },
   { key: "vat-compare", label: "부가세 비교", to: "/vat-compare" },
