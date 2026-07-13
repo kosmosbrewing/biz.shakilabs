@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
-import { ShSlider } from "@shakilabs/ui";
+import { ShPresetGroup, ShSlider } from "@shakilabs/ui";
 import SEOHead from "@/components/common/SEOHead.vue";
 import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
 import { BIZ_BREAK_EVEN_GUIDE } from "@/data/seoGuides";
@@ -19,6 +19,10 @@ const industries = Object.entries(INDUSTRY_EXPENSE_RATIOS).map(([key, val]) => (
   key,
   label: val.label,
   variableRatio: val.variableRatio,
+}));
+const industryOptions = industries.map((industry) => ({
+  label: industry.label,
+  value: industry.key,
 }));
 
 function onIndustryChange(key: string): void {
@@ -84,22 +88,12 @@ const faqJsonLd = {
     <div class="retro-panel p-4 sm:p-5 space-y-4 mb-6">
       <div>
         <label class="block text-caption font-semibold text-foreground mb-1.5">업종 선택</label>
-        <div class="flex gap-2 flex-wrap">
-          <button
-            v-for="ind in industries"
-            :key="ind.key"
-            type="button"
-            :class="[
-              'px-3 py-1.5 rounded-md text-tiny font-medium border transition-colors',
-              industryKey === ind.key
-                ? 'bg-primary text-primary-foreground border-primary'
-                : 'bg-muted/50 text-muted-foreground border-border hover:border-primary/40',
-            ]"
-            @click="onIndustryChange(ind.key)"
-          >
-            {{ ind.label }}
-          </button>
-        </div>
+        <ShPresetGroup
+          :model-value="industryKey"
+          :options="industryOptions"
+          label="업종 선택"
+          @update:model-value="onIndustryChange"
+        />
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">

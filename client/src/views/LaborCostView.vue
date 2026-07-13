@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
+import { ShPresetGroup } from "@shakilabs/ui";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import CalculatorPageHeader from "@/components/biz/CalculatorPageHeader.vue";
@@ -95,22 +96,11 @@ const insuranceMetrics = computed(() => [{
       <div class="space-y-1">
         <label class="text-tiny font-medium text-muted-foreground">월 급여 (세전)</label>
         <input v-model.number="monthlySalary" aria-label="월 급여" type="number" min="100000" class="retro-input w-full" />
-        <div class="flex flex-wrap gap-2">
-          <button
-            v-for="p in LABOR_COST_SALARY_PRESETS"
-            :key="p.value"
-            type="button"
-            :class="[
-              'px-3 py-1.5 rounded-md text-tiny font-medium border transition-colors',
-              monthlySalary === p.value
-                ? 'bg-primary text-primary-foreground border-primary'
-                : 'bg-muted/50 text-muted-foreground border-border hover:border-primary/50',
-            ]"
-            @click="monthlySalary = p.value"
-          >
-            {{ p.label }}
-          </button>
-        </div>
+        <ShPresetGroup
+          v-model="monthlySalary"
+          :options="LABOR_COST_SALARY_PRESETS"
+          label="월 급여 빠른 선택"
+        />
       </div>
 
       <div class="grid gap-3 sm:grid-cols-3">

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
-import { ShSlider } from "@shakilabs/ui";
+import { ShPresetGroup, ShSlider } from "@shakilabs/ui";
 import { Store, Receipt, AlertCircle } from "lucide-vue-next";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -41,6 +41,10 @@ const industries = Object.entries(SIMPLIFIED_VAT_RATES).map(([key, val]) => ({
   key,
   label: val.label,
   rate: val.rate,
+}));
+const industryOptions = industries.map((industry) => ({
+  label: `${industry.label} (${(industry.rate * 100).toFixed(0)}%)`,
+  value: industry.key,
 }));
 
 const result = computed(() =>
@@ -117,22 +121,6 @@ const vatMetrics = computed(() => [{
     <div class="retro-panel p-4 sm:p-5 space-y-4 mb-6">
       <div>
         <label class="block text-caption font-semibold text-foreground mb-1.5">연 매출액 (공급가액 기준)</label>
-        <div class="flex gap-2 flex-wrap mb-2">
-          <button
-            v-for="p in presets"
-            :key="p.value"
-            type="button"
-            :class="[
-              'px-3 py-1.5 rounded-md text-tiny font-medium border transition-colors',
-              annualRevenue === p.value
-                ? 'bg-primary text-primary-foreground border-primary'
-                : 'bg-muted/50 text-muted-foreground border-border hover:border-primary/40',
-            ]"
-            @click="annualRevenue = p.value"
-          >
-            {{ p.label }}
-          </button>
-        </div>
         <div class="relative">
           <input
             aria-label="연 매출액"
@@ -143,27 +131,21 @@ const vatMetrics = computed(() => [{
           />
           <span class="absolute right-3 top-1/2 -translate-y-1/2 text-tiny text-muted-foreground">원</span>
         </div>
+        <ShPresetGroup
+          v-model="annualRevenue"
+          :options="presets"
+          label="연 매출액 빠른 선택"
+          class="mt-2"
+        />
       </div>
 
       <div>
         <label class="block text-caption font-semibold text-foreground mb-1.5">업종</label>
-        <div class="flex gap-2 flex-wrap">
-          <button
-            v-for="ind in industries"
-            :key="ind.key"
-            type="button"
-            :class="[
-              'px-3 py-1.5 rounded-md text-tiny font-medium border transition-colors',
-              industryKey === ind.key
-                ? 'bg-primary text-primary-foreground border-primary'
-                : 'bg-muted/50 text-muted-foreground border-border hover:border-primary/40',
-            ]"
-            @click="industryKey = ind.key"
-          >
-            {{ ind.label }}
-            <span class="ml-1 opacity-70">({{ (ind.rate * 100).toFixed(0) }}%)</span>
-          </button>
-        </div>
+        <ShPresetGroup
+          v-model="industryKey"
+          :options="industryOptions"
+          label="업종 선택"
+        />
       </div>
 
       <div>
