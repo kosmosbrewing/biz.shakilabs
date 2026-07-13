@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import { ShPresetGroup } from "@shakilabs/ui";
+import { ShBreakdownBar, ShPresetGroup } from "@shakilabs/ui";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import CalculatorPageHeader from "@/components/biz/CalculatorPageHeader.vue";
 import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
-import BreakdownStackedBar from "@/components/result-visualization/BreakdownStackedBar.vue";
 import MetricComparisonBars from "@/components/result-visualization/MetricComparisonBars.vue";
 import { BIZ_LABOR_COST_GUIDE } from "@/data/seoGuides";
 import {
@@ -61,7 +60,7 @@ const faqJsonLd = computed(() => ({
 
 const costSegments = computed(() => [
   { key: "salary", label: "세전 급여", value: result.value.monthlySalary, tone: "primary" as const },
-  { key: "insurance", label: "사업주 4대보험", value: result.value.employer.totalInsurance, tone: "fee" as const },
+  { key: "insurance", label: "사업주 4대보험", value: result.value.employer.totalInsurance, tone: "danger" as const },
   { key: "retirement", label: "퇴직급여 적립", value: result.value.retirementReserve, tone: "muted" as const },
 ]);
 
@@ -153,11 +152,12 @@ const insuranceMetrics = computed(() => [{
     </div>
 
     <div class="grid gap-4 lg:grid-cols-2">
-      <BreakdownStackedBar
-        title="직원 1명 월 인건비 구성"
+      <ShBreakdownBar
+        label="직원 1명 월 인건비 구성"
         note="세전 급여에 사업주 부담 보험료와 선택한 퇴직급여 적립분을 더한 금액입니다."
         :segments="costSegments"
         :format-value="formatWon"
+        surface="outlined"
       />
       <MetricComparisonBars
         title="사업주·근로자 보험료 비교"

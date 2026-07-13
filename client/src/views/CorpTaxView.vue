@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
+import { ShBreakdownBar } from "@shakilabs/ui";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import CalculatorPageHeader from "@/components/biz/CalculatorPageHeader.vue";
 import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
-import BreakdownStackedBar from "@/components/result-visualization/BreakdownStackedBar.vue";
 import { BIZ_CORP_TAX_GUIDE } from "@/data/seoGuides";
 import { BIZ_SERVICE_UPDATED_AT, CORP_TAX_SOURCE_URL } from "@/data/bizExpansionData";
 import { formatPercent, formatWon, formatManWon } from "@/lib/utils";
@@ -30,8 +30,8 @@ const { result, validationError } = useSafeCalculation(
   calculateCorpTax({ taxableIncome: 500_000_000 }),
 );
 const incomeSegments = computed(() => [
-  { key: "after-tax", label: "세후 이익", value: result.value.afterTaxIncome, tone: "profit" as const },
-  { key: "tax", label: "법인세", value: result.value.tax, tone: "fee" as const },
+  { key: "after-tax", label: "세후 이익", value: result.value.afterTaxIncome, tone: "success" as const },
+  { key: "tax", label: "법인세", value: result.value.tax, tone: "danger" as const },
 ]);
 
 const faqItems = [
@@ -94,11 +94,12 @@ const faqJsonLd = computed(() => ({
       </div>
     </div>
 
-    <BreakdownStackedBar
-      title="과세표준의 세금·세후 이익 구성"
+    <ShBreakdownBar
+      label="과세표준의 세금·세후 이익 구성"
       note="입력한 과세표준에서 예상 법인세를 제외한 금액을 한 막대에 표시합니다."
       :segments="incomeSegments"
       :format-value="formatWon"
+      surface="outlined"
     />
 
     <div class="retro-panel px-4 py-4 text-caption text-foreground space-y-1">

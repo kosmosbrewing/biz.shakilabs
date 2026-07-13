@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
-import { ShPresetGroup, ShSlider } from "@shakilabs/ui";
+import { ShBreakdownBar, ShPresetGroup, ShSlider } from "@shakilabs/ui";
 import SEOHead from "@/components/common/SEOHead.vue";
 import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
-import BreakdownStackedBar from "@/components/result-visualization/BreakdownStackedBar.vue";
 import MetricComparisonBars from "@/components/result-visualization/MetricComparisonBars.vue";
 import { BIZ_HOME_GUIDE } from "@/data/seoGuides";
 import { BIZ_DATA_VERIFIED, DELIVERY_FEE_SOURCE_URL } from "@/data/bizConstants";
@@ -58,7 +57,7 @@ const bestAppSegments = computed(() => {
   const app = bestApp.value;
   if (!app) return [];
   return [
-    { key: "commission", label: "중개 수수료", value: app.commission, tone: "fee" as const },
+    { key: "commission", label: "중개 수수료", value: app.commission, tone: "danger" as const },
     { key: "payment", label: "결제 수수료", value: app.paymentFee, tone: "primary" as const },
     { key: "delivery", label: "배달대행료", value: app.deliveryFee, tone: "muted" as const },
   ];
@@ -168,12 +167,13 @@ const faqJsonLd = {
         :metrics="deliveryMetrics"
         :format-value="formatWon"
       />
-      <BreakdownStackedBar
+      <ShBreakdownBar
         v-if="bestApp"
-        :title="`${bestApp.appName} 수수료 구성`"
+        :label="`${bestApp.appName} 수수료 구성`"
         note="최저 비용 앱의 월 총 수수료를 항목별로 나눴습니다."
         :segments="bestAppSegments"
         :format-value="formatWon"
+        surface="outlined"
       />
     </div>
 
