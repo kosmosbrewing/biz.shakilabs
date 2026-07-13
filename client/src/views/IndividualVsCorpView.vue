@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { ShSlider } from "@shakilabs/ui";
+import { ShPresetGroup, ShSlider } from "@shakilabs/ui";
 import { User, Building2 } from "lucide-vue-next";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -86,22 +86,6 @@ const faqJsonLd = computed(() => ({
     <div class="biz-input-panel retro-panel mb-6 space-y-4 p-4 sm:p-5">
       <div>
         <label for="biz-revenue" class="mb-1.5 block text-caption font-semibold text-foreground">연 매출액</label>
-        <div class="flex gap-2 flex-wrap mb-2">
-          <button
-            v-for="p in presets"
-            :key="p.value"
-            type="button"
-            :class="[
-              'px-3 py-1.5 rounded-md text-tiny font-medium border transition-colors',
-              revenue === p.value
-                ? 'bg-primary text-primary-foreground border-primary'
-                : 'bg-muted/50 text-muted-foreground border-border hover:border-primary/40',
-            ]"
-            @click="revenue = p.value"
-          >
-            {{ p.label }}
-          </button>
-        </div>
         <div class="relative">
           <input
             id="biz-revenue"
@@ -112,6 +96,12 @@ const faqJsonLd = computed(() => ({
           />
           <span class="absolute right-3 top-1/2 -translate-y-1/2 text-tiny text-muted-foreground">원</span>
         </div>
+        <ShPresetGroup
+          v-model="revenue"
+          :options="presets"
+          label="연 매출액 빠른 선택"
+          class="mt-2"
+        />
       </div>
 
       <div>

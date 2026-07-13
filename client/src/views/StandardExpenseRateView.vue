@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
+import { ShPresetGroup } from "@shakilabs/ui";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import CalculatorPageHeader from "@/components/biz/CalculatorPageHeader.vue";
@@ -103,22 +104,11 @@ const methodMetrics = computed(() => [
       <div class="space-y-1">
         <label for="expense-revenue" class="text-tiny font-medium text-muted-foreground">연간 매출액</label>
         <input id="expense-revenue" v-model.number="revenue" type="number" min="0" class="retro-input w-full" />
-        <div class="flex flex-wrap gap-2">
-          <button
-            v-for="p in EXPENSE_RATE_REVENUE_PRESETS"
-            :key="p.value"
-            type="button"
-            :class="[
-              'px-3 py-1.5 rounded-md text-tiny font-medium border transition-colors',
-              revenue === p.value
-                ? 'bg-primary text-primary-foreground border-primary'
-                : 'bg-muted/50 text-muted-foreground border-border hover:border-primary/50',
-            ]"
-            @click="revenue = p.value"
-          >
-            {{ p.label }}
-          </button>
-        </div>
+        <ShPresetGroup
+          v-model="revenue"
+          :options="EXPENSE_RATE_REVENUE_PRESETS"
+          label="연간 매출액 빠른 선택"
+        />
       </div>
 
       <div class="space-y-1">
