@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
-import { ShSlider } from "@shakilabs/ui";
+import { ShPresetGroup, ShSlider } from "@shakilabs/ui";
 import SEOHead from "@/components/common/SEOHead.vue";
 import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
 import BreakdownStackedBar from "@/components/result-visualization/BreakdownStackedBar.vue";
@@ -114,22 +114,6 @@ const faqJsonLd = {
     <div class="retro-panel p-4 sm:p-5 space-y-4 mb-6">
       <div>
         <label class="block text-caption font-semibold text-foreground mb-1.5">건당 주문 금액</label>
-        <div class="flex gap-2 flex-wrap mb-2">
-          <button
-            v-for="p in presets"
-            :key="p.value"
-            type="button"
-            :class="[
-              'px-3 py-1.5 rounded-md text-tiny font-medium border transition-colors',
-              orderAmount === p.value
-                ? 'bg-primary text-primary-foreground border-primary'
-                : 'bg-muted/50 text-muted-foreground border-border hover:border-primary/40',
-            ]"
-            @click="orderAmount = p.value"
-          >
-            {{ p.label }}
-          </button>
-        </div>
         <div class="relative">
           <input
             aria-label="건당 주문 금액"
@@ -140,6 +124,12 @@ const faqJsonLd = {
           />
           <span class="absolute right-3 top-1/2 -translate-y-1/2 text-tiny text-muted-foreground">원</span>
         </div>
+        <ShPresetGroup
+          v-model="orderAmount"
+          :options="presets"
+          label="건당 주문 금액 빠른 선택"
+          class="mt-2"
+        />
       </div>
 
       <div>
