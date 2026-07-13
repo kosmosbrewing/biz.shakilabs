@@ -2,6 +2,7 @@
 import { ref, computed } from "vue";
 import { ShSlider } from "@shakilabs/ui";
 import SEOHead from "@/components/common/SEOHead.vue";
+import FaqAccordionPanel from "@/components/common/FaqAccordionPanel.vue";
 import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
 import { BIZ_BREAK_EVEN_GUIDE } from "@/data/seoGuides";
 import { calcBreakEven } from "@/utils/bizBreakEvenCalc";
@@ -211,17 +212,7 @@ const faqJsonLd = {
       <p>변동비율은 매출 대비 재료비·포장비·카드수수료 등의 비중입니다.</p>
     </div>
 
-    <div class="retro-panel overflow-hidden">
-      <div class="retro-titlebar rounded-t-2xl">
-        <h2 class="retro-title">자주 묻는 질문</h2>
-      </div>
-      <div class="retro-panel-content space-y-3">
-        <details v-for="faq in faqItems" :key="faq.q" class="retro-panel-muted p-4">
-          <summary class="cursor-pointer list-none text-body font-semibold text-foreground">{{ faq.q }}</summary>
-          <p class="mt-2 text-caption leading-relaxed text-muted-foreground">{{ faq.a }}</p>
-        </details>
-      </div>
-    </div>
+    <FaqAccordionPanel :items="faqItems" />
 
     <SeoRichGuide
       :title="BIZ_BREAK_EVEN_GUIDE.title"

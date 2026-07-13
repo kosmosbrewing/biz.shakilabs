@@ -2,6 +2,7 @@
 import { computed, ref } from "vue";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
+import FaqAccordionPanel from "@/components/common/FaqAccordionPanel.vue";
 import CalculatorPageHeader from "@/components/biz/CalculatorPageHeader.vue";
 import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
 import MetricComparisonBars from "@/components/result-visualization/MetricComparisonBars.vue";
@@ -214,21 +215,7 @@ const methodMetrics = computed(() => [
       <p>이 계산기는 간이 추정이며, 실제 신고 시 세무사 상담을 권장합니다.</p>
     </div>
 
-    <!-- FAQ -->
-    <div class="retro-panel overflow-hidden">
-      <div class="retro-titlebar rounded-t-2xl">
-        <h2 class="retro-title">자주 묻는 질문</h2>
-      </div>
-      <div class="retro-panel-content space-y-4">
-        <details v-for="faq in EXPENSE_RATE_FAQS" :key="faq.q" class="group">
-          <summary class="cursor-pointer text-body font-medium text-foreground list-none flex items-center justify-between py-2">
-            {{ faq.q }}
-            <span class="text-muted-foreground transition-transform group-open:rotate-180">▾</span>
-          </summary>
-          <p class="text-caption text-muted-foreground leading-6 pb-2">{{ faq.a }}</p>
-        </details>
-      </div>
-    </div>
+    <FaqAccordionPanel :items="EXPENSE_RATE_FAQS" />
 
     <SeoRichGuide
       :title="BIZ_HOME_GUIDE.title"

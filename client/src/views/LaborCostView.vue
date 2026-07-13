@@ -2,6 +2,7 @@
 import { computed, ref } from "vue";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
+import FaqAccordionPanel from "@/components/common/FaqAccordionPanel.vue";
 import CalculatorPageHeader from "@/components/biz/CalculatorPageHeader.vue";
 import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
 import BreakdownStackedBar from "@/components/result-visualization/BreakdownStackedBar.vue";
@@ -245,21 +246,7 @@ const insuranceMetrics = computed(() => [{
       </p>
     </div>
 
-    <!-- FAQ -->
-    <div class="retro-panel overflow-hidden">
-      <div class="retro-titlebar rounded-t-2xl">
-        <h2 class="retro-title">자주 묻는 질문</h2>
-      </div>
-      <div class="retro-panel-content space-y-4">
-        <details v-for="faq in LABOR_COST_FAQS" :key="faq.q" class="group">
-          <summary class="cursor-pointer text-body font-medium text-foreground list-none flex items-center justify-between py-2">
-            {{ faq.q }}
-            <span class="text-muted-foreground transition-transform group-open:rotate-180">▾</span>
-          </summary>
-          <p class="text-caption text-muted-foreground leading-6 pb-2">{{ faq.a }}</p>
-        </details>
-      </div>
-    </div>
+    <FaqAccordionPanel :items="LABOR_COST_FAQS" />
 
     <SeoRichGuide
       :title="BIZ_LABOR_COST_GUIDE.title"

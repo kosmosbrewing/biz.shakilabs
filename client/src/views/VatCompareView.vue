@@ -5,6 +5,7 @@ import { Store, Receipt, AlertCircle } from "lucide-vue-next";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import SEOHead from "@/components/common/SEOHead.vue";
+import FaqAccordionPanel from "@/components/common/FaqAccordionPanel.vue";
 import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
 import MetricComparisonBars from "@/components/result-visualization/MetricComparisonBars.vue";
 import { BIZ_VAT_GUIDE } from "@/data/seoGuides";
@@ -271,17 +272,7 @@ const vatMetrics = computed(() => [{
       </CardContent>
     </Card>
 
-    <div class="retro-panel overflow-hidden">
-      <div class="retro-titlebar rounded-t-2xl">
-        <h2 class="retro-title">자주 묻는 질문</h2>
-      </div>
-      <div class="retro-panel-content space-y-3">
-        <details v-for="faq in faqItems" :key="faq.q" class="retro-panel-muted p-4">
-          <summary class="cursor-pointer list-none text-body font-semibold text-foreground">{{ faq.q }}</summary>
-          <p class="mt-2 text-caption leading-relaxed text-muted-foreground">{{ faq.a }}</p>
-        </details>
-      </div>
-    </div>
+    <FaqAccordionPanel :items="faqItems" />
 
     <SeoRichGuide
       :title="BIZ_VAT_GUIDE.title"
