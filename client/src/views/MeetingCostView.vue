@@ -2,6 +2,7 @@
 import { ref } from "vue";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
+import CalculatorInteractionTracker from "@/components/analytics/CalculatorInteractionTracker.vue";
 import FaqAccordionPanel from "@/components/common/FaqAccordionPanel.vue";
 import CalculatorPageHeader from "@/components/biz/CalculatorPageHeader.vue";
 import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
@@ -68,6 +69,7 @@ const { result, validationError } = useSafeCalculation(
         <h2 class="retro-title">회의 조건 입력</h2>
         <FreshBadge :message="`${BIZ_SERVICE_UPDATED_AT} 기준`" />
       </div>
+      <CalculatorInteractionTracker calculator-id="meeting_cost" page-path="/biz/meeting-cost">
       <div class="retro-panel-content grid gap-3 md:grid-cols-3" role="group" :aria-describedby="validationError ? 'meeting-cost-error' : undefined">
         <input v-model.number="attendees" aria-label="참석 인원" type="number" min="2" class="retro-input" placeholder="참석 인원" />
         <input v-model.number="costPerPerson" aria-label="1인당 비용" type="number" min="5000" class="retro-input" placeholder="1인당 비용" />
@@ -81,6 +83,7 @@ const { result, validationError } = useSafeCalculation(
           {{ validationError }}
         </p>
       </div>
+      </CalculatorInteractionTracker>
     </div>
 
     <div class="grid gap-3 md:grid-cols-3">

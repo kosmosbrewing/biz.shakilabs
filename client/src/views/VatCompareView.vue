@@ -5,6 +5,7 @@ import { Store, Receipt, AlertCircle } from "lucide-vue-next";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import SEOHead from "@/components/common/SEOHead.vue";
+import CalculatorInteractionTracker from "@/components/analytics/CalculatorInteractionTracker.vue";
 import FaqAccordionPanel from "@/components/common/FaqAccordionPanel.vue";
 import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
 import MetricComparisonBars from "@/components/result-visualization/MetricComparisonBars.vue";
@@ -119,6 +120,7 @@ const vatMetrics = computed(() => [{
     </p>
 
     <!-- 입력 -->
+    <CalculatorInteractionTracker calculator-id="vat_compare" page-path="/biz/vat-compare">
     <div class="retro-panel p-4 sm:p-5 space-y-4 mb-6">
       <div>
         <label class="block text-caption font-semibold text-foreground mb-1.5">연 매출액 (공급가액 기준)</label>
@@ -164,6 +166,7 @@ const vatMetrics = computed(() => [{
         />
       </div>
     </div>
+    </CalculatorInteractionTracker>
 
     <!-- 결과 -->
     <Card class="mb-6">

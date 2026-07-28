@@ -12,6 +12,7 @@ import IndividualCorpComparisonChart from "@/components/biz/IndividualCorpCompar
 import IndividualCorpNotes from "@/components/biz/IndividualCorpNotes.vue";
 import { BIZ_INDIVIDUAL_VS_CORP_GUIDE } from "@/data/seoGuides";
 import { INDIVIDUAL_VS_CORP_FAQS, INDIVIDUAL_VS_CORP_PRESETS } from "@/data/individualVsCorpContent";
+import CalculatorInteractionTracker from "@/components/analytics/CalculatorInteractionTracker.vue";
 import { useIndividualVsCorp } from "@/composables/useIndividualVsCorp";
 import { formatWon, formatPercent, formatManWon } from "@/lib/utils";
 
@@ -83,60 +84,62 @@ const faqJsonLd = computed(() => ({
     />
 
     <!-- 입력 섹션 -->
-    <div class="biz-input-panel retro-panel mb-6 space-y-4 p-4 sm:p-5">
-      <div>
-        <label for="biz-revenue" class="mb-1.5 block text-caption font-semibold text-foreground">연 매출액</label>
-        <div class="relative">
-          <input
-            id="biz-revenue"
-            v-model="revenueDisplay"
-            type="text"
-            inputmode="numeric"
-            class="retro-input w-full pr-8"
+    <CalculatorInteractionTracker calculator-id="individual_vs_corp" page-path="/biz/individual-vs-corp">
+      <div class="biz-input-panel retro-panel mb-6 space-y-4 p-4 sm:p-5">
+        <div>
+          <label for="biz-revenue" class="mb-1.5 block text-caption font-semibold text-foreground">연 매출액</label>
+          <div class="relative">
+            <input
+              id="biz-revenue"
+              v-model="revenueDisplay"
+              type="text"
+              inputmode="numeric"
+              class="retro-input w-full pr-8"
+            />
+            <span class="absolute right-3 top-1/2 -translate-y-1/2 text-tiny text-muted-foreground">원</span>
+          </div>
+          <ShPresetGroup
+            v-model="revenue"
+            :options="presets"
+            label="연 매출액 빠른 선택"
+            class="mt-2"
           />
-          <span class="absolute right-3 top-1/2 -translate-y-1/2 text-tiny text-muted-foreground">원</span>
         </div>
-        <ShPresetGroup
-          v-model="revenue"
-          :options="presets"
-          label="연 매출액 빠른 선택"
-          class="mt-2"
-        />
-      </div>
 
-      <div>
-        <label for="biz-expense-rate" class="mb-1.5 block text-caption font-semibold text-foreground">
-          경비율: {{ (expenseRate * 100).toFixed(0) }}%
-        </label>
-        <ShSlider
-          id="biz-expense-rate"
-          v-model="expenseRate"
-          :min="0.1"
-          :max="0.8"
-          :step="0.05"
-          :value-text="`경비율 ${(expenseRate * 100).toFixed(0)}%`"
-          aria-label="경비율 슬라이더"
-        />
-        <div class="flex justify-between text-tiny text-muted-foreground">
-          <span>10%</span>
-          <span>80%</span>
-        </div>
-      </div>
-
-      <div>
-        <label for="biz-corp-salary" class="mb-1.5 block text-caption font-semibold text-foreground">법인 대표이사 연봉</label>
-        <div class="relative">
-          <input
-            id="biz-corp-salary"
-            v-model="corpSalaryDisplay"
-            type="text"
-            inputmode="numeric"
-            class="retro-input w-full pr-8"
+        <div>
+          <label for="biz-expense-rate" class="mb-1.5 block text-caption font-semibold text-foreground">
+            경비율: {{ (expenseRate * 100).toFixed(0) }}%
+          </label>
+          <ShSlider
+            id="biz-expense-rate"
+            v-model="expenseRate"
+            :min="0.1"
+            :max="0.8"
+            :step="0.05"
+            :value-text="`경비율 ${(expenseRate * 100).toFixed(0)}%`"
+            aria-label="경비율 슬라이더"
           />
-          <span class="absolute right-3 top-1/2 -translate-y-1/2 text-tiny text-muted-foreground">원</span>
+          <div class="flex justify-between text-tiny text-muted-foreground">
+            <span>10%</span>
+            <span>80%</span>
+          </div>
+        </div>
+
+        <div>
+          <label for="biz-corp-salary" class="mb-1.5 block text-caption font-semibold text-foreground">법인 대표이사 연봉</label>
+          <div class="relative">
+            <input
+              id="biz-corp-salary"
+              v-model="corpSalaryDisplay"
+              type="text"
+              inputmode="numeric"
+              class="retro-input w-full pr-8"
+            />
+            <span class="absolute right-3 top-1/2 -translate-y-1/2 text-tiny text-muted-foreground">원</span>
+          </div>
         </div>
       </div>
-    </div>
+    </CalculatorInteractionTracker>
 
     <!-- 결과 비교 -->
     <Card class="mb-6">
