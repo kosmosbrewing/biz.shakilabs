@@ -7,6 +7,7 @@ import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
 import MetricComparisonBars from "@/components/result-visualization/MetricComparisonBars.vue";
 import { BIZ_HOME_GUIDE } from "@/data/seoGuides";
 import { BIZ_DATA_VERIFIED, DELIVERY_FEE_SOURCE_URL } from "@/data/bizConstants";
+import CalculatorInteractionTracker from "@/components/analytics/CalculatorInteractionTracker.vue";
 import { calcDeliveryFees } from "@/utils/bizDeliveryCalc";
 import { formatWon, formatPercent } from "@/lib/utils";
 
@@ -111,45 +112,47 @@ const faqJsonLd = {
     </p>
 
     <!-- 입력 -->
-    <div class="retro-panel p-4 sm:p-5 space-y-4 mb-6">
-      <div>
-        <label class="block text-caption font-semibold text-foreground mb-1.5">건당 주문 금액</label>
-        <div class="relative">
-          <input
-            aria-label="건당 주문 금액"
-            v-model="orderDisplay"
-            type="text"
-            inputmode="numeric"
-            class="retro-input w-full pr-8"
+    <CalculatorInteractionTracker calculator-id="delivery_fee" page-path="/biz/delivery-fee">
+      <div class="retro-panel p-4 sm:p-5 space-y-4 mb-6">
+        <div>
+          <label class="block text-caption font-semibold text-foreground mb-1.5">건당 주문 금액</label>
+          <div class="relative">
+            <input
+              aria-label="건당 주문 금액"
+              v-model="orderDisplay"
+              type="text"
+              inputmode="numeric"
+              class="retro-input w-full pr-8"
+            />
+            <span class="absolute right-3 top-1/2 -translate-y-1/2 text-tiny text-muted-foreground">원</span>
+          </div>
+          <ShPresetGroup
+            v-model="orderAmount"
+            :options="presets"
+            label="건당 주문 금액 빠른 선택"
+            class="mt-2"
           />
-          <span class="absolute right-3 top-1/2 -translate-y-1/2 text-tiny text-muted-foreground">원</span>
         </div>
-        <ShPresetGroup
-          v-model="orderAmount"
-          :options="presets"
-          label="건당 주문 금액 빠른 선택"
-          class="mt-2"
-        />
-      </div>
 
-      <div>
-        <label class="block text-caption font-semibold text-foreground mb-1.5">
-          월 주문 건수: {{ monthlyOrders.toLocaleString('ko-KR') }}건
-        </label>
-        <ShSlider
-          v-model="monthlyOrders"
-          :min="50"
-          :max="3000"
-          :step="50"
-          :value-text="`${monthlyOrders.toLocaleString('ko-KR')}건`"
-          aria-label="월 주문 건수 슬라이더"
-        />
-        <div class="grid grid-cols-2 text-tiny text-muted-foreground tabular-nums">
-          <span class="justify-self-start">50건</span>
-          <span class="justify-self-end">3,000건</span>
+        <div>
+          <label class="block text-caption font-semibold text-foreground mb-1.5">
+            월 주문 건수: {{ monthlyOrders.toLocaleString('ko-KR') }}건
+          </label>
+          <ShSlider
+            v-model="monthlyOrders"
+            :min="50"
+            :max="3000"
+            :step="50"
+            :value-text="`${monthlyOrders.toLocaleString('ko-KR')}건`"
+            aria-label="월 주문 건수 슬라이더"
+          />
+          <div class="grid grid-cols-2 text-tiny text-muted-foreground tabular-nums">
+            <span class="justify-self-start">50건</span>
+            <span class="justify-self-end">3,000건</span>
+          </div>
         </div>
       </div>
-    </div>
+    </CalculatorInteractionTracker>
 
     <!-- 요약 -->
     <div v-if="bestApp" class="retro-panel p-4 sm:p-5 mb-4">

@@ -3,6 +3,7 @@ import { computed, ref } from "vue";
 import { ShPresetGroup } from "@shakilabs/ui";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
+import CalculatorInteractionTracker from "@/components/analytics/CalculatorInteractionTracker.vue";
 import FaqAccordionPanel from "@/components/common/FaqAccordionPanel.vue";
 import CalculatorPageHeader from "@/components/biz/CalculatorPageHeader.vue";
 import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
@@ -101,6 +102,7 @@ const methodMetrics = computed(() => [
       </div>
     </div>
 
+    <CalculatorInteractionTracker calculator-id="standard_expense_rate" page-path="/biz/standard-expense-rate">
     <div class="retro-panel p-4 sm:p-5 space-y-4" role="group" :aria-describedby="validationError ? 'expense-rate-error' : undefined">
       <div class="space-y-1">
         <label for="expense-revenue" class="text-tiny font-medium text-muted-foreground">연간 매출액</label>
@@ -142,6 +144,7 @@ const methodMetrics = computed(() => [
         {{ validationError }}
       </p>
     </div>
+    </CalculatorInteractionTracker>
 
     <div class="grid gap-3 md:grid-cols-2">
       <div class="retro-panel p-4 sm:p-5 space-y-3" :class="result.recommendation === 'standard' ? 'ring-2 ring-primary/30' : ''">

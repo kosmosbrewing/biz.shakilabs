@@ -9,6 +9,7 @@ import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
 import { BIZ_CORP_TAX_GUIDE } from "@/data/seoGuides";
 import { BIZ_SERVICE_UPDATED_AT, CORP_TAX_SOURCE_URL } from "@/data/bizExpansionData";
 import { formatPercent, formatWon, formatManWon } from "@/lib/utils";
+import CalculatorInteractionTracker from "@/components/analytics/CalculatorInteractionTracker.vue";
 import { calculateCorpTax } from "@/utils/bizExpansionCalc";
 import { useSafeCalculation } from "@/composables/useSafeCalculation";
 
@@ -72,12 +73,14 @@ const faqJsonLd = computed(() => ({
         <h2 class="retro-title">과세표준 입력</h2>
         <FreshBadge :message="`${BIZ_SERVICE_UPDATED_AT} 기준`" />
       </div>
-      <div class="retro-panel-content space-y-4" role="group" :aria-describedby="validationError ? 'corp-tax-error' : undefined">
-        <input v-model.number="taxableIncome" aria-label="과세표준" type="number" min="1000000" class="retro-input w-full" placeholder="과세표준" />
-        <p v-if="validationError" id="corp-tax-error" class="text-caption font-semibold text-destructive" role="alert">
-          {{ validationError }}
-        </p>
-      </div>
+      <CalculatorInteractionTracker calculator-id="corp_tax" page-path="/biz/corp-tax">
+        <div class="retro-panel-content space-y-4" role="group" :aria-describedby="validationError ? 'corp-tax-error' : undefined">
+          <input v-model.number="taxableIncome" aria-label="과세표준" type="number" min="1000000" class="retro-input w-full" placeholder="과세표준" />
+          <p v-if="validationError" id="corp-tax-error" class="text-caption font-semibold text-destructive" role="alert">
+            {{ validationError }}
+          </p>
+        </div>
+      </CalculatorInteractionTracker>
     </div>
 
     <div class="grid gap-3 md:grid-cols-3">

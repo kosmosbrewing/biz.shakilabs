@@ -5,6 +5,7 @@ import SEOHead from "@/components/common/SEOHead.vue";
 import FaqAccordionPanel from "@/components/common/FaqAccordionPanel.vue";
 import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
 import { BIZ_BREAK_EVEN_GUIDE } from "@/data/seoGuides";
+import CalculatorInteractionTracker from "@/components/analytics/CalculatorInteractionTracker.vue";
 import { calcBreakEven } from "@/utils/bizBreakEvenCalc";
 import { INDUSTRY_EXPENSE_RATIOS } from "@/data/bizConstants";
 import { formatWon } from "@/lib/utils";
@@ -86,90 +87,92 @@ const faqJsonLd = {
     </p>
 
     <!-- 입력 -->
-    <div class="retro-panel p-4 sm:p-5 space-y-4 mb-6">
-      <div>
-        <label class="block text-caption font-semibold text-foreground mb-1.5">업종 선택</label>
-        <ShPresetGroup
-          :model-value="industryKey"
-          :options="industryOptions"
-          label="업종 선택"
-          @update:model-value="onIndustryChange"
-        />
-      </div>
-
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+    <CalculatorInteractionTracker calculator-id="break_even" page-path="/biz/break-even">
+      <div class="retro-panel p-4 sm:p-5 space-y-4 mb-6">
         <div>
-          <label for="break-even-rent" class="block text-tiny font-semibold text-foreground mb-1">월 임대료</label>
-          <div class="relative">
-            <input
-              id="break-even-rent"
-              :value="fmtInput(rent)"
-              type="text"
-              inputmode="numeric"
-              class="retro-input w-full pr-8"
-              @input="rent = parseInput(($event.target as HTMLInputElement).value)"
-            />
-            <span class="absolute right-3 top-1/2 -translate-y-1/2 text-tiny text-muted-foreground">원</span>
+          <label class="block text-caption font-semibold text-foreground mb-1.5">업종 선택</label>
+          <ShPresetGroup
+            :model-value="industryKey"
+            :options="industryOptions"
+            label="업종 선택"
+            @update:model-value="onIndustryChange"
+          />
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div>
+            <label for="break-even-rent" class="block text-tiny font-semibold text-foreground mb-1">월 임대료</label>
+            <div class="relative">
+              <input
+                id="break-even-rent"
+                :value="fmtInput(rent)"
+                type="text"
+                inputmode="numeric"
+                class="retro-input w-full pr-8"
+                @input="rent = parseInput(($event.target as HTMLInputElement).value)"
+              />
+              <span class="absolute right-3 top-1/2 -translate-y-1/2 text-tiny text-muted-foreground">원</span>
+            </div>
+          </div>
+          <div>
+            <label for="break-even-labor" class="block text-tiny font-semibold text-foreground mb-1">월 인건비</label>
+            <div class="relative">
+              <input
+                id="break-even-labor"
+                :value="fmtInput(labor)"
+                type="text"
+                inputmode="numeric"
+                class="retro-input w-full pr-8"
+                @input="labor = parseInput(($event.target as HTMLInputElement).value)"
+              />
+              <span class="absolute right-3 top-1/2 -translate-y-1/2 text-tiny text-muted-foreground">원</span>
+            </div>
+          </div>
+          <div>
+            <label for="break-even-other-fixed" class="block text-tiny font-semibold text-foreground mb-1">기타 고정비</label>
+            <div class="relative">
+              <input
+                id="break-even-other-fixed"
+                :value="fmtInput(otherFixed)"
+                type="text"
+                inputmode="numeric"
+                class="retro-input w-full pr-8"
+                @input="otherFixed = parseInput(($event.target as HTMLInputElement).value)"
+              />
+              <span class="absolute right-3 top-1/2 -translate-y-1/2 text-tiny text-muted-foreground">원</span>
+            </div>
           </div>
         </div>
-        <div>
-          <label for="break-even-labor" class="block text-tiny font-semibold text-foreground mb-1">월 인건비</label>
-          <div class="relative">
-            <input
-              id="break-even-labor"
-              :value="fmtInput(labor)"
-              type="text"
-              inputmode="numeric"
-              class="retro-input w-full pr-8"
-              @input="labor = parseInput(($event.target as HTMLInputElement).value)"
-            />
-            <span class="absolute right-3 top-1/2 -translate-y-1/2 text-tiny text-muted-foreground">원</span>
-          </div>
-        </div>
-        <div>
-          <label for="break-even-other-fixed" class="block text-tiny font-semibold text-foreground mb-1">기타 고정비</label>
-          <div class="relative">
-            <input
-              id="break-even-other-fixed"
-              :value="fmtInput(otherFixed)"
-              type="text"
-              inputmode="numeric"
-              class="retro-input w-full pr-8"
-              @input="otherFixed = parseInput(($event.target as HTMLInputElement).value)"
-            />
-            <span class="absolute right-3 top-1/2 -translate-y-1/2 text-tiny text-muted-foreground">원</span>
-          </div>
-        </div>
-      </div>
 
-      <div>
-        <label for="break-even-variable-rate" class="block text-caption font-semibold text-foreground mb-1.5">
-          변동비율: {{ (variableCostRate * 100).toFixed(0) }}%
-          <span class="text-tiny text-muted-foreground font-normal ml-1">(재료비·포장비 등)</span>
-        </label>
-        <ShSlider
-          id="break-even-variable-rate"
-          v-model="variableCostRate"
-          :min="0.05"
-          :max="0.8"
-          :step="0.05"
-          :value-text="`변동비율 ${(variableCostRate * 100).toFixed(0)}%`"
-          aria-label="변동비율 슬라이더"
-        />
-      </div>
+        <div>
+          <label for="break-even-variable-rate" class="block text-caption font-semibold text-foreground mb-1.5">
+            변동비율: {{ (variableCostRate * 100).toFixed(0) }}%
+            <span class="text-tiny text-muted-foreground font-normal ml-1">(재료비·포장비 등)</span>
+          </label>
+          <ShSlider
+            id="break-even-variable-rate"
+            v-model="variableCostRate"
+            :min="0.05"
+            :max="0.8"
+            :step="0.05"
+            :value-text="`변동비율 ${(variableCostRate * 100).toFixed(0)}%`"
+            aria-label="변동비율 슬라이더"
+          />
+        </div>
 
-      <div>
-        <label for="break-even-operating-days" class="block text-caption font-semibold text-foreground mb-1.5">월 영업일수</label>
-        <input
-          id="break-even-operating-days"
-          v-model.number="operatingDays"
-          type="number"
-          min="1"
-          max="31"
-          class="retro-input w-24"
-        />
+        <div>
+          <label for="break-even-operating-days" class="block text-caption font-semibold text-foreground mb-1.5">월 영업일수</label>
+          <input
+            id="break-even-operating-days"
+            v-model.number="operatingDays"
+            type="number"
+            min="1"
+            max="31"
+            class="retro-input w-24"
+          />
+        </div>
       </div>
-    </div>
+    </CalculatorInteractionTracker>
 
     <!-- 결과 -->
     <div class="retro-panel p-4 sm:p-5 mb-6">

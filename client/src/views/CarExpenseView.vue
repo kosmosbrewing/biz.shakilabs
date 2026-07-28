@@ -9,6 +9,7 @@ import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
 import { BIZ_HOME_GUIDE } from "@/data/seoGuides";
 import { BIZ_SERVICE_UPDATED_AT } from "@/data/bizExpansionData";
 import { formatPercent, formatWon } from "@/lib/utils";
+import CalculatorInteractionTracker from "@/components/analytics/CalculatorInteractionTracker.vue";
 import { calculateCarExpenseDeduction } from "@/utils/bizExpansionCalc";
 import { useSafeCalculation } from "@/composables/useSafeCalculation";
 
@@ -69,14 +70,16 @@ const expenseSegments = computed(() => [
         <h2 class="retro-title">차량비 조건 입력</h2>
         <FreshBadge :message="`${BIZ_SERVICE_UPDATED_AT} 기준`" />
       </div>
-      <div class="retro-panel-content grid gap-3 md:grid-cols-3" role="group" :aria-describedby="validationError ? 'car-expense-error' : undefined">
-        <input v-model.number="annualCost" aria-label="연간 차량비" type="number" min="100000" class="retro-input" placeholder="연간 차량비" />
-        <input v-model.number="businessUseRate" aria-label="업무 사용비율" type="number" min="0.1" max="1" step="0.05" class="retro-input" placeholder="업무 사용비율" />
-        <input v-model.number="taxRate" aria-label="법인세율" type="number" min="0.06" max="0.5" step="0.01" class="retro-input" placeholder="법인세율" />
-        <p v-if="validationError" id="car-expense-error" class="text-caption font-semibold text-destructive md:col-span-3" role="alert">
-          {{ validationError }}
-        </p>
-      </div>
+      <CalculatorInteractionTracker calculator-id="car_expense" page-path="/biz/car-expense">
+        <div class="retro-panel-content grid gap-3 md:grid-cols-3" role="group" :aria-describedby="validationError ? 'car-expense-error' : undefined">
+          <input v-model.number="annualCost" aria-label="연간 차량비" type="number" min="100000" class="retro-input" placeholder="연간 차량비" />
+          <input v-model.number="businessUseRate" aria-label="업무 사용비율" type="number" min="0.1" max="1" step="0.05" class="retro-input" placeholder="업무 사용비율" />
+          <input v-model.number="taxRate" aria-label="법인세율" type="number" min="0.06" max="0.5" step="0.01" class="retro-input" placeholder="법인세율" />
+          <p v-if="validationError" id="car-expense-error" class="text-caption font-semibold text-destructive md:col-span-3" role="alert">
+            {{ validationError }}
+          </p>
+        </div>
+      </CalculatorInteractionTracker>
     </div>
 
     <div class="grid gap-3 md:grid-cols-3">

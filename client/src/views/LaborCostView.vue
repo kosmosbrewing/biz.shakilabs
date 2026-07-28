@@ -17,6 +17,7 @@ import {
   NATIONAL_PENSION_SOURCE_URL,
 } from "@/data/laborCost";
 import { formatManWon, formatPercent, formatWon } from "@/lib/utils";
+import CalculatorInteractionTracker from "@/components/analytics/CalculatorInteractionTracker.vue";
 import { calculateLaborCost } from "@/utils/laborCostCalc";
 import { useSafeCalculation } from "@/composables/useSafeCalculation";
 
@@ -92,42 +93,44 @@ const insuranceMetrics = computed(() => [{
       </div>
     </div>
 
-    <div class="retro-panel p-4 sm:p-5 space-y-4" role="group" :aria-describedby="validationError ? 'labor-cost-error' : undefined">
-      <div class="space-y-1">
-        <label class="text-tiny font-medium text-muted-foreground">월 급여 (세전)</label>
-        <input v-model.number="monthlySalary" aria-label="월 급여" type="number" min="100000" class="retro-input w-full" />
-        <ShPresetGroup
-          v-model="monthlySalary"
-          :options="LABOR_COST_SALARY_PRESETS"
-          label="월 급여 빠른 선택"
-        />
-      </div>
+    <CalculatorInteractionTracker calculator-id="labor_cost" page-path="/biz/labor-cost">
+      <div class="retro-panel p-4 sm:p-5 space-y-4" role="group" :aria-describedby="validationError ? 'labor-cost-error' : undefined">
+        <div class="space-y-1">
+          <label class="text-tiny font-medium text-muted-foreground">월 급여 (세전)</label>
+          <input v-model.number="monthlySalary" aria-label="월 급여" type="number" min="100000" class="retro-input w-full" />
+          <ShPresetGroup
+            v-model="monthlySalary"
+            :options="LABOR_COST_SALARY_PRESETS"
+            label="월 급여 빠른 선택"
+          />
+        </div>
 
-      <div class="grid gap-3 sm:grid-cols-3">
-        <div class="space-y-1">
-          <label class="text-tiny font-medium text-muted-foreground">직원 수</label>
-          <input v-model.number="employeeCount" aria-label="직원 수" type="number" min="1" max="10000" class="retro-input w-full" />
+        <div class="grid gap-3 sm:grid-cols-3">
+          <div class="space-y-1">
+            <label class="text-tiny font-medium text-muted-foreground">직원 수</label>
+            <input v-model.number="employeeCount" aria-label="직원 수" type="number" min="1" max="10000" class="retro-input w-full" />
+          </div>
+          <div class="space-y-1">
+            <label class="text-tiny font-medium text-muted-foreground">업종 (산재보험)</label>
+            <select v-model="industryKey" aria-label="업종" class="retro-input w-full">
+              <option v-for="ind in INDUSTRY_ACCIDENT_RATES" :key="ind.key" :value="ind.key">
+                {{ ind.label }} ({{ formatPercent(ind.rate * 100, 1) }})
+              </option>
+            </select>
+          </div>
+          <div class="space-y-1">
+            <label class="text-tiny font-medium text-muted-foreground">퇴직급여 포함</label>
+            <select v-model="includeRetirement" aria-label="퇴직급여 포함 여부" class="retro-input w-full">
+              <option :value="true">포함 (1/12)</option>
+              <option :value="false">미포함</option>
+            </select>
+          </div>
         </div>
-        <div class="space-y-1">
-          <label class="text-tiny font-medium text-muted-foreground">업종 (산재보험)</label>
-          <select v-model="industryKey" aria-label="업종" class="retro-input w-full">
-            <option v-for="ind in INDUSTRY_ACCIDENT_RATES" :key="ind.key" :value="ind.key">
-              {{ ind.label }} ({{ formatPercent(ind.rate * 100, 1) }})
-            </option>
-          </select>
-        </div>
-        <div class="space-y-1">
-          <label class="text-tiny font-medium text-muted-foreground">퇴직급여 포함</label>
-          <select v-model="includeRetirement" aria-label="퇴직급여 포함 여부" class="retro-input w-full">
-            <option :value="true">포함 (1/12)</option>
-            <option :value="false">미포함</option>
-          </select>
-        </div>
+        <p v-if="validationError" id="labor-cost-error" class="text-caption font-semibold text-destructive" role="alert">
+          {{ validationError }}
+        </p>
       </div>
-      <p v-if="validationError" id="labor-cost-error" class="text-caption font-semibold text-destructive" role="alert">
-        {{ validationError }}
-      </p>
-    </div>
+    </CalculatorInteractionTracker>
 
     <div class="grid gap-3 md:grid-cols-4">
       <div class="retro-panel-muted px-4 py-4">
