@@ -78,6 +78,10 @@
 
   body {
     @apply bg-background text-foreground;
+    /* 한국어는 기본값(word-break: normal)에서 어절 중간이 잘려 개행이 어색해진다.
+       keep-all로 공백 단위 줄바꿈을 강제하고, 긴 숫자·URL만 break-word로 예외 처리한다. */
+    word-break: keep-all;
+    overflow-wrap: break-word;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -93,6 +97,11 @@
 }
 
 @layer components {
+  /* SessionDraftControl 등에서 쓰이지만 정의가 없어 맨 텍스트로 보이던 버튼 (finance 정의와 동일) */
+  .retro-button {
+    @apply inline-flex min-h-[44px] items-center justify-center rounded-lg border border-primary bg-primary px-4 py-2 text-body font-semibold text-primary-foreground transition-colors duration-200 hover:bg-primary/90;
+  }
+
   .retro-panel-content {
     @apply px-4 py-3 sm:px-5 sm:py-4;
   }
