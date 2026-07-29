@@ -259,14 +259,13 @@ const faqJsonLd = computed(() => ({
 
     <BusinessNextActions />
 
-    <IndividualCorpNotes :faqs="faqItems" />
+    <IndividualCorpNotes :faqs="faqItems" :extra="BIZ_INDIVIDUAL_VS_CORP_GUIDE.faqs" />
 
     <SeoRichGuide
       :title="BIZ_INDIVIDUAL_VS_CORP_GUIDE.title"
       :intro="BIZ_INDIVIDUAL_VS_CORP_GUIDE.intro"
       :sections="BIZ_INDIVIDUAL_VS_CORP_GUIDE.sections"
       :checklist="BIZ_INDIVIDUAL_VS_CORP_GUIDE.checklist"
-      :faqs="BIZ_INDIVIDUAL_VS_CORP_GUIDE.faqs"
       :disclaimer="BIZ_INDIVIDUAL_VS_CORP_GUIDE.disclaimer"
     />
   </div>
