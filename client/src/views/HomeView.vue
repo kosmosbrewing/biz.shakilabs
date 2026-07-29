@@ -144,7 +144,7 @@ const faqJsonLd = {
     </section>
 
     <section class="mt-6 max-w-3xl mx-auto">
-      <FaqAccordionPanel :items="faqItems" />
+      <FaqAccordionPanel :items="faqItems" :extra="BIZ_HOME_GUIDE.faqs" />
     </section>
 
     <section class="mt-6 max-w-3xl mx-auto">
@@ -155,9 +155,7 @@ const faqJsonLd = {
       <SeoRichGuide
         :title="BIZ_HOME_GUIDE.title"
         :intro="BIZ_HOME_GUIDE.intro"
-        :sections="BIZ_HOME_GUIDE.sections"
-        :faqs="BIZ_HOME_GUIDE.faqs"
-        :disclaimer="BIZ_HOME_GUIDE.disclaimer"
+        :sections="BIZ_HOME_GUIDE.sections"        :disclaimer="BIZ_HOME_GUIDE.disclaimer"
       />
     </section>
   </div>

@@ -209,14 +209,12 @@ const faqJsonLd = {
       <p>변동비율은 매출 대비 재료비·포장비·카드수수료 등의 비중입니다.</p>
     </div>
 
-    <FaqAccordionPanel :items="faqItems" />
+    <FaqAccordionPanel :items="faqItems" :extra="BIZ_BREAK_EVEN_GUIDE.faqs" />
 
     <SeoRichGuide
       :title="BIZ_BREAK_EVEN_GUIDE.title"
       :intro="BIZ_BREAK_EVEN_GUIDE.intro"
-      :sections="BIZ_BREAK_EVEN_GUIDE.sections"
-      :faqs="BIZ_BREAK_EVEN_GUIDE.faqs"
-      :disclaimer="BIZ_BREAK_EVEN_GUIDE.disclaimer"
+      :sections="BIZ_BREAK_EVEN_GUIDE.sections"      :disclaimer="BIZ_BREAK_EVEN_GUIDE.disclaimer"
     />
   </div>
 </template>

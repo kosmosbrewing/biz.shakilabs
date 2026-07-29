@@ -239,14 +239,12 @@ const insuranceMetrics = computed(() => [{
       </p>
     </div>
 
-    <FaqAccordionPanel :items="LABOR_COST_FAQS" />
+    <FaqAccordionPanel :items="LABOR_COST_FAQS" :extra="BIZ_LABOR_COST_GUIDE.faqs" />
 
     <SeoRichGuide
       :title="BIZ_LABOR_COST_GUIDE.title"
       :intro="BIZ_LABOR_COST_GUIDE.intro"
-      :sections="BIZ_LABOR_COST_GUIDE.sections"
-      :faqs="BIZ_LABOR_COST_GUIDE.faqs"
-      :disclaimer="BIZ_LABOR_COST_GUIDE.disclaimer"
+      :sections="BIZ_LABOR_COST_GUIDE.sections"      :disclaimer="BIZ_LABOR_COST_GUIDE.disclaimer"
     />
   </div>
 </template>
