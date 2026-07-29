@@ -257,14 +257,12 @@ const vatMetrics = computed(() => [{
       </CardContent>
     </Card>
 
-    <FaqAccordionPanel :items="faqItems" />
+    <FaqAccordionPanel :items="faqItems" :extra="BIZ_VAT_GUIDE.faqs" />
 
     <SeoRichGuide
       :title="BIZ_VAT_GUIDE.title"
       :intro="BIZ_VAT_GUIDE.intro"
-      :sections="BIZ_VAT_GUIDE.sections"
-      :faqs="BIZ_VAT_GUIDE.faqs"
-      :disclaimer="BIZ_VAT_GUIDE.disclaimer"
+      :sections="BIZ_VAT_GUIDE.sections"      :disclaimer="BIZ_VAT_GUIDE.disclaimer"
     />
   </div>
 </template>

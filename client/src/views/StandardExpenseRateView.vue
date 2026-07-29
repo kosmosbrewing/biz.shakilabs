@@ -208,14 +208,12 @@ const methodMetrics = computed(() => [
       <p>이 계산기는 간이 추정이며, 실제 신고 시 세무사 상담을 권장합니다.</p>
     </div>
 
-    <FaqAccordionPanel :items="EXPENSE_RATE_FAQS" />
+    <FaqAccordionPanel :items="EXPENSE_RATE_FAQS" :extra="BIZ_HOME_GUIDE.faqs" />
 
     <SeoRichGuide
       :title="BIZ_HOME_GUIDE.title"
       :intro="BIZ_HOME_GUIDE.intro"
-      :sections="BIZ_HOME_GUIDE.sections"
-      :faqs="BIZ_HOME_GUIDE.faqs"
-      :disclaimer="BIZ_HOME_GUIDE.disclaimer"
+      :sections="BIZ_HOME_GUIDE.sections"      :disclaimer="BIZ_HOME_GUIDE.disclaimer"
     />
   </div>
 </template>

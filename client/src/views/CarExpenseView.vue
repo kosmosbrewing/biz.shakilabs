@@ -109,14 +109,12 @@ const expenseSegments = computed(() => [
       업무 사용비율 {{ formatPercent(businessUseRate, 0) }} 기준입니다. {{ result.logbookAdvice }}.
     </div>
 
-    <FaqAccordionPanel :items="faqItems" />
+    <FaqAccordionPanel :items="faqItems" :extra="BIZ_HOME_GUIDE.faqs" />
 
     <SeoRichGuide
       :title="BIZ_HOME_GUIDE.title"
       :intro="BIZ_HOME_GUIDE.intro"
-      :sections="BIZ_HOME_GUIDE.sections"
-      :faqs="BIZ_HOME_GUIDE.faqs"
-      :disclaimer="BIZ_HOME_GUIDE.disclaimer"
+      :sections="BIZ_HOME_GUIDE.sections"      :disclaimer="BIZ_HOME_GUIDE.disclaimer"
     />
   </div>
 </template>

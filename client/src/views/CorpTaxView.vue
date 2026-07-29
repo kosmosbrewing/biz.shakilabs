@@ -114,14 +114,12 @@ const faqJsonLd = computed(() => ({
       </p>
     </div>
 
-    <FaqAccordionPanel :items="faqItems" />
+    <FaqAccordionPanel :items="faqItems" :extra="BIZ_CORP_TAX_GUIDE.faqs" />
 
     <SeoRichGuide
       :title="BIZ_CORP_TAX_GUIDE.title"
       :intro="BIZ_CORP_TAX_GUIDE.intro"
-      :sections="BIZ_CORP_TAX_GUIDE.sections"
-      :faqs="BIZ_CORP_TAX_GUIDE.faqs"
-      :disclaimer="BIZ_CORP_TAX_GUIDE.disclaimer"
+      :sections="BIZ_CORP_TAX_GUIDE.sections"      :disclaimer="BIZ_CORP_TAX_GUIDE.disclaimer"
     />
   </div>
 </template>
