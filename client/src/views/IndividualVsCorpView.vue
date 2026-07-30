@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import { mergeFaqs } from "@/lib/faqMerge";
 import { ShPresetGroup, ShSlider } from "@shakilabs/ui";
 import { User, Building2 } from "lucide-vue-next";
 import { Card, CardContent } from "@/components/ui/card";
@@ -49,10 +50,12 @@ const {
 const presets = INDIVIDUAL_VS_CORP_PRESETS;
 const faqItems = INDIVIDUAL_VS_CORP_FAQS;
 
+// 화면에 실제 렌더되는 병합 FAQ와 구조화 데이터를 일치시킨다 (스키마 규칙)
+const mergedFaqs = mergeFaqs(faqItems, BIZ_INDIVIDUAL_VS_CORP_GUIDE.faqs);
 const faqJsonLd = computed(() => ({
   "@context": "https://schema.org",
   "@type": "FAQPage",
-  mainEntity: faqItems.map((faq) => ({
+  mainEntity: mergedFaqs.map((faq) => ({
     "@type": "Question",
     name: faq.q,
     acceptedAnswer: { "@type": "Answer", text: faq.a },
@@ -259,7 +262,7 @@ const faqJsonLd = computed(() => ({
 
     <BusinessNextActions />
 
-    <IndividualCorpNotes :faqs="faqItems" :extra="BIZ_INDIVIDUAL_VS_CORP_GUIDE.faqs" />
+    <IndividualCorpNotes :faqs="mergedFaqs" />
 
     <SeoRichGuide
       :title="BIZ_INDIVIDUAL_VS_CORP_GUIDE.title"

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
+import { mergeFaqs } from "@/lib/faqMerge";
 import { ShBreakdownBar, ShPresetGroup } from "@shakilabs/ui";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
@@ -50,10 +51,12 @@ const seoDescription = computed(() =>
     : "월급을 입력하면 사업주 부담 4대보험, 퇴직급여, 총 인건비와 근로자 실수령액을 한눈에 확인합니다.",
 );
 
+// 화면에 실제 렌더되는 병합 FAQ와 구조화 데이터를 일치시킨다 (스키마 규칙)
+const mergedFaqs = mergeFaqs(LABOR_COST_FAQS, BIZ_LABOR_COST_GUIDE.faqs);
 const faqJsonLd = computed(() => ({
   "@context": "https://schema.org",
   "@type": "FAQPage",
-  mainEntity: LABOR_COST_FAQS.map((f) => ({
+  mainEntity: mergedFaqs.map((f) => ({
     "@type": "Question",
     name: f.q,
     acceptedAnswer: { "@type": "Answer", text: f.a },
@@ -239,7 +242,7 @@ const insuranceMetrics = computed(() => [{
       </p>
     </div>
 
-    <FaqAccordionPanel :items="LABOR_COST_FAQS" :extra="BIZ_LABOR_COST_GUIDE.faqs" />
+    <FaqAccordionPanel :items="mergedFaqs" />
 
     <SeoRichGuide
       :title="BIZ_LABOR_COST_GUIDE.title"

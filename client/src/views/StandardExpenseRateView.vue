@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
+import { mergeFaqs } from "@/lib/faqMerge";
 import { ShPresetGroup } from "@shakilabs/ui";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
@@ -55,10 +56,12 @@ const seoDescription = computed(() =>
     : "매출과 업종을 선택하면 기준경비율·단순경비율 방식별 소득세를 비교 계산합니다.",
 );
 
+// 화면에 실제 렌더되는 병합 FAQ와 구조화 데이터를 일치시킨다 (스키마 규칙)
+const mergedFaqs = mergeFaqs(EXPENSE_RATE_FAQS, BIZ_HOME_GUIDE.faqs);
 const faqJsonLd = computed(() => ({
   "@context": "https://schema.org",
   "@type": "FAQPage",
-  mainEntity: EXPENSE_RATE_FAQS.map((f) => ({
+  mainEntity: mergedFaqs.map((f) => ({
     "@type": "Question",
     name: f.q,
     acceptedAnswer: { "@type": "Answer", text: f.a },
@@ -208,7 +211,7 @@ const methodMetrics = computed(() => [
       <p>이 계산기는 간이 추정이며, 실제 신고 시 세무사 상담을 권장합니다.</p>
     </div>
 
-    <FaqAccordionPanel :items="EXPENSE_RATE_FAQS" :extra="BIZ_HOME_GUIDE.faqs" />
+    <FaqAccordionPanel :items="mergedFaqs" />
 
     <SeoRichGuide
       :title="BIZ_HOME_GUIDE.title"

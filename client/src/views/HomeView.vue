@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { RouterLink } from "vue-router";
+import { mergeFaqs } from "@/lib/faqMerge";
 import { Building2, TrendingUp, Receipt, Truck, CarFront, Calculator, HandCoins, ArrowRight, AlertCircle } from "lucide-vue-next";
 import { ShText } from "@shakilabs/ui";
 import { ActionCard } from "@/components/ui/action-card";
@@ -70,10 +71,12 @@ const faqItems = [
   },
 ] as const;
 
+// 화면에 실제 렌더되는 병합 FAQ와 구조화 데이터를 일치시킨다 (스키마 규칙)
+const mergedFaqs = mergeFaqs(faqItems, BIZ_HOME_GUIDE.faqs);
 const faqJsonLd = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
-  mainEntity: faqItems.map((faq) => ({
+  mainEntity: mergedFaqs.map((faq) => ({
     "@type": "Question",
     name: faq.q,
     acceptedAnswer: {
@@ -144,7 +147,7 @@ const faqJsonLd = {
     </section>
 
     <section class="mt-6 max-w-5xl mx-auto">
-      <FaqAccordionPanel :items="faqItems" :extra="BIZ_HOME_GUIDE.faqs" />
+      <FaqAccordionPanel :items="mergedFaqs" />
     </section>
 
     <section class="mt-6 max-w-5xl mx-auto">

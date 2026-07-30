@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
+import { mergeFaqs } from "@/lib/faqMerge";
 import { ShPresetGroup, ShSlider } from "@shakilabs/ui";
 import SEOHead from "@/components/common/SEOHead.vue";
 import FaqAccordionPanel from "@/components/common/FaqAccordionPanel.vue";
@@ -62,10 +63,12 @@ const faqItems = [
   },
 ] as const;
 
+// 화면에 실제 렌더되는 병합 FAQ와 구조화 데이터를 일치시킨다 (스키마 규칙)
+const mergedFaqs = mergeFaqs(faqItems, BIZ_BREAK_EVEN_GUIDE.faqs);
 const faqJsonLd = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
-  mainEntity: faqItems.map((faq) => ({
+  mainEntity: mergedFaqs.map((faq) => ({
     "@type": "Question",
     name: faq.q,
     acceptedAnswer: { "@type": "Answer", text: faq.a },
@@ -209,7 +212,7 @@ const faqJsonLd = {
       <p>변동비율은 매출 대비 재료비·포장비·카드수수료 등의 비중입니다.</p>
     </div>
 
-    <FaqAccordionPanel :items="faqItems" :extra="BIZ_BREAK_EVEN_GUIDE.faqs" />
+    <FaqAccordionPanel :items="mergedFaqs" />
 
     <SeoRichGuide
       :title="BIZ_BREAK_EVEN_GUIDE.title"
