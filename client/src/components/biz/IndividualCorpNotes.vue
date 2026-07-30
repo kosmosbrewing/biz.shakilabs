@@ -3,7 +3,11 @@ import { AlertCircle } from "lucide-vue-next";
 import { Card, CardContent } from "@/components/ui/card";
 import FaqAccordionPanel from "@/components/common/FaqAccordionPanel.vue";
 
-defineProps<{ faqs: ReadonlyArray<{ q: string; a: string }> }>();
+const props = defineProps<{
+  faqs: ReadonlyArray<{ q: string; a: string }>;
+  // SEO 가이드 FAQ — 중복 문항만 걸러 이 아코디언에 병합 노출한다
+  extra?: ReadonlyArray<{ q: string; a: string }>;
+}>();
 </script>
 
 <template>
@@ -21,5 +25,5 @@ defineProps<{ faqs: ReadonlyArray<{ q: string; a: string }> }>();
       </ul>
     </CardContent>
   </Card>
-  <FaqAccordionPanel :items="faqs" />
+  <FaqAccordionPanel :items="faqs" :extra="props.extra" />
 </template>
