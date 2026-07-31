@@ -17,7 +17,7 @@ export function formatWon(amount: number | null | undefined): string {
   return `${Math.round(amount).toLocaleString("ko-KR")}원`;
 }
 
-// 축약 원화 포맷 (공유카드, SummaryBanner용): 2490000 → "약 249만원"
+// 축약 원화 포맷 (공유카드용): 2490000 → "약 249만원"
 export function formatWonShort(amount: number | null | undefined): string {
   if (amount == null) return "-";
   const abs = Math.abs(amount);

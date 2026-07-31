@@ -1,44 +1,33 @@
 <script setup lang="ts">
-import { computed, useId } from "vue";
-import { positiveBarWidth } from "@/utils/chartMath";
+// 차트 본체는 @shakilabs/ui ShMetricBars — 이 파일은 biz 레트로 패널 크롬만 입힌다.
+// 호출부 5곳(뷰 4개 + IndividualCorpComparisonChart)의 props는 그대로 유지한다.
+import { ShMetricBars } from "@shakilabs/ui";
+import type { MetricBarGroup } from "@shakilabs/ui";
 
-type ValueItem = { key: string; label: string; value: number; highlight?: boolean; detail?: string };
-type Metric = { key: string; label: string; values: readonly ValueItem[] };
-const props = defineProps<{
+defineProps<{
   title: string;
   note: string;
-  metrics: readonly Metric[];
+  metrics: readonly MetricBarGroup[];
   formatValue: (value: number) => string;
 }>();
-const titleId = `biz-metrics-${useId()}`;
-const maxima = computed(() => new Map(props.metrics.map((metric) => [
-  metric.key,
-  Math.max(...metric.values.map((item) => item.value), 0),
-])));
 </script>
 
 <template>
-  <section class="retro-panel overflow-hidden" :aria-labelledby="titleId">
-    <div class="retro-titlebar rounded-t-2xl">
-      <h2 :id="titleId" class="retro-title">{{ title }}</h2>
-    </div>
-    <div class="retro-panel-content space-y-5">
-      <p class="text-tiny leading-relaxed text-muted-foreground">{{ note }}</p>
-      <div v-for="metric in metrics" :key="metric.key" class="space-y-3">
-        <h3 class="border-b border-border/50 pb-1.5 text-tiny font-semibold text-muted-foreground">{{ metric.label }}</h3>
-        <div v-for="item in metric.values" :key="item.key" class="space-y-1.5">
-          <div class="flex items-baseline justify-between gap-3 text-caption">
-            <span class="font-semibold" :class="item.highlight ? 'text-primary' : 'text-foreground'">{{ item.label }}</span>
-            <strong class="tabular-nums" :class="item.highlight ? 'text-primary' : 'text-foreground'">{{ formatValue(item.value) }}</strong>
-          </div>
-          <div class="h-3 overflow-hidden rounded-full bg-muted/55">
-            <svg viewBox="0 0 100 12" preserveAspectRatio="none" class="block h-full w-full" aria-hidden="true">
-              <rect :width="positiveBarWidth(item.value, maxima.get(metric.key) ?? 0)" height="12" rx="4" :class="item.highlight ? 'fill-primary' : 'fill-muted-foreground/45'" />
-            </svg>
-          </div>
-          <p v-if="item.detail" class="text-tiny text-muted-foreground">{{ item.detail }}</p>
+  <section class="retro-panel overflow-hidden">
+    <!-- 차트 루트가 본문 여백을 갖고, 타이틀바만 음수 마진으로 패널 폭까지 흘려 기존 크롬을 유지한다 -->
+    <ShMetricBars
+      class="px-4 pb-3 sm:px-5 sm:pb-4"
+      :metrics="metrics"
+      :note="note"
+      :format-value="formatValue"
+    >
+      <template #header="{ titleId }">
+        <!-- 문서 아웃라인 유지를 위해 h2, aria 계약상 titleId를 heading에 그대로 붙인다 -->
+        <!-- mb는 header gap(0.25rem)과 합쳐 기존 retro-panel-content 상단 여백(py-3/sm:py-4)을 재현한다 -->
+        <div class="retro-titlebar rounded-t-2xl -mx-4 mb-2 sm:-mx-5 sm:mb-3">
+          <h2 :id="titleId" class="retro-title">{{ title }}</h2>
         </div>
-      </div>
-    </div>
+      </template>
+    </ShMetricBars>
   </section>
 </template>
