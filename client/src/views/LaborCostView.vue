@@ -117,7 +117,7 @@ const insuranceMetrics = computed(() => [{
             <label class="text-tiny font-medium text-muted-foreground">업종 (산재보험)</label>
             <select v-model="industryKey" aria-label="업종" class="retro-input w-full">
               <option v-for="ind in INDUSTRY_ACCIDENT_RATES" :key="ind.key" :value="ind.key">
-                {{ ind.label }} ({{ formatPercent(ind.rate * 100, 1) }})
+                {{ ind.label }} ({{ formatPercent(ind.rate, 1) }})
               </option>
             </select>
           </div>
@@ -139,7 +139,7 @@ const insuranceMetrics = computed(() => [{
       <div class="retro-panel-muted px-4 py-4">
         <p class="text-tiny text-muted-foreground">1인 실제 인건비</p>
         <p class="mt-2 text-h2 font-bold text-primary">{{ formatWon(result.totalCostPerEmployee) }}</p>
-        <p class="text-tiny text-muted-foreground">급여 대비 +{{ formatPercent(result.overheadRate * 100, 1) }}</p>
+        <p class="text-tiny text-muted-foreground">급여 대비 +{{ formatPercent(result.overheadRate, 1) }}</p>
       </div>
       <div class="retro-panel-muted px-4 py-4">
         <p class="text-tiny text-muted-foreground">근로자 실수령</p>
