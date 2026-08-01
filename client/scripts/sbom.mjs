@@ -1,6 +1,6 @@
 import { execFileSync } from "node:child_process";
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { dirname, resolve } from "node:path";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { basename, dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -42,6 +42,12 @@ function runNpmSbom(args) {
 }
 
 function normalizeCyclonedx(document) {
+  for (const item of document.components ?? []) {
+    for (const reference of item.externalReferences ?? []) {
+      reference.url = toRepoRelativeVendorUrl(reference.url);
+    }
+  }
+
   const component = document.metadata?.component ?? {};
 
   component.type = "application";
@@ -73,6 +79,10 @@ function normalizeCyclonedx(document) {
 }
 
 function normalizeSpdx(document) {
+  for (const item of document.packages ?? []) {
+    item.downloadLocation = toRepoRelativeVendorUrl(item.downloadLocation);
+  }
+
   const rootId = document.documentDescribes?.[0];
   const rootPackage = document.packages?.find((item) => item.SPDXID === rootId) ?? document.packages?.[0];
 
@@ -87,6 +97,25 @@ function normalizeSpdx(document) {
   rootPackage.comment = "Generated from the production dependency graph (package-lock-only, omit=dev, omit=optional).";
 
   document.comment = "Production artifact SBOM generated from npm lockfile.";
+}
+
+// npm은 file: 의존성(vendor tgz)의 위치를 "생성한 머신의 절대 경로"로 기록한다.
+// 게다가 npm 11의 redactor가 UUID처럼 보이는 경로 조각을 ***로 마스킹하므로,
+// 커밋된 SBOM에 어느 머신에서도 존재하지 않는 경로가 남는다(예: file:/private/tmp/.../***/client/vendor/x.tgz).
+// 저장소 어디에서 재생성하든 같은 값이 나오도록 repo 루트 기준 상대 경로로 되돌린다.
+function toRepoRelativeVendorUrl(url) {
+  if (typeof url !== "string" || !url.startsWith("file:")) {
+    return url;
+  }
+
+  const fileName = basename(url);
+
+  // vendor 디렉터리에 실제로 존재하는 파일일 때만 치환한다(오탐 방지).
+  if (!fileName || !existsSync(resolve(projectRoot, "vendor", fileName))) {
+    return url;
+  }
+
+  return `file:client/vendor/${fileName}`;
 }
 
 function mergeVcsReference(references) {

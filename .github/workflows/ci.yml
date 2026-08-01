@@ -36,3 +36,8 @@ jobs:
 
       - name: Build
         run: npm run build
+
+      # 커밋된 SBOM·vendor 기록이 이 저장소의 것인지 대조한다.
+      # 재생성 없이 파일만 읽으므로 네트워크 불필요·1초 미만·결정적이다.
+      - name: Verify supply-chain artifacts
+        run: npm run verify:supply-chain

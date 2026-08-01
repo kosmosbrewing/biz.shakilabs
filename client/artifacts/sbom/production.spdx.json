@@ -5,7 +5,7 @@
   "name": "biz-calculator@0.0.0",
   "documentNamespace": "http://spdx.org/spdxdocs/biz-calculator-0.0.0-***",
   "creationInfo": {
-    "created": "2026-07-31T13:20:35.656Z",
+    "created": "2026-08-01T02:52:16.697Z",
     "creators": [
       "Tool: npm/cli-11.7.0"
     ]
@@ -475,7 +475,7 @@
       "SPDXID": "SPDXRef-Package-shakilabs.ui-0.3.11",
       "versionInfo": "0.3.11",
       "packageFileName": "node_modules/@shakilabs/ui",
-      "downloadLocation": "file:/private/tmp/claude-501/-Users-igyubin-Desktop-projects-01-shakishaki-100-MVP/***/scratchpad/biz-wt/client/vendor/shakilabs-ui-0.3.11.tgz",
+      "downloadLocation": "file:client/vendor/shakilabs-ui-0.3.11.tgz",
       "filesAnalyzed": false,
       "homepage": "NOASSERTION",
       "licenseDeclared": "NOASSERTION",
