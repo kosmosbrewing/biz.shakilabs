@@ -5,7 +5,7 @@
   "serialNumber": "urn:uuid:***",
   "version": 1,
   "metadata": {
-    "timestamp": "2026-07-31T13:20:35.423Z",
+    "timestamp": "2026-08-01T02:52:16.463Z",
     "lifecycles": [
       {
         "phase": "build"
@@ -591,7 +591,7 @@
       "externalReferences": [
         {
           "type": "distribution",
-          "url": "file:/private/tmp/claude-501/-Users-igyubin-Desktop-projects-01-shakishaki-100-MVP/***/scratchpad/biz-wt/client/vendor/shakilabs-ui-0.3.11.tgz"
+          "url": "file:client/vendor/shakilabs-ui-0.3.11.tgz"
         }
       ],
       "hashes": [
