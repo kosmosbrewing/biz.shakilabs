@@ -4,6 +4,8 @@
  * 각 계산기 뷰 하단에 도메인 가이드 + FAQ + 체크리스트를 출력하여
  * vite-ssg SSR 시 HTML에 실제 텍스트가 반영되도록 한다.
  */
+import { ExternalLink } from "lucide-vue-next";
+
 export interface GuideSection {
   h2: string;
   body: string;
@@ -19,12 +21,18 @@ export interface GuideChecklist {
   items: string[];
 }
 
+export interface GuideSource {
+  label: string;
+  url: string;
+}
+
 defineProps<{
   title: string;
   intro: string;
   sections?: GuideSection[];
   faqs?: GuideFaq[];
   checklist?: GuideChecklist;
+  sources?: GuideSource[];
   disclaimer?: string;
 }>();
 </script>
@@ -66,6 +74,27 @@ defineProps<{
         <p class="text-sm font-semibold text-foreground">Q. {{ faq.q }}</p>
         <p class="text-sm leading-relaxed text-muted-foreground">A. {{ faq.a }}</p>
       </div>
+    </div>
+
+    <!-- 공식 출처: 정부·공공 원자료로 가는 follow 링크 (신뢰 신호, nofollow 금지) -->
+    <div
+      v-if="sources && sources.length > 0"
+      class="space-y-2 border-t border-border/40 pt-3"
+    >
+      <h3 class="text-base font-semibold text-foreground">공식 출처</h3>
+      <ul class="ml-4 list-disc space-y-1.5 text-sm">
+        <li v-for="(source, i) in sources" :key="`src-${i}`">
+          <a
+            :href="source.url"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-1 text-primary underline underline-offset-2"
+          >
+            <span>{{ source.label }}</span>
+            <ExternalLink class="h-3 w-3 shrink-0" />
+          </a>
+        </li>
+      </ul>
     </div>
 
     <p

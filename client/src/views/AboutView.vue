@@ -46,11 +46,19 @@ const constantsStore = useConstantsStore();
           정확한 세무 상담은 세무사를 통해 확인하세요.
         </p>
 
-        <h2 class="text-heading font-bold">문의</h2>
+        <h2 class="text-heading font-bold">검증 방법</h2>
         <p class="text-body text-muted-foreground">
-          오류 제보나 기능 건의는
-          <a :href="`mailto:${constantsStore.supportEmail}`" class="retro-link">{{ constantsStore.supportEmail }}</a>으로
-          보내주세요.
+          모든 세율·요율은 국세청·홈택스, 고용노동부, 4대사회보험 정보연계센터 등 공공 기관이 공개한 자료를 기준으로 교차 검증합니다.
+          세법이나 요율이 개정되면 확인 즉시 계산 로직에 반영하고, 각 계산기에 데이터 기준일을 함께 표기합니다.
+        </p>
+
+        <h2 class="text-heading font-bold">운영자 정보</h2>
+        <p class="text-body text-muted-foreground">
+          운영: ShakiLabs · 문의:
+          <a :href="`mailto:${constantsStore.supportEmail}`" class="retro-link">{{ constantsStore.supportEmail }}</a>
+        </p>
+        <p class="text-body text-muted-foreground">
+          오류 제보나 기능 건의도 같은 주소로 보내주시면 확인 후 반영합니다.
         </p>
       </div>
     </div>

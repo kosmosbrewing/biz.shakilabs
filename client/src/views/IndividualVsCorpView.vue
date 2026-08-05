@@ -269,6 +269,7 @@ const faqJsonLd = computed(() => ({
       :intro="BIZ_INDIVIDUAL_VS_CORP_GUIDE.intro"
       :sections="BIZ_INDIVIDUAL_VS_CORP_GUIDE.sections"
       :checklist="BIZ_INDIVIDUAL_VS_CORP_GUIDE.checklist"
+      :sources="BIZ_INDIVIDUAL_VS_CORP_GUIDE.sources"
       :disclaimer="BIZ_INDIVIDUAL_VS_CORP_GUIDE.disclaimer"
     />
   </div>
