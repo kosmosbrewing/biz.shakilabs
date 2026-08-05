@@ -21,6 +21,13 @@ type SEOOptions = {
   jsonLd?: MaybeRefOrGetter<
     Record<string, unknown> | Record<string, unknown>[] | undefined
   >;
+  /**
+   * canonical / hreflang / og:url에 쓸 경로 오버라이드.
+   * 금액 변형 라우트(예: /labor-cost/300)는 프리렌더 본문이 기본 계산기와
+   * 동일하므로 기본 경로("/labor-cost")를 넘긴다 — noindex 대신 canonical
+   * 통합을 써서 변형에 쌓인 랭킹 신호를 기본 페이지로 합친다.
+   */
+  canonicalPath?: MaybeRefOrGetter<string | undefined>;
 };
 
 function normalizeTitle(rawTitle: string): string {
@@ -47,6 +54,7 @@ export function useSEO({
   ogImage,
   noindex = false,
   jsonLd,
+  canonicalPath,
 }: SEOOptions): void {
   const route = useRoute();
 
@@ -65,7 +73,10 @@ export function useSEO({
         ? [resolvedJsonLd]
         : [];
     const siteUrl = getSiteUrl().replace(/\/+$/, "");
-    const currentPath = route.path || "/";
+    // canonical·hreflang·og:url은 항상 서로 일치해야 하므로 같은 경로에서
+    // 한 번만 해석한다 (오버라이드 우선, 없으면 라우트 경로).
+    const resolvedCanonicalPath = toValue(canonicalPath);
+    const currentPath = resolvedCanonicalPath || route.path || "/";
     const currentUrl = currentPath === "/" ? siteUrl : `${siteUrl}${currentPath}`;
 
     return {

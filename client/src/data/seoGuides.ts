@@ -2,12 +2,16 @@
 export interface GuideSection { h2: string; body: string; }
 export interface GuideFaq { q: string; a: string; }
 export interface GuideChecklist { title: string; items: string[]; }
+// 정부·공공 1차 자료로 가는 출처 링크. 의도적으로 nofollow를 붙이지 않는다:
+// 1차 출처 인용은 독자와 광고 심사 양쪽에 대한 신뢰 신호다.
+export interface GuideSource { label: string; url: string; }
 export interface GuideData {
   title: string;
   intro: string;
   sections?: GuideSection[];
   faqs?: GuideFaq[];
   checklist?: GuideChecklist;
+  sources?: GuideSource[];
   disclaimer?: string;
 }
 
@@ -123,6 +127,16 @@ export const BIZ_INDIVIDUAL_VS_CORP_GUIDE: GuideData = {
     {
       q: "법인 소득과 대표 소득을 어떻게 나누나요?",
       a: "법인 이익이 연 1억원이라면 대표 급여 6천만원 + 법인 유보 4천만원으로 나눌 수 있습니다. 대표 급여는 개인 소득세, 유보금은 법인세만 부과되므로 절세 효과가 있습니다. 단 대표 급여가 과도하면 세무 감사 대상이 될 수 있어 업종 평균을 참고해야 합니다.",
+    },
+  ],
+  sources: [
+    {
+      label: "국세청 — 종합소득세·법인세 세율과 신고 안내",
+      url: "https://www.nts.go.kr",
+    },
+    {
+      label: "홈택스 — 사업자등록·세금 신고와 납부",
+      url: "https://www.hometax.go.kr",
     },
   ],
   disclaimer: COMMON_DISCLAIMER,
@@ -327,6 +341,20 @@ export const BIZ_LABOR_COST_GUIDE: GuideData = {
     {
       q: "사업주가 직원 국민연금을 대납하면?",
       a: "사업주 부담분만 납부 가능하며, 직원 부담분(4.75%)을 대신 납부하는 것은 원칙적으로 불가능합니다. 예외적으로 '복리후생' 차원에서 합의 후 사업주가 대신 내면 해당 금액은 직원의 근로소득으로 간주됩니다.",
+    },
+  ],
+  sources: [
+    {
+      label: "고용노동부 — 최저임금·근로기준 안내",
+      url: "https://www.moel.go.kr",
+    },
+    {
+      label: "4대사회보험 정보연계센터 — 보험료율·가입 신고",
+      url: "https://www.4insure.or.kr",
+    },
+    {
+      label: "국세청 — 원천징수(급여) 세액 안내",
+      url: "https://www.nts.go.kr",
     },
   ],
   disclaimer: COMMON_DISCLAIMER,

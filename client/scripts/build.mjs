@@ -4,11 +4,11 @@ import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
 import {
   SEO_ROUTES,
+  SITEMAP_ROUTES,
   INDIVIDUAL_VS_CORP_REVENUES,
   CORP_TAX_REVENUES,
   VAT_COMPARE_REVENUES,
   STANDARD_EXPENSE_RATE_REVENUES,
-  LABOR_COST_AMOUNTS,
 } from "./seo-routes.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -21,12 +21,13 @@ const viteSsgBin = resolve(
   process.platform === "win32" ? "vite-ssg.cmd" : "vite-ssg"
 );
 
+// labor-cost 변형은 canonical 통합으로 사이트맵에서 빠졌으므로 여기 없다.
+// (아래 우선순위 매핑은 사이트맵에 실리는 라우트에만 쓰인다)
 const paramPaths = new Set([
   ...INDIVIDUAL_VS_CORP_REVENUES.map((a) => `/individual-vs-corp/${a}`),
   ...CORP_TAX_REVENUES.map((a) => `/corp-tax/${a}`),
   ...VAT_COMPARE_REVENUES.map((a) => `/vat-compare/${a}`),
   ...STANDARD_EXPENSE_RATE_REVENUES.map((a) => `/standard-expense-rate/${a}`),
-  ...LABOR_COST_AMOUNTS.map((a) => `/labor-cost/${a}`),
 ]);
 
 const basePriority = {
@@ -69,8 +70,10 @@ function resolveBuildDate() {
 }
 
 function renderSitemap(buildDate) {
+  // 금액 변형(PARAM_ROUTES)은 의도적으로 빠져 있다: canonical이 기본 페이지를
+  // 가리키므로 사이트맵에 실으면 "곧바로 딴 곳을 가리키는 URL"을 광고하는 셈이다.
   const baseUrl = "https://shakilabs.com/biz";
-  const urls = SEO_ROUTES.map((path) => {
+  const urls = SITEMAP_ROUTES.map((path) => {
     const { changefreq, priority } = getRouteConfig(path);
     return `  <url>
     <loc>${path === "/" ? baseUrl : `${baseUrl}${path}`}</loc>

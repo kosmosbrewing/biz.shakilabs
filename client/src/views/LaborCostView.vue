@@ -50,6 +50,9 @@ const seoDescription = computed(() =>
     ? `월급 ${amountLabel.value}원 기준 사업주 부담 4대보험료, 퇴직급여 적립분, 실제 인건비를 계산합니다.`
     : "월급을 입력하면 사업주 부담 4대보험, 퇴직급여, 총 인건비와 근로자 실수령액을 한눈에 확인합니다.",
 );
+// 금액 변형(/labor-cost/:amount)은 기본 계산기와 동일한 본문을 프리렌더하므로
+// 중복으로 경쟁하는 대신 기본 페이지로 canonical을 모은다.
+const canonicalPath = computed(() => (props.initialSalary ? "/labor-cost" : undefined));
 
 // 화면에 실제 렌더되는 병합 FAQ와 구조화 데이터를 일치시킨다 (스키마 규칙)
 const mergedFaqs = mergeFaqs(LABOR_COST_FAQS, BIZ_LABOR_COST_GUIDE.faqs);
@@ -80,7 +83,12 @@ const insuranceMetrics = computed(() => [{
 </script>
 
 <template>
-  <SEOHead :title="seoTitle" :description="seoDescription" :json-ld="faqJsonLd" />
+  <SEOHead
+    :title="seoTitle"
+    :description="seoDescription"
+    :canonical-path="canonicalPath"
+    :json-ld="faqJsonLd"
+  />
 
   <div class="container space-y-5 py-5 max-w-4xl">
     <CalculatorPageHeader title="인건비 계산기" />
@@ -247,7 +255,9 @@ const insuranceMetrics = computed(() => [{
     <SeoRichGuide
       :title="BIZ_LABOR_COST_GUIDE.title"
       :intro="BIZ_LABOR_COST_GUIDE.intro"
-      :sections="BIZ_LABOR_COST_GUIDE.sections"      :disclaimer="BIZ_LABOR_COST_GUIDE.disclaimer"
+      :sections="BIZ_LABOR_COST_GUIDE.sections"
+      :sources="BIZ_LABOR_COST_GUIDE.sources"
+      :disclaimer="BIZ_LABOR_COST_GUIDE.disclaimer"
     />
   </div>
 </template>
