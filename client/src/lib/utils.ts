@@ -86,3 +86,16 @@ export function copyUsingExecCommand(text: string): boolean {
   document.body.removeChild(textarea);
   return copied;
 }
+
+/**
+ * 세부담 텍스트 색: 02.finance의 deductionTextClass와 같은 규칙이다.
+ *
+ * 빨강은 "마이너스 숫자"가 아니라 "부담이 실제로 높다"는 판정이어야 한다.
+ * 이전에는 소득세·지방소득세·국민연금·건강보험 행을 전부 무조건 destructive로 칠해
+ * 실효세율이 24%든 40%든 화면이 똑같이 보였다 — 경고를 다 쓰면 경고가 사라진다.
+ */
+export function deductionTextClass(rate: number): string {
+  if (rate >= 0.32) return "text-status-danger";
+  if (rate >= 0.24) return "text-status-caution";
+  return "text-status-success";
+}
