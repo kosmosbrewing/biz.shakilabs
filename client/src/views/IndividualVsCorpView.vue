@@ -15,7 +15,7 @@ import { BIZ_INDIVIDUAL_VS_CORP_GUIDE } from "@/data/seoGuides";
 import { INDIVIDUAL_VS_CORP_FAQS, INDIVIDUAL_VS_CORP_PRESETS } from "@/data/individualVsCorpContent";
 import CalculatorInteractionTracker from "@/components/analytics/CalculatorInteractionTracker.vue";
 import { useIndividualVsCorp } from "@/composables/useIndividualVsCorp";
-import { formatWon, formatPercent, formatManWon } from "@/lib/utils";
+import { deductionTextClass, formatWon, formatPercent, formatManWon } from "@/lib/utils";
 
 const props = defineProps<{ initialRevenue?: number }>();
 const amountLabel = computed(() => props.initialRevenue ? formatManWon(props.initialRevenue / 10000) : null);
@@ -46,6 +46,14 @@ const {
   restoreDraft,
   clearDraft,
 } = useIndividualVsCorp(props.initialRevenue);
+
+// 색 판정의 기준값 — 화면에 이미 노출되는 실효세율을 그대로 쓴다
+const individualEffectiveRate = computed(() =>
+  individual.value.taxableIncome > 0 ? individual.value.totalTax / individual.value.taxableIncome : 0,
+);
+const corpEffectiveRate = computed(() =>
+  corp.value.operatingProfit > 0 ? corp.value.totalTax / corp.value.operatingProfit : 0,
+);
 
 const presets = INDIVIDUAL_VS_CORP_PRESETS;
 const faqItems = INDIVIDUAL_VS_CORP_FAQS;
@@ -184,27 +192,27 @@ const faqJsonLd = computed(() => ({
                 </div>
                 <div class="flex justify-between">
                   <span class="text-muted-foreground">소득세</span>
-                  <span class="text-destructive">{{ formatWon(individual.incomeTax) }}</span>
+                  <span class="text-foreground">{{ formatWon(individual.incomeTax) }}</span>
                 </div>
                 <div class="flex justify-between">
                   <span class="text-muted-foreground">지방소득세</span>
-                  <span class="text-destructive">{{ formatWon(individual.localTax) }}</span>
+                  <span class="text-foreground">{{ formatWon(individual.localTax) }}</span>
                 </div>
                 <div class="flex justify-between">
                   <span class="text-muted-foreground">국민연금</span>
-                  <span class="text-destructive">{{ formatWon(individual.nationalPension) }}</span>
+                  <span class="text-foreground">{{ formatWon(individual.nationalPension) }}</span>
                 </div>
                 <div class="flex justify-between">
                   <span class="text-muted-foreground">건강+장기요양</span>
-                  <span class="text-destructive">{{ formatWon(individual.healthInsurance + individual.longTermCare) }}</span>
+                  <span class="text-foreground">{{ formatWon(individual.healthInsurance + individual.longTermCare) }}</span>
                 </div>
                 <div class="flex justify-between border-t border-border pt-1 font-semibold">
                   <span class="text-muted-foreground">총 세금·보험</span>
-                  <span class="text-destructive">{{ formatWon(individual.totalTax) }}</span>
+                  <span :class="deductionTextClass(individualEffectiveRate)">{{ formatWon(individual.totalTax) }}</span>
                 </div>
                 <div class="flex justify-between">
                   <span class="text-muted-foreground">실효세율</span>
-                  <span class="text-foreground">{{ individual.taxableIncome > 0 ? formatPercent(individual.totalTax / individual.taxableIncome) : '-' }}</span>
+                  <span :class="deductionTextClass(individualEffectiveRate)">{{ individual.taxableIncome > 0 ? formatPercent(individualEffectiveRate) : '-' }}</span>
                 </div>
               </div>
             </CardContent>
@@ -229,27 +237,27 @@ const faqJsonLd = computed(() => ({
                 </div>
                 <div class="flex justify-between">
                   <span class="text-muted-foreground">법인세</span>
-                  <span class="text-destructive">{{ formatWon(corp.corpTax + corp.corpLocalTax) }}</span>
+                  <span class="text-foreground">{{ formatWon(corp.corpTax + corp.corpLocalTax) }}</span>
                 </div>
                 <div class="flex justify-between">
                   <span class="text-muted-foreground">급여 소득세</span>
-                  <span class="text-destructive">{{ formatWon(corp.salaryIncomeTax + corp.salaryLocalTax) }}</span>
+                  <span class="text-foreground">{{ formatWon(corp.salaryIncomeTax + corp.salaryLocalTax) }}</span>
                 </div>
                 <div class="flex justify-between">
                   <span class="text-muted-foreground">4대보험</span>
-                  <span class="text-destructive">{{ formatWon(corp.socialInsurance) }}</span>
+                  <span class="text-foreground">{{ formatWon(corp.socialInsurance) }}</span>
                 </div>
                 <div class="flex justify-between">
                   <span class="text-muted-foreground">배당소득세</span>
-                  <span class="text-destructive">{{ formatWon(corp.dividendTax) }}</span>
+                  <span class="text-foreground">{{ formatWon(corp.dividendTax) }}</span>
                 </div>
                 <div class="flex justify-between border-t border-border pt-1 font-semibold">
                   <span class="text-muted-foreground">총 세금·보험</span>
-                  <span class="text-destructive">{{ formatWon(corp.totalTax) }}</span>
+                  <span :class="deductionTextClass(corpEffectiveRate)">{{ formatWon(corp.totalTax) }}</span>
                 </div>
                 <div class="flex justify-between">
                   <span class="text-muted-foreground">실효세율</span>
-                  <span class="text-foreground">{{ corp.operatingProfit > 0 ? formatPercent(corp.totalTax / corp.operatingProfit) : '-' }}</span>
+                  <span :class="deductionTextClass(corpEffectiveRate)">{{ corp.operatingProfit > 0 ? formatPercent(corpEffectiveRate) : '-' }}</span>
                 </div>
               </div>
             </CardContent>
