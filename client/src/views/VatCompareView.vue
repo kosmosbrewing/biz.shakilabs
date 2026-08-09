@@ -27,6 +27,9 @@ const seoDesc = computed(() =>
     ? `연 매출 ${amountLabel.value}원 기준, 간이과세와 일반과세 중 어느 쪽이 부가세가 적은지 비교합니다.`
     : "연 매출 기준, 간이과세와 일반과세 중 어느 쪽이 부가세가 적은지 비교합니다.",
 );
+// 금액 변형(/vat-compare/:amount)은 기본 계산기와 동일한 본문을 프리렌더하므로
+// 중복으로 경쟁하는 대신 기본 페이지로 canonical을 모은다.
+const canonicalPath = computed(() => (props.initialRevenue ? "/vat-compare" : undefined));
 
 const annualRevenue = ref(props.initialRevenue ?? 80_000_000);
 const industryKey = ref("food");
@@ -113,6 +116,7 @@ const vatMetrics = computed(() => [{
   <SEOHead
     :title="seoTitle"
     :description="seoDesc"
+    :canonical-path="canonicalPath"
     :json-ld="faqJsonLd"
   />
 

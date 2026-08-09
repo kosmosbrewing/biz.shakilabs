@@ -29,6 +29,9 @@ const seoDesc = computed(() =>
     ? `연 매출 ${amountLabel.value}원 기준, 개인사업자와 법인 중 어느 쪽이 세후소득이 많은지 비교합니다.`
     : "동일 매출 기준, 개인사업자와 법인 중 어느 쪽이 세후소득이 많은지 비교해보세요.",
 );
+// 금액 변형(/individual-vs-corp/:amount)은 기본 계산기와 동일한 본문을
+// 프리렌더하므로 중복으로 경쟁하는 대신 기본 페이지로 canonical을 모은다.
+const canonicalPath = computed(() => (props.initialRevenue ? "/individual-vs-corp" : undefined));
 
 const {
   revenue,
@@ -75,6 +78,7 @@ const faqJsonLd = computed(() => ({
   <SEOHead
     :title="seoTitle"
     :description="seoDesc"
+    :canonical-path="canonicalPath"
     :json-ld="faqJsonLd"
   />
 

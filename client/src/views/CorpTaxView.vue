@@ -26,6 +26,9 @@ const seoDescription = computed(() =>
     ? `과세표준 ${amountLabel.value}원 기준 예상 법인세·지방소득세와 실효세율을 계산합니다.`
     : "법인 과세표준을 입력하면 누진세율 기준 예상 법인세·지방소득세와 실효세율을 계산합니다.",
 );
+// 금액 변형(/corp-tax/:amount)은 기본 계산기와 동일한 본문을 프리렌더하므로
+// 중복으로 경쟁하는 대신 기본 페이지로 canonical을 모은다.
+const canonicalPath = computed(() => (props.initialTaxableIncome ? "/corp-tax" : undefined));
 
 const taxableIncome = ref(props.initialTaxableIncome ?? 500_000_000);
 const { result, validationError } = useSafeCalculation(
@@ -66,7 +69,12 @@ const faqJsonLd = computed(() => ({
 </script>
 
 <template>
-  <SEOHead :title="seoTitle" :description="seoDescription" :json-ld="faqJsonLd" />
+  <SEOHead
+    :title="seoTitle"
+    :description="seoDescription"
+    :canonical-path="canonicalPath"
+    :json-ld="faqJsonLd"
+  />
 
   <div class="container space-y-5 py-5 max-w-4xl">
     <CalculatorPageHeader title="법인세 계산기" />
