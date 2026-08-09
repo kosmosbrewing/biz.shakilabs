@@ -55,6 +55,9 @@ const seoDescription = computed(() =>
     ? `매출 ${amountLabel.value}원 기준 기준경비율과 단순경비율 방식의 세금 차이를 비교합니다.`
     : "매출과 업종을 선택하면 기준경비율·단순경비율 방식별 소득세를 비교 계산합니다.",
 );
+// 금액 변형(/standard-expense-rate/:amount)은 기본 계산기와 동일한 본문을
+// 프리렌더하므로 중복으로 경쟁하는 대신 기본 페이지로 canonical을 모은다.
+const canonicalPath = computed(() => (props.initialRevenue ? "/standard-expense-rate" : undefined));
 
 // 화면에 실제 렌더되는 병합 FAQ와 구조화 데이터를 일치시킨다 (스키마 규칙)
 const mergedFaqs = mergeFaqs(EXPENSE_RATE_FAQS, BIZ_HOME_GUIDE.faqs);
@@ -89,7 +92,12 @@ const methodMetrics = computed(() => [
 </script>
 
 <template>
-  <SEOHead :title="seoTitle" :description="seoDescription" :json-ld="faqJsonLd" />
+  <SEOHead
+    :title="seoTitle"
+    :description="seoDescription"
+    :canonical-path="canonicalPath"
+    :json-ld="faqJsonLd"
+  />
 
   <div class="container space-y-5 py-5 max-w-4xl">
     <CalculatorPageHeader title="기준경비율 계산기" />

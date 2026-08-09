@@ -2,14 +2,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
-import {
-  SEO_ROUTES,
-  SITEMAP_ROUTES,
-  INDIVIDUAL_VS_CORP_REVENUES,
-  CORP_TAX_REVENUES,
-  VAT_COMPARE_REVENUES,
-  STANDARD_EXPENSE_RATE_REVENUES,
-} from "./seo-routes.mjs";
+import { SEO_ROUTES, SITEMAP_ROUTES } from "./seo-routes.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const projectRoot = resolve(__dirname, "..");
@@ -21,14 +14,10 @@ const viteSsgBin = resolve(
   process.platform === "win32" ? "vite-ssg.cmd" : "vite-ssg"
 );
 
-// labor-cost 변형은 canonical 통합으로 사이트맵에서 빠졌으므로 여기 없다.
-// (아래 우선순위 매핑은 사이트맵에 실리는 라우트에만 쓰인다)
-const paramPaths = new Set([
-  ...INDIVIDUAL_VS_CORP_REVENUES.map((a) => `/individual-vs-corp/${a}`),
-  ...CORP_TAX_REVENUES.map((a) => `/corp-tax/${a}`),
-  ...VAT_COMPARE_REVENUES.map((a) => `/vat-compare/${a}`),
-  ...STANDARD_EXPENSE_RATE_REVENUES.map((a) => `/standard-expense-rate/${a}`),
-]);
+// 금액 변형 라우트("/family/12345") 판별. 현재는 5개 패밀리 전부 canonical 통합으로
+// 사이트맵에서 빠져 있어 이 분기를 타지 않지만, 어느 패밀리가 고유 본문을 갖춰
+// PARAM_ROUTES에서 빠지면 열거를 고칠 필요 없이 바로 0.7 우선순위를 받는다.
+const PARAM_PATH_PATTERN = /^\/[a-z-]+\/\d+$/;
 
 const basePriority = {
   "/": "1.0",
@@ -54,7 +43,7 @@ function getRouteConfig(path) {
       priority: basePriority[path],
     };
   }
-  if (paramPaths.has(path)) {
+  if (PARAM_PATH_PATTERN.test(path)) {
     return { changefreq: "monthly", priority: "0.7" };
   }
   return { changefreq: "monthly", priority: "0.5" };

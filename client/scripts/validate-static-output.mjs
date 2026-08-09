@@ -45,7 +45,7 @@ function validateRoute(route) {
   assert(existsSync(outputPath), `Missing static output for ${route}: ${outputPath}`);
 
   const html = readFileSync(outputPath, "utf8");
-  // labor-cost 금액 변형은 기본 페이지로 canonical을 모아야 하고(doorway 통합),
+  // 금액 변형은 기본 계산기 페이지로 canonical을 모아야 하고(doorway 통합),
   // 그 외 라우트는 전부 self-canonical이어야 한다.
   const canonicalRoute = canonicalPathFor(route);
   const expectedCanonical =
@@ -73,7 +73,7 @@ function validateSitemap() {
   assert(JSON.stringify(actualUrls) === JSON.stringify(expectedUrls),
     "Sitemap must contain exactly the self-canonical routes");
   assert(actualUrls.every((url) => !variantUrls.has(url)),
-    "Sitemap must not list canonicalized labor-cost variant routes");
+    "Sitemap must not list canonicalized amount-variant routes");
 }
 
 validateVercelConfig(resolve(repositoryRoot, "vercel.json"));
