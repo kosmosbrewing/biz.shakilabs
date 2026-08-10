@@ -90,5 +90,31 @@ assert(/name="robots" content="noindex,nofollow"/.test(notFoundHtml),
   "404.html must be noindex,nofollow");
 assert(notFoundHtml.includes('href="/biz/individual-vs-corp"'),
   "404.html must link to an existing calculator");
+// 콘텐츠가 없는 화면의 광고는 Google "Valuable Inventory" 위반이다. noindex는 색인만
+// 막을 뿐 정책은 로더의 존재로 판정하므로, build.mjs가 404에서 태그를 지운 상태를
+// 여기서 고정한다. 셸(index.html)은 나머지 전 라우트에 로더를 싣기 때문에,
+// 이 어서션이 없으면 셸을 손대는 순간 조용히 되살아난다.
+assert(!/adsbygoogle|googlesyndication/i.test(notFoundHtml),
+  "404.html must not load the AdSense script (Valuable Inventory: no ads on a contentless screen)");
+
+// 애드센스 심사 필수 3요소(제3자 광고 쿠키 고지·맞춤 광고 고지·옵트아웃 2링크)와
+// 운영자 신원은 13자산 공통 기준이다. 방침 문구를 다듬다 실수로 빠뜨리면 심사에서
+// 바로 걸리므로 정적 출력에 실제로 남아 있는지 빌드에서 확인한다.
+const privacyHtml = readFileSync(routeOutputPath("/privacy"), "utf8");
+const termsHtml = readFileSync(routeOutputPath("/terms"), "utf8");
+
+for (const [needle, label] of [
+  ["adssettings.google.com", "Google 광고 설정 옵트아웃 링크"],
+  ["aboutads.info", "aboutads.info 옵트아웃 링크"],
+  ["제3자", "제3자 광고 쿠키 고지"],
+  ["맞춤 광고", "맞춤 광고 고지"],
+]) {
+  assert(privacyHtml.includes(needle), `/privacy must retain the ${label}`);
+}
+
+for (const html of [privacyHtml, termsHtml]) {
+  assert(/운영:\s*ShakiLabs/.test(html), "Policy pages must state the operator (운영: ShakiLabs)");
+  assert(html.includes("skdba1313@gmail.com"), "Policy pages must state the contact address");
+}
 
 console.log(`Validated ${SEO_ROUTES.length} prerendered routes (${SITEMAP_ROUTES.length} sitemap + ${PARAM_ROUTES.length} canonicalized variants) and custom 404 output.`);

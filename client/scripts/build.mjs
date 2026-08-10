@@ -99,6 +99,25 @@ function removeRenderedNoscriptFallbacks() {
   }
 }
 
+// 404 셸에서만 애드센스 로더를 걷어낸다. 404 화면은 제목·안내 한 줄·복귀 링크뿐이라
+// 게시자 콘텐츠가 사실상 없는데, 콘텐츠 없는 화면에 광고를 싣는 것이 Google의
+// "Valuable Inventory"(가치 있는 인벤토리) 정책이 금지하는 바로 그 상황이다.
+// noindex는 색인만 막을 뿐 정책 판정은 로더의 존재로 이뤄지므로 태그 자체를 지운다.
+//
+// 정상 라우트의 광고 배선은 건드리지 않는다: 이 앱의 광고는 전부 셸의 이 태그 하나에서
+// 나오고(AdSlot.vue는 어디에서도 import되지 않는다) 404.html만 후처리하기 때문이다.
+function stripAdsenseLoaderFromNotFound() {
+  const outputPath = routeOutputPath("/404");
+  if (!existsSync(outputPath)) return;
+
+  const html = readFileSync(outputPath, "utf8");
+  writeFileSync(
+    outputPath,
+    html.replace(/\n?\s*<script[^>]*\bdata-adsense="true"[^>]*><\/script>/i, ""),
+    "utf8",
+  );
+}
+
 const buildDate = resolveBuildDate();
 
 mkdirSync(dirname(sitemapPath), { recursive: true });
@@ -118,6 +137,7 @@ if (result.status !== 0) {
 }
 
 removeRenderedNoscriptFallbacks();
+stripAdsenseLoaderFromNotFound();
 
 const validationResult = spawnSync(
   process.execPath,
