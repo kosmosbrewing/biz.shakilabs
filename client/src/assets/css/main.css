@@ -41,12 +41,16 @@
 @tailwind utilities;
 
 @layer base {
+  /* 라이트 의미색은 흰 카드(--card) 위 12px 본문에 쓰이므로 WCAG AA 4.5:1을 넘겨야 한다.
+     기존 success 3.85 / warning 2.61 / caution 3.16은 전부 미달이었다 (라이브 실측).
+     통과값은 finance·house가 이미 쓰는 대장값과 동일하게 맞춰 앱 간 리터럴을 통일한다.
+     danger(4.73) · info(5.10)은 이미 통과하므로 불필요한 시각 변화를 피해 그대로 둔다. */
   :root {
-    --status-success: 148 61% 36%;
-    --status-warning: 43 88% 43%;
-    --status-caution: 28 82% 48%;
-    --status-danger: 0 70% 52%;
-    --status-info: 212 83% 45%;
+    --status-success: 142 64% 24%; /* 7.20:1 on --card */
+    --status-warning: 24 83% 31%; /* 7.04:1 on --card */
+    --status-caution: 17 79% 34%; /* 7.02:1 on --card */
+    --status-danger: 0 70% 52%; /* 4.73:1 — 통과, 유지 */
+    --status-info: 212 83% 45%; /* 5.10:1 — 통과, 유지 */
   }
 
   .dark {

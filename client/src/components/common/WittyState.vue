@@ -40,7 +40,8 @@ const iconClass = computed(() => {
 </script>
 
 <template>
-  <div class="rounded-xl border border-border/60 bg-white px-3 py-4 text-center">
+  <!-- bg-white는 다크에서도 흰 배경으로 고정돼 text-foreground(거의 흰색)와 겹친다. 카드 토큰을 쓴다. -->
+  <div class="rounded-xl border border-border/60 bg-card px-3 py-4 text-center">
     <component :is="iconComponent" :class="iconClass" class="mx-auto" />
     <p class="mt-1 text-caption font-semibold text-foreground">{{ title || defaultTitle }}</p>
     <p class="mt-1 text-caption text-muted-foreground">{{ description || defaultDescription }}</p>

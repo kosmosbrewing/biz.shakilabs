@@ -40,7 +40,9 @@ const spinnerSizes: Record<SpinnerSize, string> = {
 const textColorClasses = computed(() => {
   const map: Record<SpinnerColor, string> = {
     primary: "text-primary",
-    white: "text-white dark:text-foreground",
+    // "white"는 채워진 primary 배경 위에서 쓰라는 뜻이다. 다크에서 text-foreground(거의 흰색)를
+    // 밝은 초록 위에 올리면 2.03:1이 된다 — 그 자리의 정답 토큰은 --primary-foreground다.
+    white: "text-primary-foreground",
     muted: "text-muted-foreground",
     foreground: "text-foreground",
   };
@@ -50,7 +52,7 @@ const textColorClasses = computed(() => {
 const dotColorClasses = computed(() => {
   const map: Record<SpinnerColor, string> = {
     primary: "bg-primary",
-    white: "bg-white dark:bg-foreground",
+    white: "bg-primary-foreground",
     muted: "bg-muted-foreground",
     foreground: "bg-foreground",
   };

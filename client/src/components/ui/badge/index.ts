@@ -11,7 +11,9 @@ export const badgeVariants = cva(
         outline: "text-foreground",
         deduction: "border-transparent bg-deduction text-deduction-foreground",
         highlight: "border-transparent bg-highlight text-highlight-foreground",
-        neutral: "border-border/50 bg-muted-foreground/70 text-white",
+        // bg-muted-foreground/70 + text-white는 라이트 3.37:1 · 다크 3.46:1로 양쪽 다 미달이었다.
+        // 알파를 걷어내고 대비쌍(muted-foreground ↔ background)을 쓰면 라이트 6.51 · 다크 8.64.
+        neutral: "border-border/50 bg-muted-foreground text-background",
       },
     },
     defaultVariants: {

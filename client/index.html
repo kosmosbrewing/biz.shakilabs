@@ -113,16 +113,18 @@
         --accent-foreground: 160 74% 26%;
         --popover: 0 0% 100%;
         --popover-foreground: 222 47% 11%;
-        --destructive: 0 72% 52%;
-        --destructive-foreground: 210 40% 98%;
+        /* 4.49:1(배경 위)로 AA를 아슬아슬하게 놓쳤다. text-destructive는 폼 검증 메시지와
+           배달수수료 표의 금액에 12px 본문으로 쓰이므로 대형 텍스트 예외가 적용되지 않는다. */
+        --destructive: 0 74% 42%; /* 6.41:1 on --card */
+        --destructive-foreground: 210 40% 98%; /* 6.12:1 on --destructive */
         --border: 214 16% 85%;
         --input: 214 16% 85%;
         --ring: 160 75% 25%;
         --radius: 0.4rem;
-        --profit: 151 64% 37%;
-        --profit-foreground: 0 0% 100%;
-        --fee: 0 72% 52%;
-        --fee-foreground: 0 0% 100%;
+        --profit: 151 64% 24%; /* 3.55 → 7.14:1 on --card (CopyTableButton "복사됨" 라벨) */
+        --profit-foreground: 0 0% 100%; /* 7.14:1 on --profit */
+        --fee: 0 74% 42%; /* --destructive와 같은 빨강으로 통일 (6.41:1) */
+        --fee-foreground: 0 0% 100%; /* 6.41:1 on --fee */
       }
 
       .dark {
@@ -140,15 +142,18 @@
         --accent-foreground: 152 100% 79%;
         --popover: 217 33% 17%;
         --popover-foreground: 210 40% 96%;
-        --destructive: 0 72% 58%;
-        --destructive-foreground: 0 0% 100%;
+        /* 다크에서 3.67:1이었다 — 어두운 카드 위 빨강은 밝기를 올려야 읽힌다.
+           대신 채워진 배경(bg-destructive)에서는 흰 글자가 2.58:1로 무너지므로,
+           전경을 --primary-foreground와 같은 방식으로 "앱 hue 유지 + 어둡게" 잡는다. */
+        --destructive: 0 75% 72%; /* 5.74:1 on --card */
+        --destructive-foreground: 0 90% 8%; /* 7.42:1 on --destructive */
         --border: 214 16% 26%;
         --input: 214 16% 30%;
         --ring: 160 72% 47%;
-        --profit: 151 60% 54%;
-        --profit-foreground: 0 0% 100%;
-        --fee: 0 62% 58%;
-        --fee-foreground: 0 0% 100%;
+        --profit: 151 60% 54%; /* 7.52:1 on --card — 통과, 유지 */
+        --profit-foreground: 151 90% 8%; /* 흰색은 1.97:1이었다 → 8.19:1 */
+        --fee: 0 75% 72%; /* 3.64 → 5.74:1. 8개 저장소에 복제된 0 62% 58% 리터럴을 통일한다 */
+        --fee-foreground: 0 90% 8%; /* 7.42:1 on --fee */
       }
 
       html {
