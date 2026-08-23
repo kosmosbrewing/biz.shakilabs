@@ -7,6 +7,7 @@ import {
   PARAM_ROUTES,
   canonicalPathFor,
 } from "./seo-routes.mjs";
+import { validateUtilitiesAreGenerated } from "./validate-tailwind-utilities.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const projectRoot = resolve(__dirname, "..");
@@ -146,6 +147,7 @@ validateVercelConfig(resolve(projectRoot, "vercel.json"));
 SEO_ROUTES.forEach(validateRoute);
 const sitemapUrls = validateSitemap();
 validateRouterRoutesAreListed(sitemapUrls);
+const utilityCount = validateUtilitiesAreGenerated({ projectRoot, distRoot });
 
 // 홈이 자기 콘텐츠를 갖고 렌더됐는지. 라우터가 홈을 리다이렉트로 바꾸면 vite-ssg는
 // 대상 페이지를 그대로 index.html에 복사해 /biz가 다른 계산기의 사본이 된다 —
@@ -198,4 +200,4 @@ for (const html of [privacyHtml, termsHtml]) {
   assert(html.includes("skdba1313@gmail.com"), "Policy pages must state the contact address");
 }
 
-console.log(`Validated ${SEO_ROUTES.length} prerendered routes (${SITEMAP_ROUTES.length} sitemap + ${PARAM_ROUTES.length} canonicalized variants) and custom 404 output.`);
+console.log(`Validated ${SEO_ROUTES.length} prerendered routes (${SITEMAP_ROUTES.length} sitemap + ${PARAM_ROUTES.length} canonicalized variants), ${utilityCount} generated colour utilities, and custom 404 output.`);

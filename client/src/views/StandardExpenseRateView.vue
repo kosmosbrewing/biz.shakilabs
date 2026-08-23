@@ -209,7 +209,7 @@ const methodMetrics = computed(() => [
     <!-- 차이 요약 -->
     <div class="retro-panel-muted px-4 py-4 text-center">
       <p class="text-caption text-muted-foreground">{{ result.recommendation === 'standard' ? '기준경비율' : '단순경비율' }} 방식이</p>
-      <p class="text-h2 font-bold text-primary">{{ formatWon(Math.abs(result.taxDifference)) }}</p>
+      <p class="text-h1 font-bold text-primary">{{ formatWon(Math.abs(result.taxDifference)) }}</p>
       <p class="text-caption text-muted-foreground">더 절세됩니다</p>
     </div>
 
