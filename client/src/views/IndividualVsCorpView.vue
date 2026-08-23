@@ -167,7 +167,7 @@ const faqJsonLd = computed(() => ({
               betterOption === '법인'
                 ? 'bg-primary/15 text-primary border-transparent'
                 : betterOption === '개인'
-                  ? 'bg-blue-500/15 text-blue-600 dark:text-blue-400 border-transparent'
+                  ? 'bg-status-info/15 text-status-info border-transparent'
                   : '',
             ]"
           >
@@ -177,13 +177,13 @@ const faqJsonLd = computed(() => ({
 
         <div class="biz-compare-grid grid grid-cols-2 gap-4">
           <!-- 개인사업자 -->
-          <Card class="border-blue-200/50 dark:border-blue-800/50">
+          <Card class="border-status-info/25">
             <CardContent class="biz-compare-card space-y-2 p-4">
               <div class="flex items-center justify-center gap-2">
-                <span class="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400">
+                <span class="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-status-info/10 text-status-info">
                   <User class="h-3.5 w-3.5" />
                 </span>
-                <h3 class="text-caption font-bold text-blue-600 dark:text-blue-400">개인사업자</h3>
+                <h3 class="text-caption font-bold text-status-info">개인사업자</h3>
               </div>
               <div class="text-center">
                 <p class="text-h1 font-bold text-foreground tabular-nums">{{ formatWon(individual.afterTaxIncome) }}</p>
