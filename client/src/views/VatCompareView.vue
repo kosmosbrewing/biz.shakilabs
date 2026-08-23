@@ -194,7 +194,7 @@ const vatMetrics = computed(() => [{
               'rounded-full px-3 py-1 text-caption border-transparent',
               result.recommendation === 'simplified'
                 ? 'bg-primary/15 text-primary'
-                : 'bg-blue-500/15 text-blue-600 dark:text-blue-400',
+                : 'bg-status-info/15 text-status-info',
             ]"
           >
             {{ result.recommendation === 'simplified' ? '간이과세' : '일반과세' }}가
@@ -204,13 +204,13 @@ const vatMetrics = computed(() => [{
 
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <!-- 일반과세 -->
-          <Card class="border-blue-200/50 dark:border-blue-800/50">
+          <Card class="border-status-info/25">
             <CardContent class="biz-compare-card p-4 text-center space-y-2">
               <div class="flex items-center justify-center gap-2">
-                <span class="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400">
+                <span class="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-status-info/10 text-status-info">
                   <Receipt class="h-3.5 w-3.5" />
                 </span>
-                <h3 class="text-caption font-bold text-blue-600 dark:text-blue-400">일반과세</h3>
+                <h3 class="text-caption font-bold text-status-info">일반과세</h3>
               </div>
               <p class="text-h1 font-bold text-foreground tabular-nums">{{ formatWon(result.generalVat) }}</p>
               <p class="text-tiny text-muted-foreground">연간 부가세</p>
