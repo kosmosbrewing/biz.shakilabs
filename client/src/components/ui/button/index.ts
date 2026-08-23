@@ -9,12 +9,12 @@ export const buttonVariants = cva(
         // (라이트는 6.08:1이라 라이트만 보면 잡히지 않는 결함이다.) 토큰을 쓰면 다크 7.89:1.
         default: "border border-primary bg-primary text-primary-foreground hover:text-primary-foreground active:text-primary-foreground shadow-sm hover:-translate-y-[1px] hover:bg-primary/90 active:translate-y-0 active:scale-[0.985] active:bg-primary/95",
         destructive: "border border-destructive bg-destructive text-destructive-foreground hover:text-destructive-foreground active:text-destructive-foreground shadow-sm hover:-translate-y-[1px] hover:bg-destructive/90 active:translate-y-0 active:scale-[0.985] active:bg-destructive/95",
-        outline: "border border-border bg-background text-muted-foreground hover:-translate-y-[1px] hover:border-primary/40 hover:bg-primary/5 active:translate-y-0 active:scale-[0.985] active:border-primary/45 active:bg-primary/8",
+        outline: "border border-border bg-background text-muted-foreground hover:-translate-y-[1px] hover:border-primary/40 hover:bg-primary/5 active:translate-y-0 active:scale-[0.985] active:border-primary/45 active:bg-primary/[8%]",
         subtle: "border border-border/70 bg-card text-foreground shadow-sm hover:-translate-y-[1px] hover:border-primary/50 hover:bg-muted/20 active:translate-y-0 active:scale-[0.985] active:border-primary/55 active:bg-muted/30",
         secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "text-muted-foreground hover:bg-accent/60 hover:text-muted-foreground active:bg-accent/80",
-        contrast: "bg-card text-card-foreground shadow-sm hover:bg-card/92 active:scale-[0.985] active:bg-card/95",
-        contrastOutline: "border border-white/35 text-white hover:bg-white/10 active:scale-[0.985] active:bg-white/14 active:text-white",
+        contrast: "bg-card text-card-foreground shadow-sm hover:bg-card/[92%] active:scale-[0.985] active:bg-card/95",
+        contrastOutline: "border border-white/35 text-white hover:bg-white/10 active:scale-[0.985] active:bg-white/[14%] active:text-white",
         link: "text-primary underline-offset-4 hover:underline",
       },
       size: {

@@ -88,15 +88,15 @@ const expenseSegments = computed(() => [
     <div class="grid gap-3 md:grid-cols-3">
       <div class="retro-panel-muted px-4 py-4">
         <p class="text-tiny text-muted-foreground">손금 인정액</p>
-        <p class="mt-2 text-h2 font-bold text-primary">{{ formatWon(result.deductibleAmount) }}</p>
+        <p class="mt-2 text-h1 font-bold text-primary">{{ formatWon(result.deductibleAmount) }}</p>
       </div>
       <div class="retro-panel-muted px-4 py-4">
         <p class="text-tiny text-muted-foreground">사적 사용분</p>
-        <p class="mt-2 text-h2 font-bold text-foreground">{{ formatWon(result.nonDeductibleAmount) }}</p>
+        <p class="mt-2 text-h1 font-bold text-foreground">{{ formatWon(result.nonDeductibleAmount) }}</p>
       </div>
       <div class="retro-panel-muted px-4 py-4">
         <p class="text-tiny text-muted-foreground">예상 절세 효과</p>
-        <p class="mt-2 text-h2 font-bold text-foreground">{{ formatWon(result.taxSaving) }}</p>
+        <p class="mt-2 text-h1 font-bold text-foreground">{{ formatWon(result.taxSaving) }}</p>
       </div>
     </div>
 

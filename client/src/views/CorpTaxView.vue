@@ -97,15 +97,15 @@ const faqJsonLd = computed(() => ({
     <div class="grid gap-3 md:grid-cols-3">
       <div class="retro-panel-muted px-4 py-4">
         <p class="text-tiny text-muted-foreground">법인세 + 지방소득세</p>
-        <p class="mt-2 text-h2 font-bold text-primary">{{ formatWon(result.tax) }}</p>
+        <p class="mt-2 text-h1 font-bold text-primary">{{ formatWon(result.tax) }}</p>
       </div>
       <div class="retro-panel-muted px-4 py-4">
         <p class="text-tiny text-muted-foreground">세후 이익</p>
-        <p class="mt-2 text-h2 font-bold text-foreground">{{ formatWon(result.afterTaxIncome) }}</p>
+        <p class="mt-2 text-h1 font-bold text-foreground">{{ formatWon(result.afterTaxIncome) }}</p>
       </div>
       <div class="retro-panel-muted px-4 py-4">
         <p class="text-tiny text-muted-foreground">실효세율</p>
-        <p class="mt-2 text-h2 font-bold text-foreground">{{ formatPercent(result.effectiveRate, 1) }}</p>
+        <p class="mt-2 text-h1 font-bold text-foreground">{{ formatPercent(result.effectiveRate, 1) }}</p>
       </div>
     </div>
 

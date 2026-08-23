@@ -146,22 +146,22 @@ const insuranceMetrics = computed(() => [{
     <div class="grid gap-3 md:grid-cols-4">
       <div class="retro-panel-muted px-4 py-4">
         <p class="text-tiny text-muted-foreground">1인 실제 인건비</p>
-        <p class="mt-2 text-h2 font-bold text-primary">{{ formatWon(result.totalCostPerEmployee) }}</p>
+        <p class="mt-2 text-h1 font-bold text-primary">{{ formatWon(result.totalCostPerEmployee) }}</p>
         <p class="text-tiny text-muted-foreground">급여 대비 +{{ formatPercent(result.overheadRate, 1) }}</p>
       </div>
       <div class="retro-panel-muted px-4 py-4">
         <p class="text-tiny text-muted-foreground">근로자 실수령</p>
-        <p class="mt-2 text-h2 font-bold text-foreground">{{ formatWon(result.employeeNetPay) }}</p>
+        <p class="mt-2 text-h1 font-bold text-foreground">{{ formatWon(result.employeeNetPay) }}</p>
         <p class="text-tiny text-muted-foreground">4대보험 공제 후</p>
       </div>
       <div class="retro-panel-muted px-4 py-4">
         <p class="text-tiny text-muted-foreground">전체 월 인건비</p>
-        <p class="mt-2 text-h2 font-bold text-foreground">{{ formatWon(result.totalMonthlyCost) }}</p>
+        <p class="mt-2 text-h1 font-bold text-foreground">{{ formatWon(result.totalMonthlyCost) }}</p>
         <p class="text-tiny text-muted-foreground">{{ employeeCount }}명 기준</p>
       </div>
       <div class="retro-panel-muted px-4 py-4">
         <p class="text-tiny text-muted-foreground">연간 인건비 합계</p>
-        <p class="mt-2 text-h2 font-bold text-foreground">{{ formatWon(result.totalAnnualCost) }}</p>
+        <p class="mt-2 text-h1 font-bold text-foreground">{{ formatWon(result.totalAnnualCost) }}</p>
         <p class="text-tiny text-muted-foreground">12개월 기준</p>
       </div>
     </div>
