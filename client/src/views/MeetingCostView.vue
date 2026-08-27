@@ -6,6 +6,7 @@ import SEOHead from "@/components/common/SEOHead.vue";
 import CalculatorInteractionTracker from "@/components/analytics/CalculatorInteractionTracker.vue";
 import FaqAccordionPanel from "@/components/common/FaqAccordionPanel.vue";
 import CalculatorPageHeader from "@/components/biz/CalculatorPageHeader.vue";
+import BizResultHero from "@/components/biz/BizResultHero.vue";
 import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
 import { BIZ_HOME_GUIDE } from "@/data/seoGuides";
 import { BIZ_SERVICE_UPDATED_AT } from "@/data/bizExpansionData";
@@ -89,18 +90,16 @@ const { result, validationError } = useSafeCalculation(
       </CalculatorInteractionTracker>
     </div>
 
-    <div class="grid gap-3 md:grid-cols-3">
-      <div class="retro-panel-muted px-4 py-4">
-        <p class="text-tiny text-muted-foreground">1회 회의 비용</p>
-        <p class="mt-2 text-h1 font-bold text-foreground">{{ formatWon(result.perMeeting) }}</p>
+    <BizResultHero label="연간 총예산" :value="formatWon(result.annualBudget)" />
+
+    <div class="grid grid-cols-2 gap-3">
+      <div class="retro-stat text-center">
+        <p class="retro-stat-label">1회 회의 비용</p>
+        <p class="retro-stat-value">{{ formatWon(result.perMeeting) }}</p>
       </div>
-      <div class="retro-panel-muted px-4 py-4">
-        <p class="text-tiny text-muted-foreground">연간 총예산</p>
-        <p class="mt-2 text-h1 font-bold text-primary">{{ formatWon(result.annualBudget) }}</p>
-      </div>
-      <div class="retro-panel-muted px-4 py-4">
-        <p class="text-tiny text-muted-foreground">예상 매입세액</p>
-        <p class="mt-2 text-h1 font-bold text-foreground">{{ formatWon(result.vatCredit) }}</p>
+      <div class="retro-stat text-center">
+        <p class="retro-stat-label">예상 매입세액</p>
+        <p class="retro-stat-value">{{ formatWon(result.vatCredit) }}</p>
       </div>
     </div>
 

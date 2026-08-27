@@ -3,6 +3,7 @@ import { ref, computed } from "vue";
 import { mergeFaqs } from "@/lib/faqMerge";
 import { ShBreakdownBar, ShPresetGroup, ShSlider } from "@shakilabs/ui";
 import SEOHead from "@/components/common/SEOHead.vue";
+import BizResultHero from "@/components/biz/BizResultHero.vue";
 import FaqAccordionPanel from "@/components/common/FaqAccordionPanel.vue";
 import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
 import MetricComparisonBars from "@/components/result-visualization/MetricComparisonBars.vue";
@@ -158,14 +159,13 @@ const faqJsonLd = {
     </CalculatorInteractionTracker>
 
     <!-- 요약 -->
-    <div v-if="bestApp" class="retro-panel p-4 sm:p-5 mb-4">
-      <div class="text-center">
-        <p class="text-caption text-muted-foreground mb-1">월 매출 {{ formatWon(totalRevenue) }} 기준</p>
-        <span class="inline-block px-3 py-1 rounded-full text-caption font-bold bg-primary/15 text-primary">
-          입력한 가정에서는 {{ bestApp.appName }} 총비용이 가장 적음
-        </span>
-      </div>
-    </div>
+    <BizResultHero
+      v-if="bestApp"
+      class="mb-4"
+      :label="`총비용 최저 — ${bestApp.appName} 월 총비용`"
+      :value="formatWon(bestApp.totalFee)"
+      :sub="`입력한 가정 · 월 매출 ${formatWon(totalRevenue)} 기준`"
+    />
 
     <div class="mb-6 grid gap-4">
       <MetricComparisonBars

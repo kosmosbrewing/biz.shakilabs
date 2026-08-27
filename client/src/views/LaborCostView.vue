@@ -6,6 +6,7 @@ import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import FaqAccordionPanel from "@/components/common/FaqAccordionPanel.vue";
 import CalculatorPageHeader from "@/components/biz/CalculatorPageHeader.vue";
+import BizResultHero from "@/components/biz/BizResultHero.vue";
 import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
 import MetricComparisonBars from "@/components/result-visualization/MetricComparisonBars.vue";
 import { BIZ_LABOR_COST_GUIDE } from "@/data/seoGuides";
@@ -143,26 +144,27 @@ const insuranceMetrics = computed(() => [{
       </div>
     </CalculatorInteractionTracker>
 
-    <div class="grid gap-3 md:grid-cols-4">
-      <div class="retro-panel-muted px-4 py-4">
-        <p class="text-tiny text-muted-foreground">1인 실제 인건비</p>
-        <p class="mt-2 text-h1 font-bold text-primary">{{ formatWon(result.totalCostPerEmployee) }}</p>
-        <p class="text-tiny text-muted-foreground">급여 대비 +{{ formatPercent(result.overheadRate, 1) }}</p>
+    <BizResultHero
+      label="1인 실제 인건비"
+      :value="formatWon(result.totalCostPerEmployee)"
+      :sub="`급여 대비 +${formatPercent(result.overheadRate, 1)}`"
+    />
+
+    <div class="grid grid-cols-1 gap-3 sm:grid-cols-3">
+      <div class="retro-stat text-center">
+        <p class="retro-stat-label">근로자 실수령</p>
+        <p class="retro-stat-value">{{ formatWon(result.employeeNetPay) }}</p>
+        <p class="mt-0.5 text-tiny text-muted-foreground">4대보험 공제 후</p>
       </div>
-      <div class="retro-panel-muted px-4 py-4">
-        <p class="text-tiny text-muted-foreground">근로자 실수령</p>
-        <p class="mt-2 text-h1 font-bold text-foreground">{{ formatWon(result.employeeNetPay) }}</p>
-        <p class="text-tiny text-muted-foreground">4대보험 공제 후</p>
+      <div class="retro-stat text-center">
+        <p class="retro-stat-label">전체 월 인건비</p>
+        <p class="retro-stat-value">{{ formatWon(result.totalMonthlyCost) }}</p>
+        <p class="mt-0.5 text-tiny text-muted-foreground">{{ employeeCount }}명 기준</p>
       </div>
-      <div class="retro-panel-muted px-4 py-4">
-        <p class="text-tiny text-muted-foreground">전체 월 인건비</p>
-        <p class="mt-2 text-h1 font-bold text-foreground">{{ formatWon(result.totalMonthlyCost) }}</p>
-        <p class="text-tiny text-muted-foreground">{{ employeeCount }}명 기준</p>
-      </div>
-      <div class="retro-panel-muted px-4 py-4">
-        <p class="text-tiny text-muted-foreground">연간 인건비 합계</p>
-        <p class="mt-2 text-h1 font-bold text-foreground">{{ formatWon(result.totalAnnualCost) }}</p>
-        <p class="text-tiny text-muted-foreground">12개월 기준</p>
+      <div class="retro-stat text-center">
+        <p class="retro-stat-label">연간 인건비 합계</p>
+        <p class="retro-stat-value">{{ formatWon(result.totalAnnualCost) }}</p>
+        <p class="mt-0.5 text-tiny text-muted-foreground">12개월 기준</p>
       </div>
     </div>
 

@@ -7,6 +7,7 @@ import SEOHead from "@/components/common/SEOHead.vue";
 import CalculatorInteractionTracker from "@/components/analytics/CalculatorInteractionTracker.vue";
 import FaqAccordionPanel from "@/components/common/FaqAccordionPanel.vue";
 import CalculatorPageHeader from "@/components/biz/CalculatorPageHeader.vue";
+import BizResultHero from "@/components/biz/BizResultHero.vue";
 import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
 import MetricComparisonBars from "@/components/result-visualization/MetricComparisonBars.vue";
 import { BIZ_HOME_GUIDE } from "@/data/seoGuides";
@@ -207,11 +208,11 @@ const methodMetrics = computed(() => [
     />
 
     <!-- 차이 요약 -->
-    <div class="retro-panel-muted px-4 py-4 text-center">
-      <p class="text-caption text-muted-foreground">{{ result.recommendation === 'standard' ? '기준경비율' : '단순경비율' }} 방식이</p>
-      <p class="text-h1 font-bold text-primary">{{ formatWon(Math.abs(result.taxDifference)) }}</p>
-      <p class="text-caption text-muted-foreground">더 절세됩니다</p>
-    </div>
+    <BizResultHero
+      :label="`${result.recommendation === 'standard' ? '기준경비율' : '단순경비율'} 방식이`"
+      :value="formatWon(Math.abs(result.taxDifference))"
+      sub="더 절세됩니다"
+    />
 
     <div class="retro-panel px-4 py-4 space-y-2 text-caption text-muted-foreground">
       <p>단순경비율은 직전 과세기간 수입금액이 업종별 기준({{ industry.label }}: {{ industry.simpleThreshold.toLocaleString() }}만원) 이하인 경우에만 적용 가능합니다.</p>

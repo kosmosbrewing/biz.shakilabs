@@ -4,8 +4,8 @@ import { mergeFaqs } from "@/lib/faqMerge";
 import { ShPresetGroup, ShSlider } from "@shakilabs/ui";
 import { Store, Receipt, AlertCircle } from "lucide-vue-next";
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import SEOHead from "@/components/common/SEOHead.vue";
+import BizResultHero from "@/components/biz/BizResultHero.vue";
 import CalculatorInteractionTracker from "@/components/analytics/CalculatorInteractionTracker.vue";
 import FaqAccordionPanel from "@/components/common/FaqAccordionPanel.vue";
 import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
@@ -187,20 +187,14 @@ const vatMetrics = computed(() => [{
           연 매출 4,800만원 미만 — 간이과세 납부 면제 대상입니다.
         </div>
 
-        <div class="text-center mb-4">
-          <Badge
-            v-if="result.isSimplifiedEligible"
-            :class="[
-              'rounded-full px-3 py-1 text-caption border-transparent',
-              result.recommendation === 'simplified'
-                ? 'bg-primary/15 text-primary'
-                : 'bg-status-info/15 text-status-info',
-            ]"
-          >
-            {{ result.recommendation === 'simplified' ? '간이과세' : '일반과세' }}가
-            {{ formatWon(Math.abs(result.difference)) }} 유리
-          </Badge>
-        </div>
+        <BizResultHero
+          v-if="result.isSimplifiedEligible"
+          class="mb-4"
+          flat
+          label="연간 부가세 차이"
+          :value="formatWon(Math.abs(result.difference))"
+          :sub="`${result.recommendation === 'simplified' ? '간이과세' : '일반과세'}가 유리`"
+        />
 
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <!-- 일반과세 -->
@@ -212,8 +206,8 @@ const vatMetrics = computed(() => [{
                 </span>
                 <h3 class="text-caption font-bold text-status-info">일반과세</h3>
               </div>
+              <p class="text-caption text-muted-foreground">연간 부가세</p>
               <p class="text-h1 font-bold text-foreground tabular-nums">{{ formatWon(result.generalVat) }}</p>
-              <p class="text-tiny text-muted-foreground">연간 부가세</p>
             </CardContent>
           </Card>
 
@@ -226,11 +220,11 @@ const vatMetrics = computed(() => [{
                 </span>
                 <h3 class="text-caption font-bold text-primary">간이과세</h3>
               </div>
+              <p class="text-caption text-muted-foreground">
+                {{ result.isSimplifiedExempt ? '납부 면제' : '연간 부가세' }}
+              </p>
               <p class="text-h1 font-bold text-foreground tabular-nums">
                 {{ result.isSimplifiedEligible ? formatWon(result.simplifiedVat) : '-' }}
-              </p>
-              <p class="text-tiny text-muted-foreground">
-                {{ result.isSimplifiedExempt ? '납부 면제' : '연간 부가세' }}
               </p>
             </CardContent>
           </Card>
