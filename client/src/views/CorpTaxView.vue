@@ -6,6 +6,7 @@ import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import FaqAccordionPanel from "@/components/common/FaqAccordionPanel.vue";
 import CalculatorPageHeader from "@/components/biz/CalculatorPageHeader.vue";
+import BizResultHero from "@/components/biz/BizResultHero.vue";
 import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
 import { BIZ_CORP_TAX_GUIDE } from "@/data/seoGuides";
 import { BIZ_SERVICE_UPDATED_AT, CORP_TAX_SOURCE_URL } from "@/data/bizExpansionData";
@@ -94,18 +95,16 @@ const faqJsonLd = computed(() => ({
       </CalculatorInteractionTracker>
     </div>
 
-    <div class="grid gap-3 md:grid-cols-3">
-      <div class="retro-panel-muted px-4 py-4">
-        <p class="text-tiny text-muted-foreground">법인세 + 지방소득세</p>
-        <p class="mt-2 text-h1 font-bold text-primary">{{ formatWon(result.tax) }}</p>
+    <BizResultHero label="법인세 + 지방소득세" :value="formatWon(result.tax)" />
+
+    <div class="grid grid-cols-2 gap-3">
+      <div class="retro-stat text-center">
+        <p class="retro-stat-label">세후 이익</p>
+        <p class="retro-stat-value">{{ formatWon(result.afterTaxIncome) }}</p>
       </div>
-      <div class="retro-panel-muted px-4 py-4">
-        <p class="text-tiny text-muted-foreground">세후 이익</p>
-        <p class="mt-2 text-h1 font-bold text-foreground">{{ formatWon(result.afterTaxIncome) }}</p>
-      </div>
-      <div class="retro-panel-muted px-4 py-4">
-        <p class="text-tiny text-muted-foreground">실효세율</p>
-        <p class="mt-2 text-h1 font-bold text-foreground">{{ formatPercent(result.effectiveRate, 1) }}</p>
+      <div class="retro-stat text-center">
+        <p class="retro-stat-label">실효세율</p>
+        <p class="retro-stat-value">{{ formatPercent(result.effectiveRate, 1) }}</p>
       </div>
     </div>
 

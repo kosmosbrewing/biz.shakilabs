@@ -4,8 +4,8 @@ import { mergeFaqs } from "@/lib/faqMerge";
 import { ShPresetGroup, ShSlider } from "@shakilabs/ui";
 import { User, Building2 } from "lucide-vue-next";
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import SEOHead from "@/components/common/SEOHead.vue";
+import BizResultHero from "@/components/biz/BizResultHero.vue";
 import BusinessSessionDraftControl from "@/components/biz/BusinessSessionDraftControl.vue";
 import BusinessNextActions from "@/components/biz/BusinessNextActions.vue";
 import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
@@ -159,21 +159,13 @@ const faqJsonLd = computed(() => ({
     <!-- 결과 비교 -->
     <Card class="mb-6">
       <CardContent class="biz-result-panel p-4 sm:p-5">
-        <div class="text-center mb-4">
-          <Badge
-            :variant="betterOption === '동일' ? 'secondary' : 'default'"
-            :class="[
-              'rounded-full px-3 py-1 text-caption',
-              betterOption === '법인'
-                ? 'bg-primary/15 text-primary border-transparent'
-                : betterOption === '개인'
-                  ? 'bg-status-info/15 text-status-info border-transparent'
-                  : '',
-            ]"
-          >
-            {{ betterOption === '동일' ? '세후소득 동일' : `${betterOption}이 ${formatWon(Math.abs(difference))} 유리` }}
-          </Badge>
-        </div>
+        <BizResultHero
+          class="mb-4"
+          flat
+          label="세후소득 차이"
+          :value="formatWon(Math.abs(difference))"
+          :sub="betterOption === '동일' ? '개인·법인 세후소득 동일' : `${betterOption}이 유리`"
+        />
 
         <div class="biz-compare-grid grid grid-cols-2 gap-4">
           <!-- 개인사업자 -->
@@ -186,8 +178,8 @@ const faqJsonLd = computed(() => ({
                 <h3 class="text-caption font-bold text-status-info">개인사업자</h3>
               </div>
               <div class="text-center">
+                <p class="text-caption text-muted-foreground">세후소득</p>
                 <p class="text-h1 font-bold text-foreground tabular-nums">{{ formatWon(individual.afterTaxIncome) }}</p>
-                <p class="text-tiny text-muted-foreground">세후소득</p>
               </div>
               <div class="biz-metrics space-y-1 text-tiny">
                 <div class="flex justify-between">
@@ -231,8 +223,8 @@ const faqJsonLd = computed(() => ({
                 <h3 class="text-caption font-bold text-primary">법인</h3>
               </div>
               <div class="text-center">
+                <p class="text-caption text-muted-foreground">세후소득</p>
                 <p class="text-h1 font-bold text-foreground tabular-nums">{{ formatWon(corp.afterTaxIncome) }}</p>
-                <p class="text-tiny text-muted-foreground">세후소득</p>
               </div>
               <div class="biz-metrics space-y-1 text-tiny">
                 <div class="flex justify-between">
