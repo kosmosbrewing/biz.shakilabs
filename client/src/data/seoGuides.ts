@@ -1,4 +1,7 @@
 // SEO 리치 가이드 데이터 (biz 앱)
+// 데이터 확인일을 상수에서 가져와 문구와 실제 검증 이력의 드리프트를 막는다.
+import { BIZ_DATA_VERIFIED } from "./bizConstants";
+
 export interface GuideSection { h2: string; body: string; }
 export interface GuideFaq { q: string; a: string; }
 export interface GuideChecklist { title: string; items: string[]; }
@@ -371,7 +374,7 @@ export const BIZ_ABOUT_GUIDE: GuideData = {
     },
     {
       h2: "데이터 출처",
-      body: "세율·요율·공제 한도 등 모든 수치는 국세청 공식 고시, 기획재정부 세법 개정안, 고용노동부 최저임금 고시, 국민연금공단·건강보험공단 공식 자료를 기반으로 합니다. 매년 1월 세법 개정 시 즉시 반영하며, 주요 정책 변경이 있을 때마다 업데이트합니다.",
+      body: `세율·요율·공제 한도 등 모든 수치는 국세청 공식 고시, 기획재정부 세법 개정안, 고용노동부 최저임금 고시, 국민연금공단·건강보험공단 공식 자료를 기반으로 합니다. 세법 개정 사항은 확인 후 반영합니다(최근 반영: 2026년 1월 시행 세법, 데이터 확인일 ${BIZ_DATA_VERIFIED}).`,
     },
     {
       h2: "운영 원칙",
