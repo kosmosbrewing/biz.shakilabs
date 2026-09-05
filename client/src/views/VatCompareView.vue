@@ -11,6 +11,8 @@ import FaqAccordionPanel from "@/components/common/FaqAccordionPanel.vue";
 import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
 import MetricComparisonBars from "@/components/result-visualization/MetricComparisonBars.vue";
 import { BIZ_VAT_GUIDE } from "@/data/seoGuides";
+import { withDigest } from "@/data/digests";
+import { VAT_DIGEST } from "@/data/digests/vatDigest";
 import { calcVatCompare } from "@/utils/bizVatCalc";
 import { SIMPLIFIED_VAT_RATES } from "@/data/bizConstants";
 import { formatWon, formatManWon } from "@/lib/utils";
@@ -81,6 +83,8 @@ const faqItems = [
 
 // 화면에 실제 렌더되는 병합 FAQ와 구조화 데이터를 일치시킨다 (스키마 규칙)
 const mergedFaqs = mergeFaqs(faqItems, BIZ_VAT_GUIDE.faqs);
+// 엔진 파생 다이제스트를 일반 가이드 섹션 앞에 싣는다 (페이지 고유 내용 우선)
+const guideSections = withDigest(BIZ_VAT_GUIDE, VAT_DIGEST);
 const faqJsonLd = computed(() => ({
   "@context": "https://schema.org",
   "@type": "FAQPage",
@@ -263,7 +267,7 @@ const vatMetrics = computed(() => [{
     <SeoRichGuide
       :title="BIZ_VAT_GUIDE.title"
       :intro="BIZ_VAT_GUIDE.intro"
-      :sections="BIZ_VAT_GUIDE.sections"      :disclaimer="BIZ_VAT_GUIDE.disclaimer"
+      :sections="guideSections"      :disclaimer="BIZ_VAT_GUIDE.disclaimer"
     />
   </div>
 </template>

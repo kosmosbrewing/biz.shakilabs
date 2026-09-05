@@ -140,11 +140,25 @@ function validateRouterRoutesAreListed(sitemapUrls) {
   }
 }
 
+// 파생 다이제스트가 SSR 산출물에 실제로 실렸는지. 다이제스트는 가이드 섹션 앞에 8건 이상 붙으므로
+// 계산기 라우트의 seo-rich-guide 안 <article> 수는 (다이제스트 8 + 일반 섹션 5) = 13 이상이어야 한다.
+// 뷰가 :sections 바인딩을 원래 가이드로 되돌리면 5로 떨어져 여기서 잡힌다.
+const DIGEST_ROUTES = SITEMAP_ROUTES.filter((route) => !["/about", "/terms", "/privacy"].includes(route));
+const MIN_GUIDE_ARTICLES = 13;
+function validateDigestRendered(route) {
+  const html = readFileSync(routeOutputPath(route), "utf8");
+  const guide = html.match(/<section class="seo-rich-guide[\s\S]*?<\/section>/)?.[0] ?? "";
+  const articles = guide.match(/<article\b/g)?.length ?? 0;
+  assert(articles >= MIN_GUIDE_ARTICLES,
+    `${route}: expected at least ${MIN_GUIDE_ARTICLES} guide articles (digest + guide), found ${articles}`);
+}
+
 validateVercelConfig(resolve(repositoryRoot, "vercel.json"));
 validateVercelConfig(resolve(projectRoot, "vercel.json"));
 // validateRoute는 PARAM_ROUTES에도 돈다: 사이트맵에서 빠졌더라도 정적 HTML은
 // 계속 존재해야 한다 (soft-404 가드).
 SEO_ROUTES.forEach(validateRoute);
+DIGEST_ROUTES.forEach(validateDigestRendered);
 const sitemapUrls = validateSitemap();
 validateRouterRoutesAreListed(sitemapUrls);
 const utilityCount = validateUtilitiesAreGenerated({ projectRoot, distRoot });

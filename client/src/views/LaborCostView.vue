@@ -10,6 +10,8 @@ import BizResultHero from "@/components/biz/BizResultHero.vue";
 import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
 import MetricComparisonBars from "@/components/result-visualization/MetricComparisonBars.vue";
 import { BIZ_LABOR_COST_GUIDE } from "@/data/seoGuides";
+import { withDigest } from "@/data/digests";
+import { LABOR_DIGEST } from "@/data/digests/laborDigest";
 import {
   INDUSTRY_ACCIDENT_RATES,
   LABOR_COST_FAQS,
@@ -57,6 +59,8 @@ const canonicalPath = computed(() => (props.initialSalary ? "/labor-cost" : unde
 
 // 화면에 실제 렌더되는 병합 FAQ와 구조화 데이터를 일치시킨다 (스키마 규칙)
 const mergedFaqs = mergeFaqs(LABOR_COST_FAQS, BIZ_LABOR_COST_GUIDE.faqs);
+// 엔진 파생 다이제스트를 일반 가이드 섹션 앞에 싣는다 (페이지 고유 내용 우선)
+const guideSections = withDigest(BIZ_LABOR_COST_GUIDE, LABOR_DIGEST);
 const faqJsonLd = computed(() => ({
   "@context": "https://schema.org",
   "@type": "FAQPage",
@@ -257,7 +261,7 @@ const insuranceMetrics = computed(() => [{
     <SeoRichGuide
       :title="BIZ_LABOR_COST_GUIDE.title"
       :intro="BIZ_LABOR_COST_GUIDE.intro"
-      :sections="BIZ_LABOR_COST_GUIDE.sections"
+      :sections="guideSections"
       :sources="BIZ_LABOR_COST_GUIDE.sources"
       :disclaimer="BIZ_LABOR_COST_GUIDE.disclaimer"
     />

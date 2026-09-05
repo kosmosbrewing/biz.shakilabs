@@ -9,6 +9,8 @@ import CalculatorPageHeader from "@/components/biz/CalculatorPageHeader.vue";
 import BizResultHero from "@/components/biz/BizResultHero.vue";
 import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
 import { BIZ_CORP_TAX_GUIDE } from "@/data/seoGuides";
+import { withDigest } from "@/data/digests";
+import { CORP_TAX_DIGEST } from "@/data/digests/corpTaxDigest";
 import { BIZ_SERVICE_UPDATED_AT, CORP_TAX_SOURCE_URL } from "@/data/bizExpansionData";
 import { formatPercent, formatWon, formatManWon } from "@/lib/utils";
 import CalculatorInteractionTracker from "@/components/analytics/CalculatorInteractionTracker.vue";
@@ -58,6 +60,8 @@ const faqItems = [
 
 // 화면에 실제 렌더되는 병합 FAQ와 구조화 데이터를 일치시킨다 (스키마 규칙)
 const mergedFaqs = mergeFaqs(faqItems, BIZ_CORP_TAX_GUIDE.faqs);
+// 엔진 파생 다이제스트를 일반 가이드 섹션 앞에 싣는다 (페이지 고유 내용 우선)
+const guideSections = withDigest(BIZ_CORP_TAX_GUIDE, CORP_TAX_DIGEST);
 const faqJsonLd = computed(() => ({
   "@context": "https://schema.org",
   "@type": "FAQPage",
@@ -129,7 +133,7 @@ const faqJsonLd = computed(() => ({
     <SeoRichGuide
       :title="BIZ_CORP_TAX_GUIDE.title"
       :intro="BIZ_CORP_TAX_GUIDE.intro"
-      :sections="BIZ_CORP_TAX_GUIDE.sections"      :disclaimer="BIZ_CORP_TAX_GUIDE.disclaimer"
+      :sections="guideSections"      :disclaimer="BIZ_CORP_TAX_GUIDE.disclaimer"
     />
   </div>
 </template>

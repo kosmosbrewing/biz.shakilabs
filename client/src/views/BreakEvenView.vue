@@ -7,6 +7,8 @@ import FaqAccordionPanel from "@/components/common/FaqAccordionPanel.vue";
 import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
 import BizResultHero from "@/components/biz/BizResultHero.vue";
 import { BIZ_BREAK_EVEN_GUIDE } from "@/data/seoGuides";
+import { withDigest } from "@/data/digests";
+import { BREAK_EVEN_DIGEST } from "@/data/digests/breakEvenDigest";
 import CalculatorInteractionTracker from "@/components/analytics/CalculatorInteractionTracker.vue";
 import { calcBreakEven } from "@/utils/bizBreakEvenCalc";
 import { INDUSTRY_EXPENSE_RATIOS } from "@/data/bizConstants";
@@ -66,6 +68,8 @@ const faqItems = [
 
 // 화면에 실제 렌더되는 병합 FAQ와 구조화 데이터를 일치시킨다 (스키마 규칙)
 const mergedFaqs = mergeFaqs(faqItems, BIZ_BREAK_EVEN_GUIDE.faqs);
+// 엔진 파생 다이제스트를 일반 가이드 섹션 앞에 싣는다 (페이지 고유 내용 우선)
+const guideSections = withDigest(BIZ_BREAK_EVEN_GUIDE, BREAK_EVEN_DIGEST);
 const faqJsonLd = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
@@ -214,7 +218,7 @@ const faqJsonLd = {
     <SeoRichGuide
       :title="BIZ_BREAK_EVEN_GUIDE.title"
       :intro="BIZ_BREAK_EVEN_GUIDE.intro"
-      :sections="BIZ_BREAK_EVEN_GUIDE.sections"      :disclaimer="BIZ_BREAK_EVEN_GUIDE.disclaimer"
+      :sections="guideSections"      :disclaimer="BIZ_BREAK_EVEN_GUIDE.disclaimer"
     />
   </div>
 </template>
