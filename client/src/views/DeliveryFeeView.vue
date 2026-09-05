@@ -8,6 +8,8 @@ import FaqAccordionPanel from "@/components/common/FaqAccordionPanel.vue";
 import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
 import MetricComparisonBars from "@/components/result-visualization/MetricComparisonBars.vue";
 import { BIZ_HOME_GUIDE } from "@/data/seoGuides";
+import { withDigest } from "@/data/digests";
+import { DELIVERY_DIGEST } from "@/data/digests/deliveryDigest";
 import { BIZ_DATA_VERIFIED, DELIVERY_FEE_SOURCE_URL } from "@/data/bizConstants";
 import CalculatorInteractionTracker from "@/components/analytics/CalculatorInteractionTracker.vue";
 import { calcDeliveryFees } from "@/utils/bizDeliveryCalc";
@@ -91,6 +93,8 @@ const faqItems = [
 
 // 화면에 실제 렌더되는 병합 FAQ와 구조화 데이터를 일치시킨다 (스키마 규칙)
 const mergedFaqs = mergeFaqs(faqItems, BIZ_HOME_GUIDE.faqs);
+// 엔진 파생 다이제스트를 일반 가이드 섹션 앞에 싣는다 (페이지 고유 내용 우선)
+const guideSections = withDigest(BIZ_HOME_GUIDE, DELIVERY_DIGEST);
 const faqJsonLd = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
@@ -252,7 +256,7 @@ const faqJsonLd = {
     <SeoRichGuide
       :title="BIZ_HOME_GUIDE.title"
       :intro="BIZ_HOME_GUIDE.intro"
-      :sections="BIZ_HOME_GUIDE.sections"      :disclaimer="BIZ_HOME_GUIDE.disclaimer"
+      :sections="guideSections"      :disclaimer="BIZ_HOME_GUIDE.disclaimer"
     />
   </div>
 </template>

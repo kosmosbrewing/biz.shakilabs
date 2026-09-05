@@ -12,6 +12,8 @@ import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
 import IndividualCorpComparisonChart from "@/components/biz/IndividualCorpComparisonChart.vue";
 import IndividualCorpNotes from "@/components/biz/IndividualCorpNotes.vue";
 import { BIZ_INDIVIDUAL_VS_CORP_GUIDE } from "@/data/seoGuides";
+import { withDigest } from "@/data/digests";
+import { IVC_DIGEST } from "@/data/digests/ivcDigest";
 import { INDIVIDUAL_VS_CORP_FAQS, INDIVIDUAL_VS_CORP_PRESETS } from "@/data/individualVsCorpContent";
 import CalculatorInteractionTracker from "@/components/analytics/CalculatorInteractionTracker.vue";
 import { useIndividualVsCorp } from "@/composables/useIndividualVsCorp";
@@ -63,6 +65,8 @@ const faqItems = INDIVIDUAL_VS_CORP_FAQS;
 
 // 화면에 실제 렌더되는 병합 FAQ와 구조화 데이터를 일치시킨다 (스키마 규칙)
 const mergedFaqs = mergeFaqs(faqItems, BIZ_INDIVIDUAL_VS_CORP_GUIDE.faqs);
+// 엔진 파생 다이제스트를 일반 가이드 섹션 앞에 싣는다 (페이지 고유 내용 우선)
+const guideSections = withDigest(BIZ_INDIVIDUAL_VS_CORP_GUIDE, IVC_DIGEST);
 const faqJsonLd = computed(() => ({
   "@context": "https://schema.org",
   "@type": "FAQPage",
@@ -271,7 +275,7 @@ const faqJsonLd = computed(() => ({
     <SeoRichGuide
       :title="BIZ_INDIVIDUAL_VS_CORP_GUIDE.title"
       :intro="BIZ_INDIVIDUAL_VS_CORP_GUIDE.intro"
-      :sections="BIZ_INDIVIDUAL_VS_CORP_GUIDE.sections"
+      :sections="guideSections"
       :checklist="BIZ_INDIVIDUAL_VS_CORP_GUIDE.checklist"
       :sources="BIZ_INDIVIDUAL_VS_CORP_GUIDE.sources"
       :disclaimer="BIZ_INDIVIDUAL_VS_CORP_GUIDE.disclaimer"
