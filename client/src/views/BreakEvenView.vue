@@ -83,7 +83,7 @@ const faqJsonLd = {
 
 <template>
   <SEOHead
-    title="소상공인 손익분기점(BEP) 계산기 | shakilabs.com/biz"
+    title="소상공인 손익분기점(BEP) 계산기"
     description="고정비와 변동비를 입력하면 월 매출 손익분기점을 계산합니다."
     :json-ld="faqJsonLd"
   />
