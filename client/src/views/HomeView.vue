@@ -93,7 +93,7 @@ const faqJsonLd = {
 
 <template>
   <SEOHead
-    title="사업자 계산기 — 개인vs법인·손익분기·부가세·배달앱 수수료"
+    title="사업자 계산기 | 개인vs법인·손익분기·부가세·배달앱 수수료"
     description="개인사업자 vs 법인 세후소득, 손익분기점, 간이과세 vs 일반과세, 배달앱 수수료를 무료로 계산하세요."
     :json-ld="faqJsonLd"
   />

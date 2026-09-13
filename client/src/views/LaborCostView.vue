@@ -46,7 +46,7 @@ const amountLabel = computed(() => (props.initialSalary ? formatManWon(props.ini
 const seoTitle = computed(() =>
   amountLabel.value
     ? `월급 ${amountLabel.value} 인건비 계산기 | 4대보험 사업주 부담`
-    : "인건비 계산기 — 4대보험·퇴직금 포함 실제 고용비용 계산",
+    : "인건비 계산기 | 4대보험·퇴직금 포함 실제 고용비용 계산",
 );
 const seoDescription = computed(() =>
   amountLabel.value
