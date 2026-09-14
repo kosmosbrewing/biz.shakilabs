@@ -28,9 +28,12 @@
   font-display: swap;
 }
 
+/* 강조 숫자 전용 서브셋(숫자·통화/수량 단위 44자, 14.5KB). 원본 944KB .woff는
+   더 이상 src에 없다 — 참조 안 하면 받아가지 않는다.
+   비-숫자 글리프(제목 등 font-brand 사용처)는 폰트 스택 폴백(Pretendard)이 글리프 단위로 받는다. */
 @font-face {
   font-family: "GmarketSans";
-  src: url("/fonts/GmarketSansBold.woff") format("woff");
+  src: url("/fonts/GmarketSansBold-num-v1.woff2") format("woff2");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
