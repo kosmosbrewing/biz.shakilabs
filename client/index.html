@@ -75,10 +75,20 @@
     </script>
 
     <script>
+      // v3 6.10 - 사이트 전역 테마 키. 카테고리별로 나누지 않는다(구 biz-calculator:theme:v1
+      // 분열 폐기). 기존 저장값이 있으면 그대로 이전해 사용자의 선택을 유지한다.
       (() => {
         try {
-          const key = "biz-calculator:theme:v1";
-          const saved = localStorage.getItem(key);
+          const key = "shakilabs:theme:v1";
+          const legacyKey = "biz-calculator:theme:v1";
+          let saved = localStorage.getItem(key);
+          if (saved !== "dark" && saved !== "light") {
+            const legacy = localStorage.getItem(legacyKey);
+            if (legacy === "dark" || legacy === "light") {
+              saved = legacy;
+              localStorage.setItem(key, legacy);
+            }
+          }
           const prefersDark =
             typeof window.matchMedia === "function" &&
             window.matchMedia("(prefers-color-scheme: dark)").matches;
@@ -92,6 +102,7 @@
           if (theme === "dark") {
             document.documentElement.classList.add("dark");
           }
+          document.documentElement.style.colorScheme = theme;
         } catch {
           // no-op
         }
@@ -99,12 +110,15 @@
     </script>
     <style>
       :root {
-        --background: 210 40% 98%;
-        --foreground: 222 47% 11%;
+        /* v3 §2.1 중성 토큰(레시피 §4) — canvas/ink/ink-muted/card/line은 hex에서 역산
+           (반올림 왕복 검증 완료). 이전 값(210 40% 98%)은 차가운 청회색이었다.
+           --primary(브랜드 hue 160)는 그대로 둔다 — 건드리는 건 구조색뿐. */
+        --background: 60 11.11% 96.47%; /* color.canvas #F7F7F5 */
+        --foreground: 0 0% 3.92%; /* color.ink #0A0A0A */
         --muted: 210 40% 96%;
-        --muted-foreground: 215 16% 37%;
-        --card: 0 0% 100%;
-        --card-foreground: 222 47% 11%;
+        --muted-foreground: 60 3.37% 34.9%; /* color.ink-muted #5C5C56 */
+        --card: 0 0% 100%; /* color.card #FFFFFF */
+        --card-foreground: 0 0% 3.92%;
         --primary: 160 75% 25%;
         --primary-foreground: 0 0% 100%;
         --secondary: 152 100% 97%;
@@ -117,7 +131,7 @@
            배달수수료 표의 금액에 12px 본문으로 쓰이므로 대형 텍스트 예외가 적용되지 않는다. */
         --destructive: 0 74% 42%; /* 6.41:1 on --card */
         --destructive-foreground: 210 40% 98%; /* 6.12:1 on --destructive */
-        --border: 214 16% 85%;
+        --border: 60 8% 90.2%; /* color.line #E8E8E4 */
         --input: 214 16% 85%;
         --ring: 160 75% 25%;
         --radius: 0.4rem;
@@ -128,12 +142,13 @@
       }
 
       .dark {
-        --background: 222 47% 11%;
-        --foreground: 210 40% 96%;
+        /* v3 §2.1 다크 중성 토큰(레시피 §4) — 양 테마 AA 재측정 완료(게이트 자기검증 포함). */
+        --background: 0 0% 7.06%; /* color.canvas dark #121212 */
+        --foreground: 0 0% 96.08%; /* color.ink dark #F5F5F5 */
         --muted: 217 33% 17%;
-        --muted-foreground: 215 20% 72%;
-        --card: 217 33% 17%;
-        --card-foreground: 210 40% 96%;
+        --muted-foreground: 60 3.33% 64.71%; /* color.ink-muted dark #A8A8A2 */
+        --card: 0 0% 10.98%; /* color.card dark #1C1C1C */
+        --card-foreground: 0 0% 96.08%;
         --primary: 160 72% 47%;
         --primary-foreground: 160 90% 8%;
         --secondary: 216 28% 18%;
@@ -147,7 +162,7 @@
            전경을 --primary-foreground와 같은 방식으로 "앱 hue 유지 + 어둡게" 잡는다. */
         --destructive: 0 75% 72%; /* 5.74:1 on --card */
         --destructive-foreground: 0 90% 8%; /* 7.42:1 on --destructive */
-        --border: 214 16% 26%;
+        --border: 0 0% 16.47%; /* color.line dark #2A2A2A */
         --input: 214 16% 30%;
         --ring: 160 72% 47%;
         --profit: 151 60% 54%; /* 7.52:1 on --card — 통과, 유지 */

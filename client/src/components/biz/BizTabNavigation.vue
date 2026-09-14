@@ -1,22 +1,13 @@
 <script setup lang="ts">
+// v3 §3.3-1 — 모바일(<48rem)은 헤더의 좌측 드로어가 대신한다.
+// 링크는 드로어에 그대로 렌더되므로 크롤 경로는 유지된다(레시피 §3).
 import { computed } from "vue";
 import { RouterLink, useRoute } from "vue-router";
-import {
-  ShPrimaryNavigation,
-  type PrimaryNavigationItem,
-} from "@shakilabs/ui";
+import { ShPrimaryNavigation } from "@shakilabs/ui";
+import { BIZ_TOOLS } from "@/data/bizNavigation";
 
 const route = useRoute();
-const tabs: readonly PrimaryNavigationItem[] = [
-  { key: "home", label: "사업 도구", to: "/", href: "/biz" },
-  { key: "individual-vs-corp", label: "개인 vs 법인", to: "/individual-vs-corp" },
-  { key: "break-even", label: "손익분기점", to: "/break-even" },
-  { key: "vat-compare", label: "부가세 비교", to: "/vat-compare" },
-  { key: "delivery-fee", label: "배달앱 수수료", to: "/delivery-fee" },
-  { key: "corp-tax", label: "법인세 계산", to: "/corp-tax" },
-  { key: "car-expense", label: "차량 경비", to: "/car-expense" },
-  { key: "meeting-cost", label: "회의 비용", to: "/meeting-cost" },
-];
+const tabs = BIZ_TOOLS;
 
 const activeItem = computed(() =>
   tabs.find((item) => route.path === item.to),
@@ -25,8 +16,17 @@ const activeItem = computed(() =>
 
 <template>
   <ShPrimaryNavigation
+    class="tab-navigation--desktop-only"
     :items="tabs"
     :active-key="activeItem?.key"
     :link-component="RouterLink"
   />
 </template>
+
+<style scoped>
+@media (max-width: 47.99rem) {
+  .tab-navigation--desktop-only {
+    display: none;
+  }
+}
+</style>
