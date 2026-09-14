@@ -75,10 +75,20 @@
     </script>
 
     <script>
+      // v3 6.10 - 사이트 전역 테마 키. 카테고리별로 나누지 않는다(구 biz-calculator:theme:v1
+      // 분열 폐기). 기존 저장값이 있으면 그대로 이전해 사용자의 선택을 유지한다.
       (() => {
         try {
-          const key = "biz-calculator:theme:v1";
-          const saved = localStorage.getItem(key);
+          const key = "shakilabs:theme:v1";
+          const legacyKey = "biz-calculator:theme:v1";
+          let saved = localStorage.getItem(key);
+          if (saved !== "dark" && saved !== "light") {
+            const legacy = localStorage.getItem(legacyKey);
+            if (legacy === "dark" || legacy === "light") {
+              saved = legacy;
+              localStorage.setItem(key, legacy);
+            }
+          }
           const prefersDark =
             typeof window.matchMedia === "function" &&
             window.matchMedia("(prefers-color-scheme: dark)").matches;
@@ -92,6 +102,7 @@
           if (theme === "dark") {
             document.documentElement.classList.add("dark");
           }
+          document.documentElement.style.colorScheme = theme;
         } catch {
           // no-op
         }
