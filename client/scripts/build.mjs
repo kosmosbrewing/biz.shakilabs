@@ -148,4 +148,19 @@ const validationResult = spawnSync(
   }
 );
 
-process.exit(validationResult.status ?? 1);
+if (validationResult.status !== 0) {
+  process.exit(validationResult.status ?? 1);
+}
+
+// 브랜드 폰트가 조용히 원본 944KB로 되돌아가거나 예산을 넘지 않는지 매 빌드마다 확인한다
+// (BL-020 — 서브셋 스크립트 없이 @font-face만 바뀌어 966KB를 그대로 내려받던 사고 재발 방지).
+const fontVerifyResult = spawnSync(
+  process.execPath,
+  [resolve(projectRoot, "scripts", "verify-fonts.mjs")],
+  {
+    cwd: projectRoot,
+    stdio: "inherit",
+  }
+);
+
+process.exit(fontVerifyResult.status ?? 1);

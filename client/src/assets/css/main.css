@@ -28,9 +28,16 @@
   font-display: swap;
 }
 
+/* 제목+숫자 통합 브랜드 서브셋(BL-020 개정판, docs/BRAND_FONT_SUBSET.md).
+   숫자 전용 41자안은 폐기했다 — h1처럼 한글과 숫자가 한 요소에 섞이면 글자
+   단위로 서체가 갈라지는 버그가 생긴다("종합소득세 계산기"에서 '세'만 Gmarket).
+   그래서 실제로 font-brand가 쓰이는 모든 요소(h1 제목, .retro-title 섹션
+   헤딩, 결과 히어로 금액)를 렌더 스캔으로 전수 수집해 문자셋을 만들었다 —
+   제목까지 통째로 커버해도 7.4KB 안팎이라 숫자만 자를 이유가 없다.
+   원본 944KB .woff는 src에 없으니 참조 안 하면 받아가지 않는다. */
 @font-face {
   font-family: "GmarketSans";
-  src: url("/fonts/GmarketSansBold.woff") format("woff");
+  src: url("/fonts/GmarketSansBold-brand-v1.woff2") format("woff2");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
