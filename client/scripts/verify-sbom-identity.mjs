@@ -47,6 +47,24 @@ if (existsSync(spdxPath)) {
   );
 }
 
+// @shakilabs/ui는 vendor tgz로 핀 고정된 file: 의존성이라 npm이 자동으로 버전
+// 드리프트를 잡아주지 않는다 — package.json 핀을 올려도 SBOM을 재생성하지 않으면
+// 구버전이 그대로 남는다(2026-08-21 함대 감사에서 9버전 낡은 SBOM 발견, biz는
+// 0.3.15 vs 0.3.24). 위 메타데이터 검증은 "이 앱 자신"만 보므로 dependency로
+// 들어간 @shakilabs/ui는 별도로 검증해야 한다.
+const uiPin = packageJson.dependencies?.["@shakilabs/ui"];
+const uiPinMatch = typeof uiPin === "string" ? uiPin.match(/shakilabs-ui-(\d+\.\d+\.\d+)\.tgz$/) : null;
+
+if (uiPinMatch) {
+  const expectedUiVersion = uiPinMatch[1];
+  const uiComponent = (cyclonedx.components ?? []).find((item) => item.name === "@shakilabs/ui");
+
+  expect(
+    uiComponent?.version === expectedUiVersion,
+    `cyclonedx components[] @shakilabs/ui version is "${uiComponent?.version}", expected "${expectedUiVersion}" (from package.json dependencies["@shakilabs/ui"]="${uiPin}")`,
+  );
+}
+
 if (errors.length > 0) {
   console.error("verify-sbom-identity: FAILED — committed SBOM does not describe this repository");
   for (const message of errors) {
