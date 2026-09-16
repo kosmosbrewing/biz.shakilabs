@@ -1,6 +1,7 @@
 <script setup lang="ts">
-// v3 3.2 - GlobalHeader 내용은 로고 + 사이트 링크 + 테마 버튼뿐이다. 앱은 자체
-// 헤더 마크업을 갖지 않는다. 티커(안내 문구)는 헤더 밖 얇은 배너로 내린다.
+// v3 3.2 - 0.3.24부터 헤더가 로고/회전 안내/사이트 링크+테마 토글 3열이다. 팁은
+// 헤더 밖 얇은 배너가 아니라 패키지의 #tip 슬롯(흐름 밖 절대 배치)에 실려
+// 문구 길이가 바뀌어도 56px 헤더 높이가 흔들리지 않는다.
 import { computed } from "vue";
 import { useRoute } from "vue-router";
 import { ShGlobalHeader } from "@shakilabs/ui";
@@ -25,13 +26,12 @@ const navActiveKey = computed(
     :nav-active-key="navActiveKey"
     nav-title="사업 도구"
   >
+    <template #tip>
+      <TickerBar :key="route.path" :messages="tickerMessages" />
+    </template>
+
     <template #utility>
       <ThemeToggle />
     </template>
   </ShGlobalHeader>
-  <div class="border-b border-border bg-background">
-    <div class="container flex min-h-7 items-center justify-center px-3 py-1 text-center sm:px-4">
-      <TickerBar :messages="tickerMessages" />
-    </div>
-  </div>
 </template>
