@@ -115,16 +115,12 @@
    패키지가 mobile(<640px)에서 __mobile 그리드를, 그 이상에서 __desktop 가로 스크롤을 고르는데
    그 분기를 지워 전 폭에서 __desktop 한 줄만 쓴다. 이 파일은 @shakilabs/ui/styles.css 뒤에
    import되므로 소스 순서상 패키지 기본값을 이긴다(main.css는 그 앞이라 못 이긴다). */
+/* --accent-hsl / --accent-muted-hsl은 index.html의 토큰 블록으로 옮겼다 —
+   액센트 값이 두 파일에 나뉘어 있으면 하나만 고쳐 내비 밑줄만 옛 브랜드색으로
+   남는 사고가 난다(게이트 scripts/verify-accent-tokens.mjs가 index.html을 본다). */
 :root {
-  --accent-hsl: var(--primary);
-  --accent-muted-hsl: 160 75% 96%;
   --header-h: 56px;
   --secondary-nav-h: 45px;
-}
-
-.dark {
-  --accent-hsl: var(--primary);
-  --accent-muted-hsl: 160 50% 20%;
 }
 
 html {
