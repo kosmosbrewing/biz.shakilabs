@@ -211,7 +211,7 @@ const vatMetrics = computed(() => [{
                 <h3 class="text-caption font-bold text-status-info">일반과세</h3>
               </div>
               <p class="text-caption text-muted-foreground">연간 부가세</p>
-              <p class="text-h1 font-bold text-foreground tabular-nums">{{ formatWon(result.generalVat) }}</p>
+              <p class="text-h1 font-bold font-brand text-foreground tabular-nums">{{ formatWon(result.generalVat) }}</p>
             </CardContent>
           </Card>
 
@@ -227,7 +227,7 @@ const vatMetrics = computed(() => [{
               <p class="text-caption text-muted-foreground">
                 {{ result.isSimplifiedExempt ? '납부 면제' : '연간 부가세' }}
               </p>
-              <p class="text-h1 font-bold text-foreground tabular-nums">
+              <p class="text-h1 font-bold font-brand text-foreground tabular-nums">
                 {{ result.isSimplifiedEligible ? formatWon(result.simplifiedVat) : '-' }}
               </p>
             </CardContent>
