@@ -80,28 +80,13 @@ const config: Config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // 셀러 수수료 비교 전용 색상
-        profit: {
-          DEFAULT: "hsl(var(--profit))",
-          foreground: "hsl(var(--profit-foreground))",
-        },
-        fee: {
-          DEFAULT: "hsl(var(--fee))",
-          foreground: "hsl(var(--fee-foreground))",
-        },
+        // v3 §2.1 의미색 4종만 남긴다. 로컬 별칭(profit·fee)과 5번째 단계(caution),
+        // 어디서도 쓰이지 않던 마켓 브랜드 하드코딩 hex는 폐기했다.
         status: {
           success: "hsl(var(--status-success))",
           warning: "hsl(var(--status-warning))",
-          caution: "hsl(var(--status-caution))",
           danger: "hsl(var(--status-danger))",
           info: "hsl(var(--status-info))",
-        },
-        // 마켓 브랜드 컬러
-        market: {
-          smartstore: "#03C75A",
-          coupang: "#E31937",
-          elevenst: "#FF6B00",
-          gmarket: "#00B050",
         },
       },
 

@@ -96,6 +96,6 @@ export function copyUsingExecCommand(text: string): boolean {
  */
 export function deductionTextClass(rate: number): string {
   if (rate >= 0.32) return "text-status-danger";
-  if (rate >= 0.24) return "text-status-caution";
+  if (rate >= 0.24) return "text-status-warning";
   return "text-status-success";
 }
