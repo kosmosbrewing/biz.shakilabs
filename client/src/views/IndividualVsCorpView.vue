@@ -183,7 +183,7 @@ const faqJsonLd = computed(() => ({
               </div>
               <div class="text-center">
                 <p class="text-caption text-muted-foreground">세후소득</p>
-                <p class="text-h1 font-bold text-foreground tabular-nums">{{ formatWon(individual.afterTaxIncome) }}</p>
+                <p class="text-h1 font-bold font-brand text-foreground tabular-nums">{{ formatWon(individual.afterTaxIncome) }}</p>
               </div>
               <div class="biz-metrics space-y-1 text-tiny">
                 <div class="flex justify-between">
@@ -228,7 +228,7 @@ const faqJsonLd = computed(() => ({
               </div>
               <div class="text-center">
                 <p class="text-caption text-muted-foreground">세후소득</p>
-                <p class="text-h1 font-bold text-foreground tabular-nums">{{ formatWon(corp.afterTaxIncome) }}</p>
+                <p class="text-h1 font-bold font-brand text-foreground tabular-nums">{{ formatWon(corp.afterTaxIncome) }}</p>
               </div>
               <div class="biz-metrics space-y-1 text-tiny">
                 <div class="flex justify-between">
