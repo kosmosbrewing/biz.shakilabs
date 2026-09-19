@@ -124,7 +124,7 @@ const vatMetrics = computed(() => [{
     :json-ld="faqJsonLd"
   />
 
-  <div class="container py-6 sm:py-8 max-w-3xl">
+  <div class="container py-6 sm:py-8">
     <h1 class="text-h1 font-bold text-foreground mb-1">간이과세 vs 일반과세</h1>
     <p class="text-caption text-muted-foreground mb-6">
       연 매출과 업종으로 부가가치세 차이를 비교합니다.

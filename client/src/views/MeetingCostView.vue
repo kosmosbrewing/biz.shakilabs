@@ -69,7 +69,7 @@ const { result, validationError } = useSafeCalculation(
 <template>
   <SEOHead :title="seoTitle" :description="seoDescription" :json-ld="faqJsonLd" />
 
-  <div class="container space-y-5 py-5 max-w-4xl">
+  <div class="container space-y-5 py-5">
     <CalculatorPageHeader title="회의 비용 계산기" />
 
     <div class="retro-panel overflow-hidden">

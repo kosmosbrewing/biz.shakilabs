@@ -41,7 +41,7 @@ defineProps<{
   <section class="seo-rich-guide space-y-4 rounded-lg border border-border/40 bg-muted/10 p-4 md:p-6">
     <header class="space-y-2">
       <h2 class="text-xl font-bold text-foreground">{{ title }}</h2>
-      <p class="text-sm leading-relaxed text-muted-foreground">{{ intro }}</p>
+      <p class="max-w-[65ch] text-sm leading-relaxed text-muted-foreground">{{ intro }}</p>
     </header>
 
     <div v-if="sections && sections.length > 0" class="space-y-4">
@@ -51,13 +51,13 @@ defineProps<{
         class="space-y-2"
       >
         <h3 class="text-base font-semibold text-foreground">{{ s.h2 }}</h3>
-        <p class="text-sm leading-relaxed text-muted-foreground">{{ s.body }}</p>
+        <p class="max-w-[65ch] text-sm leading-relaxed text-muted-foreground">{{ s.body }}</p>
       </article>
     </div>
 
     <div v-if="checklist && checklist.items.length > 0" class="space-y-2">
       <h3 class="text-base font-semibold text-foreground">{{ checklist.title }}</h3>
-      <ul class="ml-4 list-disc space-y-1 text-sm text-muted-foreground">
+      <ul class="ml-4 max-w-[65ch] list-disc space-y-1 text-sm text-muted-foreground">
         <li v-for="(item, i) in checklist.items" :key="`chk-${i}`">
           {{ item }}
         </li>
@@ -71,8 +71,8 @@ defineProps<{
         :key="`faq-${i}`"
         class="space-y-1"
       >
-        <p class="text-sm font-semibold text-foreground">Q. {{ faq.q }}</p>
-        <p class="text-sm leading-relaxed text-muted-foreground">A. {{ faq.a }}</p>
+        <p class="max-w-[65ch] text-sm font-semibold text-foreground">Q. {{ faq.q }}</p>
+        <p class="max-w-[65ch] text-sm leading-relaxed text-muted-foreground">A. {{ faq.a }}</p>
       </div>
     </div>
 
@@ -99,7 +99,7 @@ defineProps<{
 
     <p
       v-if="disclaimer"
-      class="border-t border-border/40 pt-3 text-xs text-muted-foreground"
+      class="max-w-[65ch] border-t border-border/40 pt-3 text-xs text-muted-foreground"
     >
       {{ disclaimer }}
     </p>

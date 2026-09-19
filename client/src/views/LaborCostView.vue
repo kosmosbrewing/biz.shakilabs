@@ -95,7 +95,7 @@ const insuranceMetrics = computed(() => [{
     :json-ld="faqJsonLd"
   />
 
-  <div class="container space-y-5 py-5 max-w-4xl">
+  <div class="container space-y-5 py-5">
     <CalculatorPageHeader title="인건비 계산기" />
 
     <!-- 헤더 -->
