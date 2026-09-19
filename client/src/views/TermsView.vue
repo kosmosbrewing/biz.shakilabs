@@ -11,7 +11,7 @@ const constantsStore = useConstantsStore();
     description="사업자 계산기(shakilabs.com/biz)의 이용약관입니다. 9개 계산기가 제공하는 추정치의 성격, 세무·노무 대리가 아니라는 점, 세율·수수료 데이터의 기준일과 한계, 광고 게재와 면책 범위를 안내합니다."
   />
 
-  <div class="container py-5">
+  <div class="sh-container sh-container--prose py-5">
     <div class="retro-panel">
       <div class="retro-titlebar rounded-t-2xl">
         <h1 class="retro-title">이용약관</h1>

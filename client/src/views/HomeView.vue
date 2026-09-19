@@ -98,7 +98,7 @@ const faqJsonLd = {
     :json-ld="faqJsonLd"
   />
 
-  <div class="container py-8 sm:py-12">
+  <div class="sh-container sh-container--page py-8 sm:py-12">
     <section class="mx-auto mb-10 border-b border-border pb-6">
       <ShText as="h1" variant="title">사업자 계산기</ShText>
       <ShText class="mt-2 max-w-xl" variant="body" tone="muted">

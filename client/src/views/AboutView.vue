@@ -14,7 +14,7 @@ const constantsStore = useConstantsStore();
     description="shakilabs.com/biz은 사업자를 위한 세금·손익·수수료 계산 무료 도구입니다."
   />
 
-  <div class="container py-5 space-y-5">
+  <div class="sh-container sh-container--prose py-5 space-y-5">
     <div class="retro-panel">
       <div class="retro-titlebar rounded-t-2xl">
         <h1 class="retro-title">서비스 안내</h1>

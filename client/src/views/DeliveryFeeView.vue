@@ -113,7 +113,7 @@ const faqJsonLd = {
     :json-ld="faqJsonLd"
   />
 
-  <div class="container py-6 sm:py-8">
+  <div class="sh-container sh-container--tool py-6 sm:py-8">
     <h1 class="text-h1 font-bold text-foreground mb-1">배달앱 수수료 비교</h1>
     <p class="text-caption text-muted-foreground mb-6">
       주문 금액과 월 주문 건수로 배달앱별 수수료를 비교합니다.
