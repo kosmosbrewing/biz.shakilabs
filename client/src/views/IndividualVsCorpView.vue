@@ -86,7 +86,7 @@ const faqJsonLd = computed(() => ({
     :json-ld="faqJsonLd"
   />
 
-  <div class="text-resize-layout container max-w-3xl py-6 sm:py-8">
+  <div class="text-resize-layout container py-6 sm:py-8">
     <h1 class="text-h1 font-bold text-foreground mb-1">개인사업자 vs 법인 세후소득</h1>
     <p class="text-caption text-muted-foreground mb-6">
       동일 매출·경비율 기준으로 세후 실수령을 비교합니다.

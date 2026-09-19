@@ -5,7 +5,7 @@
   "name": "biz-calculator@0.0.0",
   "documentNamespace": "http://spdx.org/spdxdocs/biz-calculator-0.0.0-***",
   "creationInfo": {
-    "created": "2026-09-16T12:40:02.390Z",
+    "created": "2026-09-17T22:34:09.509Z",
     "creators": [
       "Tool: npm/cli-11.7.0"
     ]
@@ -472,10 +472,10 @@
     },
     {
       "name": "@shakilabs/ui",
-      "SPDXID": "SPDXRef-Package-shakilabs.ui-0.3.24",
-      "versionInfo": "0.3.24",
+      "SPDXID": "SPDXRef-Package-shakilabs.ui-0.3.29",
+      "versionInfo": "0.3.29",
       "packageFileName": "node_modules/@shakilabs/ui",
-      "downloadLocation": "file:client/vendor/shakilabs-ui-0.3.24.tgz",
+      "downloadLocation": "file:client/vendor/shakilabs-ui-0.3.29.tgz",
       "filesAnalyzed": false,
       "homepage": "NOASSERTION",
       "licenseDeclared": "NOASSERTION",
@@ -483,13 +483,13 @@
         {
           "referenceCategory": "PACKAGE-MANAGER",
           "referenceType": "purl",
-          "referenceLocator": "pkg:npm/%40shakilabs/ui@0.3.24"
+          "referenceLocator": "pkg:npm/%40shakilabs/ui@0.3.29"
         }
       ],
       "checksums": [
         {
           "algorithm": "SHA512",
-          "checksumValue": "03971ee6828fd0648f9bdb791797dd89a6c4e69980c7478adf5de24255aa65c87c3604073b96981b74bb373d6da20b3a511a6b19535286eb16730f7c869f48b5"
+          "checksumValue": "a8f711cfffc6839dee49488098ba24c98889e2fb4b185de05c5112bd6e545ab41a841697ed82eae9627fbb5e8ccd03d397420fd47fac6e544bb42d038906c93a"
         }
       ]
     },
@@ -2714,7 +2714,7 @@
       "relationshipType": "DEPENDENCY_OF"
     },
     {
-      "spdxElementId": "SPDXRef-Package-shakilabs.ui-0.3.24",
+      "spdxElementId": "SPDXRef-Package-shakilabs.ui-0.3.29",
       "relatedSpdxElement": "SPDXRef-Package-biz-calculator-0.0.0",
       "relationshipType": "DEPENDENCY_OF"
     },

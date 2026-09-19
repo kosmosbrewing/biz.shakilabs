@@ -99,14 +99,14 @@ const faqJsonLd = {
   />
 
   <div class="container py-8 sm:py-12">
-    <section class="mx-auto mb-10 max-w-5xl border-b border-border pb-6">
+    <section class="mx-auto mb-10 border-b border-border pb-6">
       <ShText as="h1" variant="title">사업자 계산기</ShText>
       <ShText class="mt-2 max-w-xl" variant="body" tone="muted">
         창업 준비부터 운영까지, 사업에 필요한 세금·손익·수수료를 빠르게 계산하세요.
       </ShText>
     </section>
 
-    <div class="mx-auto grid max-w-5xl gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <div class="mx-auto grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       <ActionCard
         v-for="tool in tools"
         :key="tool.to"
@@ -132,7 +132,7 @@ const faqJsonLd = {
       </ActionCard>
     </div>
 
-    <section class="mt-12 max-w-5xl mx-auto">
+    <section class="mt-12 mx-auto">
       <Card class="border-border/60">
         <CardContent class="p-5">
           <div class="flex items-center gap-2 mb-3">
@@ -150,15 +150,15 @@ const faqJsonLd = {
       </Card>
     </section>
 
-    <section class="mt-6 max-w-5xl mx-auto">
+    <section class="mt-6 mx-auto">
       <FaqAccordionPanel :items="mergedFaqs" />
     </section>
 
-    <section class="mt-6 max-w-5xl mx-auto">
+    <section class="mt-6 mx-auto">
       <RelatedServices />
     </section>
 
-    <section class="mt-6 max-w-5xl mx-auto">
+    <section class="mt-6 mx-auto">
       <SeoRichGuide
         :title="BIZ_HOME_GUIDE.title"
         :intro="BIZ_HOME_GUIDE.intro"
