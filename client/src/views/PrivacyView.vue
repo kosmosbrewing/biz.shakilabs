@@ -27,7 +27,7 @@ const CALCULATOR_INPUTS = [
     description="사업자 계산기(shakilabs.com/biz)가 매출·급여·직원 수 등 경영 수치를 어떻게 다루는지, 무엇을 수집하지 않는지, 쿠키·광고·분석 도구를 어떻게 사용하는지 안내합니다."
   />
 
-  <div class="container py-5">
+  <div class="sh-container sh-container--prose py-5">
     <div class="retro-panel">
       <div class="retro-titlebar rounded-t-2xl">
         <h1 class="retro-title">개인정보 처리방침</h1>

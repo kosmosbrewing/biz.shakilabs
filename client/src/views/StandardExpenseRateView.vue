@@ -104,7 +104,7 @@ const methodMetrics = computed(() => [
     :json-ld="faqJsonLd"
   />
 
-  <div class="container space-y-5 py-5">
+  <div class="sh-container sh-container--tool space-y-5 py-5">
     <CalculatorPageHeader title="기준경비율 계산기" />
 
     <!-- 헤더 -->

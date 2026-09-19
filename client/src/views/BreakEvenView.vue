@@ -88,7 +88,7 @@ const faqJsonLd = {
     :json-ld="faqJsonLd"
   />
 
-  <div class="container py-6 sm:py-8">
+  <div class="sh-container sh-container--tool py-6 sm:py-8">
     <h1 class="text-h1 font-bold text-foreground mb-1">손익분기점 계산기</h1>
     <p class="text-caption text-muted-foreground mb-6">
       월 고정비와 변동비율로 BEP(Break-Even Point)를 계산합니다.

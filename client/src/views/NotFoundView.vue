@@ -11,7 +11,7 @@ import { buttonVariants } from "@/components/ui/button";
     :noindex="true"
   />
 
-  <div class="container py-20 text-center space-y-4">
+  <div class="sh-container sh-container--page py-20 text-center space-y-4">
     <p class="text-display text-muted-foreground">404</p>
     <h1 class="text-heading font-bold text-foreground">페이지를 찾을 수 없습니다</h1>
     <p class="text-body text-muted-foreground">입력하신 주소가 잘못되었거나 페이지가 이동되었습니다.</p>
