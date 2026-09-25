@@ -1,6 +1,6 @@
 <script setup lang="ts">
-// v3 §3.3-1 — 모바일(<48rem)은 헤더의 좌측 드로어가 대신한다.
-// 링크는 드로어에 그대로 렌더되므로 크롤 경로는 유지된다(레시피 §3).
+// 모바일(<48rem)에서는 패키지가 이 탭 줄을 숨기고 헤더 ☰가 같은 목록을 연다(0.3.38).
+// ☰ 목록은 항상 DOM에 렌더되므로 크롤 경로는 끊기지 않는다(레시피 §3).
 import { computed } from "vue";
 import { RouterLink, useRoute } from "vue-router";
 import { ShPrimaryNavigation } from "@shakilabs/ui";
@@ -16,17 +16,8 @@ const activeItem = computed(() =>
 
 <template>
   <ShPrimaryNavigation
-    class="tab-navigation--desktop-only"
     :items="tabs"
     :active-key="activeItem?.key"
     :link-component="RouterLink"
   />
 </template>
-
-<style scoped>
-@media (max-width: 47.99rem) {
-  .tab-navigation--desktop-only {
-    display: none;
-  }
-}
-</style>
