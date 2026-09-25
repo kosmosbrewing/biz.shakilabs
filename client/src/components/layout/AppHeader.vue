@@ -3,8 +3,7 @@
 // 0.3.38 "순수 내비게이션"(2026-09-25): 가운데 회전 안내(티커)는 정보라 뺐다.
 import { computed } from "vue";
 import { RouterLink, useRoute } from "vue-router";
-import { ShGlobalHeader, type GlobalHeaderLink } from "@shakilabs/ui";
-import ThemeToggle from "@/components/layout/ThemeToggle.vue";
+import { ShGlobalHeader, ShThemeToggle, type GlobalHeaderLink } from "@shakilabs/ui";
 import { BIZ_TOOLS } from "@/data/bizNavigation";
 
 // 사이트 링크 — 블로그는 포털 소유라 href, 소개는 이 앱 라우트라 RouterLink(to). 모바일에서는 ☰ 안으로 들어간다.
@@ -34,7 +33,7 @@ const navActiveKey = computed(
     :link-component="RouterLink"
   >
     <template #utility>
-      <ThemeToggle />
+      <ShThemeToggle storage-key="shakilabs:theme:v1" />
     </template>
   </ShGlobalHeader>
 </template>
