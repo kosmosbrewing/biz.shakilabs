@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { mergeFaqs } from "@/lib/faqMerge";
-import { ShCalculatorSplit, ShPresetGroup, ShSlider } from "@shakilabs/ui";
+import { ShCalculatorSplit, ShPairRow, ShPresetGroup, ShSlider } from "@shakilabs/ui";
 import { User, Building2 } from "lucide-vue-next";
 import { Card, CardContent } from "@/components/ui/card";
 import SEOHead from "@/components/common/SEOHead.vue";
@@ -9,6 +9,7 @@ import BizResultHero from "@/components/biz/BizResultHero.vue";
 import BusinessSessionDraftControl from "@/components/biz/BusinessSessionDraftControl.vue";
 import BusinessNextActions from "@/components/biz/BusinessNextActions.vue";
 import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
+import FaqAccordionPanel from "@/components/common/FaqAccordionPanel.vue";
 import IndividualCorpComparisonChart from "@/components/biz/IndividualCorpComparisonChart.vue";
 import IndividualCorpNotes from "@/components/biz/IndividualCorpNotes.vue";
 import { BIZ_INDIVIDUAL_VS_CORP_GUIDE } from "@/data/seoGuides";
@@ -272,11 +273,19 @@ const faqJsonLd = computed(() => ({
       </template>
     </ShCalculatorSplit>
 
-    <IndividualCorpComparisonChart :individual="individual" :corp="corp" :better-option="betterOption" />
+    <!-- 계산기 아래 데이터 블록 2열(ShPairRow, 사용자 결정 2026-09-25) — 순서 유지, 짧은 블록은 한 칸에 쌓는다.
+         FAQ는 전폭 유지 대상이라 IndividualCorpNotes에서 분리해 짝 바깥으로 옮겼다(유의사항 카드만 짝에 남긴다). -->
+    <ShPairRow class="mb-6">
+      <template #start>
+        <IndividualCorpComparisonChart :individual="individual" :corp="corp" :better-option="betterOption" />
+      </template>
+      <template #end>
+        <BusinessNextActions />
+        <IndividualCorpNotes />
+      </template>
+    </ShPairRow>
 
-    <BusinessNextActions />
-
-    <IndividualCorpNotes :faqs="mergedFaqs" />
+    <FaqAccordionPanel :items="mergedFaqs" class="mb-6" />
 
     <SeoRichGuide
       :title="BIZ_INDIVIDUAL_VS_CORP_GUIDE.title"

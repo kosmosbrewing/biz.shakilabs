@@ -5,7 +5,7 @@
   "name": "biz-calculator@0.0.0",
   "documentNamespace": "http://spdx.org/spdxdocs/biz-calculator-0.0.0-***",
   "creationInfo": {
-    "created": "2026-09-25T09:32:35.172Z",
+    "created": "2026-09-25T10:40:04.843Z",
     "creators": [
       "Tool: npm/cli-11.7.0"
     ]
@@ -484,12 +484,6 @@
           "referenceCategory": "PACKAGE-MANAGER",
           "referenceType": "purl",
           "referenceLocator": "pkg:npm/%40shakilabs/ui@0.3.37"
-        }
-      ],
-      "checksums": [
-        {
-          "algorithm": "SHA512",
-          "checksumValue": "99425f865d3b82e0f26e8dcd232e7aeb74260ce6e3f96b275391c237e92e1cfd4a09d2219cf115c4d8702a83aea891d7a7b991c4e8d82010f4c12cef42396528"
         }
       ]
     },

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { mergeFaqs } from "@/lib/faqMerge";
-import { ShBreakdownBar, ShCalculatorSplit } from "@shakilabs/ui";
+import { ShBreakdownBar, ShCalculatorSplit, ShPairRow } from "@shakilabs/ui";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import FaqAccordionPanel from "@/components/common/FaqAccordionPanel.vue";
@@ -126,22 +126,28 @@ const faqJsonLd = computed(() => ({
     </ShCalculatorSplit>
 
     <!-- 차트·근거 노트는 결과 칸(반폭)에 두면 1440px 실측에서 결과가 입력보다 340px 길어져
-         왼쪽 칸이 빈다 — 1×2 아래 전폭으로 내리고 결과 칸엔 요약(히어로+통계)만 남긴다. -->
-    <ShBreakdownBar
-      label="과세표준의 세금·세후 이익 구성"
-      note="입력한 과세표준에서 예상 법인세를 제외한 금액을 한 막대에 표시합니다."
-      :segments="incomeSegments"
-      :format-value="formatWon"
-      surface="outlined"
-    />
-
-    <div class="retro-panel px-4 py-4 text-caption text-foreground space-y-1">
-      <p>현재 과세 구간은 {{ result.bracketLabel }}이며 지방소득세 포함 한계세율은 {{ formatPercent(result.marginalRate, 1) }}입니다.</p>
-      <p class="text-muted-foreground">
-        공식 근거:
-        <a :href="CORP_TAX_SOURCE_URL" target="_blank" rel="noopener noreferrer" class="retro-link">국세청 법인세 세율</a>
-      </p>
-    </div>
+         왼쪽 칸이 빈다 — 1×2 아래 전폭으로 내리고 결과 칸엔 요약(히어로+통계)만 남긴다.
+         둘은 아래 데이터 블록 2열(ShPairRow, 사용자 결정 2026-09-25)로 짝짓는다. -->
+    <ShPairRow>
+      <template #start>
+        <ShBreakdownBar
+          label="과세표준의 세금·세후 이익 구성"
+          note="입력한 과세표준에서 예상 법인세를 제외한 금액을 한 막대에 표시합니다."
+          :segments="incomeSegments"
+          :format-value="formatWon"
+          surface="outlined"
+        />
+      </template>
+      <template #end>
+        <div class="retro-panel px-4 py-4 text-caption text-foreground space-y-1">
+          <p>현재 과세 구간은 {{ result.bracketLabel }}이며 지방소득세 포함 한계세율은 {{ formatPercent(result.marginalRate, 1) }}입니다.</p>
+          <p class="text-muted-foreground">
+            공식 근거:
+            <a :href="CORP_TAX_SOURCE_URL" target="_blank" rel="noopener noreferrer" class="retro-link">국세청 법인세 세율</a>
+          </p>
+        </div>
+      </template>
+    </ShPairRow>
 
     <FaqAccordionPanel :items="mergedFaqs" />
 

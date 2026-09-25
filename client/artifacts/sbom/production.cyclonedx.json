@@ -5,7 +5,7 @@
   "serialNumber": "urn:uuid:***",
   "version": 1,
   "metadata": {
-    "timestamp": "2026-09-25T09:32:34.986Z",
+    "timestamp": "2026-09-25T10:40:04.667Z",
     "lifecycles": [
       {
         "phase": "build"
@@ -592,12 +592,6 @@
         {
           "type": "distribution",
           "url": "file:client/vendor/shakilabs-ui-0.3.37.tgz"
-        }
-      ],
-      "hashes": [
-        {
-          "alg": "SHA-512",
-          "content": "99425f865d3b82e0f26e8dcd232e7aeb74260ce6e3f96b275391c237e92e1cfd4a09d2219cf115c4d8702a83aea891d7a7b991c4e8d82010f4c12cef42396528"
         }
       ]
     },

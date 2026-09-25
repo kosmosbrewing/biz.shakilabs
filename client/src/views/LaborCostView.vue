@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { mergeFaqs } from "@/lib/faqMerge";
-import { ShBreakdownBar, ShCalculatorSplit, ShPresetGroup } from "@shakilabs/ui";
+import { ShBreakdownBar, ShCalculatorSplit, ShPairRow, ShPresetGroup } from "@shakilabs/ui";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import FaqAccordionPanel from "@/components/common/FaqAccordionPanel.vue";
@@ -187,22 +187,28 @@ const insuranceMetrics = computed(() => [{
     </ShCalculatorSplit>
 
     <!-- 차트·상세표는 결과 칸(반폭)에 두면 1440px 실측에서 결과가 입력보다 크게 길어져 왼쪽 칸이 빈다 —
-         1×2 아래 전폭으로 내리고 결과 칸엔 요약(히어로+통계 3종)만 남긴다. -->
-    <div class="grid gap-4 lg:grid-cols-2">
-      <ShBreakdownBar
-        label="직원 1명 월 인건비 구성"
-        note="세전 급여에 사업주 부담 보험료와 선택한 퇴직급여 적립분을 더한 금액입니다."
-        :segments="costSegments"
-        :format-value="formatWon"
-        surface="outlined"
-      />
-      <MetricComparisonBars
-        title="사업주·근로자 보험료 비교"
-        note="소득세를 제외한 월 4대보험 부담액을 같은 기준으로 비교합니다."
-        :metrics="insuranceMetrics"
-        :format-value="formatWon"
-      />
-    </div>
+         1×2 아래 전폭으로 내리고 결과 칸엔 요약(히어로+통계 3종)만 남긴다.
+         기존 lg:grid-cols-2 대신 아래 데이터 블록 2열의 공통 틀 ShPairRow로 통일한다(사용자 결정 2026-09-25,
+         간격·분기점 동일: gap-4=1rem, lg=64rem). -->
+    <ShPairRow>
+      <template #start>
+        <ShBreakdownBar
+          label="직원 1명 월 인건비 구성"
+          note="세전 급여에 사업주 부담 보험료와 선택한 퇴직급여 적립분을 더한 금액입니다."
+          :segments="costSegments"
+          :format-value="formatWon"
+          surface="outlined"
+        />
+      </template>
+      <template #end>
+        <MetricComparisonBars
+          title="사업주·근로자 보험료 비교"
+          note="소득세를 제외한 월 4대보험 부담액을 같은 기준으로 비교합니다."
+          :metrics="insuranceMetrics"
+          :format-value="formatWon"
+        />
+      </template>
+    </ShPairRow>
 
     <!-- 4대보험 상세 -->
     <div class="retro-panel overflow-hidden">
