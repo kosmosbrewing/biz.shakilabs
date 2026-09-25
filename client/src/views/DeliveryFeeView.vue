@@ -6,7 +6,8 @@ import SEOHead from "@/components/common/SEOHead.vue";
 import BizResultHero from "@/components/biz/BizResultHero.vue";
 import FaqAccordionPanel from "@/components/common/FaqAccordionPanel.vue";
 import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
-import MetricComparisonBars from "@/components/result-visualization/MetricComparisonBars.vue";
+import type { GapBarItem } from "@shakilabs/ui";
+import GapComparisonBars from "@/components/result-visualization/GapComparisonBars.vue";
 import { BIZ_HOME_GUIDE } from "@/data/seoGuides";
 import { withDigest } from "@/data/digests";
 import { DELIVERY_DIGEST } from "@/data/digests/deliveryDigest";
@@ -35,29 +36,14 @@ const bestApp = computed(() => {
   return results.value.reduce((best, cur) => cur.totalFee < best.totalFee ? cur : best);
 });
 
-const deliveryMetrics = computed(() => [
-  {
-    key: "fee",
-    label: "월 총 수수료",
-    values: results.value.map((app) => ({
-      key: app.appKey,
-      label: app.appName,
-      value: app.totalFee,
-      highlight: app.appKey === bestApp.value?.appKey,
-      detail: `실질 수수료율 ${formatPercent(app.feeRate)}`,
-    })),
-  },
-  {
-    key: "net",
-    label: "월 순수익",
-    values: results.value.map((app) => ({
-      key: app.appKey,
-      label: app.appName,
-      value: app.netRevenue,
-      highlight: app.appKey === bestApp.value?.appKey,
-    })),
-  },
-]);
+// 순수익 = 매출 − 수수료라 앱 간 순수익 차이는 수수료 차이와 같다(거울상). 두 지표를 따로 0부터 그리던
+// 막대는 같은 정보를 두 번 보여 줬고 값이 비슷해 차이도 안 보였다 — 순수익 하나를 1위 대비 차이로 그린다.
+const deliveryItems = computed<GapBarItem[]>(() => results.value.map((app) => ({
+  key: app.appKey,
+  label: app.appName,
+  value: app.netRevenue,
+  detail: `월 수수료 ${formatWon(app.totalFee)} · 실질 수수료율 ${formatPercent(app.feeRate)}`,
+})));
 
 const bestAppSegments = computed(() => {
   const app = bestApp.value;
@@ -172,11 +158,12 @@ const faqJsonLd = {
     />
 
     <div class="mb-6 grid gap-4">
-      <MetricComparisonBars
+      <GapComparisonBars
         title="앱별 월 비용과 순수익"
-        note="각 지표는 별도 기준으로 비교하며, 강조된 앱은 입력값에서 총비용이 가장 적습니다."
-        :metrics="deliveryMetrics"
+        note="막대는 1위보다 덜 남는 월 순수익입니다. 매출이 같아 순수익 차이는 수수료 차이와 같습니다."
+        :items="deliveryItems"
         :format-value="formatWon"
+        better="higher"
       />
       <ShBreakdownBar
         v-if="bestApp"
