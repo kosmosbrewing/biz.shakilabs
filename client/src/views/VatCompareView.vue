@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import { mergeFaqs } from "@/lib/faqMerge";
-import { ShPresetGroup, ShSlider } from "@shakilabs/ui";
+import { ShCalculatorSplit, ShPresetGroup, ShSlider } from "@shakilabs/ui";
 import { Store, Receipt, AlertCircle } from "lucide-vue-next";
 import { Card, CardContent } from "@/components/ui/card";
 import SEOHead from "@/components/common/SEOHead.vue";
@@ -130,111 +130,138 @@ const vatMetrics = computed(() => [{
       연 매출과 업종으로 부가가치세 차이를 비교합니다.
     </p>
 
-    <!-- 입력 -->
-    <CalculatorInteractionTracker calculator-id="vat_compare" page-path="/biz/vat-compare">
-    <div class="retro-panel p-4 sm:p-5 space-y-4 mb-6">
-      <div>
-        <label class="block text-caption font-semibold text-foreground mb-1.5">연 매출액 (공급가액 기준)</label>
-        <div class="relative">
-          <input
-            aria-label="연 매출액"
-            v-model="revenueDisplay"
-            type="text"
-            inputmode="numeric"
-            class="retro-input w-full pr-8"
-          />
-          <span class="absolute right-3 top-1/2 -translate-y-1/2 text-tiny text-muted-foreground">원</span>
+    <ShCalculatorSplit class="mb-6">
+      <template #input>
+        <!-- 입력 -->
+        <CalculatorInteractionTracker calculator-id="vat_compare" page-path="/biz/vat-compare">
+        <div class="retro-panel p-4 sm:p-5 space-y-4">
+          <div>
+            <label class="block text-caption font-semibold text-foreground mb-1.5">연 매출액 (공급가액 기준)</label>
+            <div class="relative">
+              <input
+                aria-label="연 매출액"
+                v-model="revenueDisplay"
+                type="text"
+                inputmode="numeric"
+                class="retro-input w-full pr-8"
+              />
+              <span class="absolute right-3 top-1/2 -translate-y-1/2 text-tiny text-muted-foreground">원</span>
+            </div>
+            <ShPresetGroup
+              v-model="annualRevenue"
+              :options="presets"
+              label="연 매출액 빠른 선택"
+              class="mt-2"
+            />
+          </div>
+
+          <div>
+            <label class="block text-caption font-semibold text-foreground mb-1.5">업종</label>
+            <ShPresetGroup
+              v-model="industryKey"
+              :options="industryOptions"
+              label="업종 선택"
+            />
+          </div>
+
+          <div>
+            <label class="block text-caption font-semibold text-foreground mb-1.5">
+              매입 비율: {{ (purchaseRate * 100).toFixed(0) }}%
+              <span class="text-tiny text-muted-foreground font-normal ml-1">(세금계산서 매입분)</span>
+            </label>
+            <ShSlider
+              v-model="purchaseRate"
+              :min="0.05"
+              :max="0.8"
+              :step="0.05"
+              :value-text="`매입 비율 ${(purchaseRate * 100).toFixed(0)}%`"
+              aria-label="매입 비율 슬라이더"
+            />
+          </div>
         </div>
-        <ShPresetGroup
-          v-model="annualRevenue"
-          :options="presets"
-          label="연 매출액 빠른 선택"
-          class="mt-2"
-        />
-      </div>
+        </CalculatorInteractionTracker>
+      </template>
 
-      <div>
-        <label class="block text-caption font-semibold text-foreground mb-1.5">업종</label>
-        <ShPresetGroup
-          v-model="industryKey"
-          :options="industryOptions"
-          label="업종 선택"
-        />
-      </div>
+      <template #result>
+        <!-- 결과 -->
+        <Card>
+          <CardContent class="p-4 sm:p-5">
+            <!-- 간이과세 적격 여부 -->
+            <div v-if="!result.isSimplifiedEligible" class="mb-4 rounded-lg bg-destructive/10 p-3 text-caption text-destructive font-medium">
+              선택한 업종은 연 매출 {{ formatWon(result.simplifiedThreshold) }} 이상이면 간이과세 적용이 불가합니다. 일반과세만 가능합니다.
+            </div>
 
-      <div>
-        <label class="block text-caption font-semibold text-foreground mb-1.5">
-          매입 비율: {{ (purchaseRate * 100).toFixed(0) }}%
-          <span class="text-tiny text-muted-foreground font-normal ml-1">(세금계산서 매입분)</span>
-        </label>
-        <ShSlider
-          v-model="purchaseRate"
-          :min="0.05"
-          :max="0.8"
-          :step="0.05"
-          :value-text="`매입 비율 ${(purchaseRate * 100).toFixed(0)}%`"
-          aria-label="매입 비율 슬라이더"
-        />
-      </div>
-    </div>
-    </CalculatorInteractionTracker>
+            <div v-if="result.isSimplifiedExempt && result.isSimplifiedEligible" class="mb-4 rounded-lg bg-primary/10 p-3 text-caption text-primary font-medium">
+              연 매출 4,800만원 미만 — 간이과세 납부 면제 대상입니다.
+            </div>
 
-    <!-- 결과 -->
-    <Card class="mb-6">
-      <CardContent class="p-4 sm:p-5">
-        <!-- 간이과세 적격 여부 -->
-        <div v-if="!result.isSimplifiedEligible" class="mb-4 rounded-lg bg-destructive/10 p-3 text-caption text-destructive font-medium">
-          선택한 업종은 연 매출 {{ formatWon(result.simplifiedThreshold) }} 이상이면 간이과세 적용이 불가합니다. 일반과세만 가능합니다.
-        </div>
+            <BizResultHero
+              v-if="result.isSimplifiedEligible"
+              class="mb-4"
+              flat
+              label="연간 부가세 차이"
+              :value="formatWon(Math.abs(result.difference))"
+              :sub="`${result.recommendation === 'simplified' ? '간이과세' : '일반과세'}가 유리`"
+            />
 
-        <div v-if="result.isSimplifiedExempt && result.isSimplifiedEligible" class="mb-4 rounded-lg bg-primary/10 p-3 text-caption text-primary font-medium">
-          연 매출 4,800만원 미만 — 간이과세 납부 면제 대상입니다.
-        </div>
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <!-- 일반과세 -->
+              <Card class="border-status-info/25">
+                <CardContent class="biz-compare-card p-4 text-center space-y-2">
+                  <div class="flex items-center justify-center gap-2">
+                    <span class="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-status-info/10 text-status-info">
+                      <Receipt class="h-3.5 w-3.5" />
+                    </span>
+                    <h3 class="text-caption font-bold text-status-info">일반과세</h3>
+                  </div>
+                  <p class="text-caption text-muted-foreground">연간 부가세</p>
+                  <p class="text-h1 font-bold font-brand text-foreground tabular-nums">{{ formatWon(result.generalVat) }}</p>
+                </CardContent>
+              </Card>
 
-        <BizResultHero
-          v-if="result.isSimplifiedEligible"
-          class="mb-4"
-          flat
-          label="연간 부가세 차이"
-          :value="formatWon(Math.abs(result.difference))"
-          :sub="`${result.recommendation === 'simplified' ? '간이과세' : '일반과세'}가 유리`"
-        />
+              <!-- 간이과세 -->
+              <Card class="border-primary/25">
+                <CardContent class="biz-compare-card p-4 text-center space-y-2">
+                  <div class="flex items-center justify-center gap-2">
+                    <span class="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                      <Store class="h-3.5 w-3.5" />
+                    </span>
+                    <h3 class="text-caption font-bold text-primary">간이과세</h3>
+                  </div>
+                  <p class="text-caption text-muted-foreground">
+                    {{ result.isSimplifiedExempt ? '납부 면제' : '연간 부가세' }}
+                  </p>
+                  <p class="text-h1 font-bold font-brand text-foreground tabular-nums">
+                    {{ result.isSimplifiedEligible ? formatWon(result.simplifiedVat) : '-' }}
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+          </CardContent>
+        </Card>
+      </template>
 
-        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <!-- 일반과세 -->
-          <Card class="border-status-info/25">
-            <CardContent class="biz-compare-card p-4 text-center space-y-2">
-              <div class="flex items-center justify-center gap-2">
-                <span class="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-status-info/10 text-status-info">
-                  <Receipt class="h-3.5 w-3.5" />
-                </span>
-                <h3 class="text-caption font-bold text-status-info">일반과세</h3>
-              </div>
-              <p class="text-caption text-muted-foreground">연간 부가세</p>
-              <p class="text-h1 font-bold font-brand text-foreground tabular-nums">{{ formatWon(result.generalVat) }}</p>
-            </CardContent>
-          </Card>
-
-          <!-- 간이과세 -->
-          <Card class="border-primary/25">
-            <CardContent class="biz-compare-card p-4 text-center space-y-2">
-              <div class="flex items-center justify-center gap-2">
-                <span class="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                  <Store class="h-3.5 w-3.5" />
-                </span>
-                <h3 class="text-caption font-bold text-primary">간이과세</h3>
-              </div>
-              <p class="text-caption text-muted-foreground">
-                {{ result.isSimplifiedExempt ? '납부 면제' : '연간 부가세' }}
-              </p>
-              <p class="text-h1 font-bold font-brand text-foreground tabular-nums">
-                {{ result.isSimplifiedEligible ? formatWon(result.simplifiedVat) : '-' }}
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-      </CardContent>
-    </Card>
+      <!-- 과세 유형 기준은 입력(매출·업종)의 가정·출처 노트라 below-input에 둔다 — 결과 칸(비교 카드)에
+           두면 결과가 입력보다 훨씬 길어져 왼쪽 칸이 빈다. -->
+      <template #below-input>
+        <Card class="border-border/60">
+          <CardContent class="p-4">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground">
+                <AlertCircle class="h-3.5 w-3.5" />
+              </span>
+              <p class="text-tiny font-semibold text-foreground">과세 유형 기준 (2026년)</p>
+            </div>
+            <ul class="list-disc pl-4 space-y-0.5 text-tiny text-muted-foreground">
+              <li>간이과세 적용 기준: 연 매출 1억 400만원 미만, 다만 부동산임대업·과세유흥장소는 4,800만원 미만</li>
+              <li>간이과세 납부의무 면제: 연 매출 4,800만원 미만</li>
+              <li>일반과세: 부가세 = 매출세액(10%) - 매입세액</li>
+              <li>간이과세: 부가세 = 매출액 × 업종별 부가가치율 × 10%</li>
+            </ul>
+          </CardContent>
+        </Card>
+      </template>
+    </ShCalculatorSplit>
 
     <MetricComparisonBars
       class="mb-6"
@@ -243,24 +270,6 @@ const vatMetrics = computed(() => [{
       :metrics="vatMetrics"
       :format-value="formatWon"
     />
-
-    <!-- 과세 유형 기준 -->
-    <Card class="border-border/60">
-      <CardContent class="p-4">
-        <div class="flex items-center gap-2 mb-2">
-          <span class="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground">
-            <AlertCircle class="h-3.5 w-3.5" />
-          </span>
-          <p class="text-tiny font-semibold text-foreground">과세 유형 기준 (2026년)</p>
-        </div>
-        <ul class="list-disc pl-4 space-y-0.5 text-tiny text-muted-foreground">
-          <li>간이과세 적용 기준: 연 매출 1억 400만원 미만, 다만 부동산임대업·과세유흥장소는 4,800만원 미만</li>
-          <li>간이과세 납부의무 면제: 연 매출 4,800만원 미만</li>
-          <li>일반과세: 부가세 = 매출세액(10%) - 매입세액</li>
-          <li>간이과세: 부가세 = 매출액 × 업종별 부가가치율 × 10%</li>
-        </ul>
-      </CardContent>
-    </Card>
 
     <FaqAccordionPanel :items="mergedFaqs" />
 

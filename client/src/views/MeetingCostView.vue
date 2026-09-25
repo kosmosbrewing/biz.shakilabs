@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { mergeFaqs } from "@/lib/faqMerge";
+import { ShCalculatorSplit } from "@shakilabs/ui";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import CalculatorInteractionTracker from "@/components/analytics/CalculatorInteractionTracker.vue";
@@ -72,44 +73,57 @@ const { result, validationError } = useSafeCalculation(
   <div class="sh-container sh-container--tool space-y-5 py-5">
     <CalculatorPageHeader title="회의 비용 계산기" />
 
-    <div class="retro-panel overflow-hidden">
-      <div class="retro-titlebar rounded-t-2xl">
-        <h2 class="retro-title">회의 조건 입력</h2>
-        <FreshBadge :message="`${BIZ_SERVICE_UPDATED_AT} 기준`" />
-      </div>
-      <CalculatorInteractionTracker calculator-id="meeting_cost" page-path="/biz/meeting-cost">
-      <div class="retro-panel-content grid gap-3 md:grid-cols-3" role="group" :aria-describedby="validationError ? 'meeting-cost-error' : undefined">
-        <input v-model.number="attendees" aria-label="참석 인원" type="number" min="2" class="retro-input" placeholder="참석 인원" />
-        <input v-model.number="costPerPerson" aria-label="1인당 비용" type="number" min="5000" class="retro-input" placeholder="1인당 비용" />
-        <input v-model.number="meetingsPerMonth" aria-label="월 회의 횟수" type="number" min="1" class="retro-input" placeholder="월 회의 횟수" />
-        <input v-model.number="months" aria-label="개월 수" type="number" min="1" max="12" class="retro-input" placeholder="개월 수" />
-        <label class="retro-panel-muted flex items-center gap-2 px-3 py-3 text-caption font-semibold text-foreground md:col-span-2">
-          <input v-model="vatIncluded" type="checkbox" class="h-4 w-4 rounded border-border" />
-          부가세 포함 영수증 기준
-        </label>
-        <p v-if="validationError" id="meeting-cost-error" class="text-caption font-semibold text-destructive md:col-span-3" role="alert">
-          {{ validationError }}
-        </p>
-      </div>
-      </CalculatorInteractionTracker>
-    </div>
+    <ShCalculatorSplit>
+      <template #input>
+        <div class="retro-panel overflow-hidden">
+          <div class="retro-titlebar rounded-t-2xl">
+            <h2 class="retro-title">회의 조건 입력</h2>
+            <FreshBadge :message="`${BIZ_SERVICE_UPDATED_AT} 기준`" />
+          </div>
+          <CalculatorInteractionTracker calculator-id="meeting_cost" page-path="/biz/meeting-cost">
+          <div class="retro-panel-content grid gap-3 md:grid-cols-3" role="group" :aria-describedby="validationError ? 'meeting-cost-error' : undefined">
+            <input v-model.number="attendees" aria-label="참석 인원" type="number" min="2" class="retro-input" placeholder="참석 인원" />
+            <input v-model.number="costPerPerson" aria-label="1인당 비용" type="number" min="5000" class="retro-input" placeholder="1인당 비용" />
+            <input v-model.number="meetingsPerMonth" aria-label="월 회의 횟수" type="number" min="1" class="retro-input" placeholder="월 회의 횟수" />
+            <input v-model.number="months" aria-label="개월 수" type="number" min="1" max="12" class="retro-input" placeholder="개월 수" />
+            <label class="retro-panel-muted flex items-center gap-2 px-3 py-3 text-caption font-semibold text-foreground md:col-span-2">
+              <input v-model="vatIncluded" type="checkbox" class="h-4 w-4 rounded border-border" />
+              부가세 포함 영수증 기준
+            </label>
+            <p v-if="validationError" id="meeting-cost-error" class="text-caption font-semibold text-destructive md:col-span-3" role="alert">
+              {{ validationError }}
+            </p>
+          </div>
+          </CalculatorInteractionTracker>
+        </div>
+      </template>
 
-    <BizResultHero label="연간 총예산" :value="formatWon(result.annualBudget)" />
+      <template #result>
+        <section class="retro-panel overflow-hidden" aria-labelledby="meeting-cost-result-title">
+          <div class="retro-titlebar rounded-t-2xl">
+            <h2 id="meeting-cost-result-title" class="retro-title">회의 비용 계산 결과</h2>
+          </div>
+          <div class="retro-panel-content space-y-4">
+            <BizResultHero flat label="연간 총예산" :value="formatWon(result.annualBudget)" />
 
-    <div class="grid grid-cols-2 gap-3">
-      <div class="retro-stat text-center">
-        <p class="retro-stat-label">1회 회의 비용</p>
-        <p class="retro-stat-value">{{ formatWon(result.perMeeting) }}</p>
-      </div>
-      <div class="retro-stat text-center">
-        <p class="retro-stat-label">예상 매입세액</p>
-        <p class="retro-stat-value">{{ formatWon(result.vatCredit) }}</p>
-      </div>
-    </div>
+            <div class="grid grid-cols-2 gap-3">
+              <div class="retro-stat text-center">
+                <p class="retro-stat-label">1회 회의 비용</p>
+                <p class="retro-stat-value">{{ formatWon(result.perMeeting) }}</p>
+              </div>
+              <div class="retro-stat text-center">
+                <p class="retro-stat-label">예상 매입세액</p>
+                <p class="retro-stat-value">{{ formatWon(result.vatCredit) }}</p>
+              </div>
+            </div>
 
-    <div class="retro-panel px-4 py-4 text-caption text-foreground">
-      참석자 1인당 연간 부담액은 약 {{ formatWon(result.annualPerPerson) }}입니다.
-    </div>
+            <div class="retro-panel-muted retro-panel-content text-caption text-foreground">
+              참석자 1인당 연간 부담액은 약 {{ formatWon(result.annualPerPerson) }}입니다.
+            </div>
+          </div>
+        </section>
+      </template>
+    </ShCalculatorSplit>
 
     <FaqAccordionPanel :items="mergedFaqs" />
 

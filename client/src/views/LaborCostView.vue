@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { mergeFaqs } from "@/lib/faqMerge";
-import { ShBreakdownBar, ShPresetGroup } from "@shakilabs/ui";
+import { ShBreakdownBar, ShCalculatorSplit, ShPresetGroup } from "@shakilabs/ui";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import FaqAccordionPanel from "@/components/common/FaqAccordionPanel.vue";
@@ -98,80 +98,96 @@ const insuranceMetrics = computed(() => [{
   <div class="sh-container sh-container--tool space-y-5 py-5">
     <CalculatorPageHeader title="인건비 계산기" />
 
-    <!-- 헤더 -->
-    <div class="retro-panel overflow-hidden">
-      <div class="retro-titlebar rounded-t-2xl">
-        <h2 class="retro-title">계산 기준 안내</h2>
-        <FreshBadge :message="`${LABOR_COST_UPDATED} 기준`" />
-      </div>
-      <div class="retro-panel-content space-y-2">
-        <p class="text-body text-muted-foreground">월급을 입력하면 사업주 부담 4대보험, 퇴직급여, 총 인건비를 계산합니다.</p>
-      </div>
-    </div>
-
-    <CalculatorInteractionTracker calculator-id="labor_cost" page-path="/biz/labor-cost">
-      <div class="retro-panel p-4 sm:p-5 space-y-4" role="group" :aria-describedby="validationError ? 'labor-cost-error' : undefined">
-        <div class="space-y-1">
-          <label class="text-tiny font-medium text-muted-foreground">월 급여 (세전)</label>
-          <input v-model.number="monthlySalary" aria-label="월 급여" type="number" min="100000" class="retro-input w-full" />
-          <ShPresetGroup
-            v-model="monthlySalary"
-            :options="LABOR_COST_SALARY_PRESETS"
-            label="월 급여 빠른 선택"
-          />
-        </div>
-
-        <div class="grid gap-3 sm:grid-cols-3">
-          <div class="space-y-1">
-            <label class="text-tiny font-medium text-muted-foreground">직원 수</label>
-            <input v-model.number="employeeCount" aria-label="직원 수" type="number" min="1" max="10000" class="retro-input w-full" />
+    <ShCalculatorSplit>
+      <template #input>
+        <!-- 헤더 -->
+        <div class="retro-panel overflow-hidden">
+          <div class="retro-titlebar rounded-t-2xl">
+            <h2 class="retro-title">계산 기준 안내</h2>
+            <FreshBadge :message="`${LABOR_COST_UPDATED} 기준`" />
           </div>
-          <div class="space-y-1">
-            <label class="text-tiny font-medium text-muted-foreground">업종 (산재보험)</label>
-            <select v-model="industryKey" aria-label="업종" class="retro-input w-full">
-              <option v-for="ind in INDUSTRY_ACCIDENT_RATES" :key="ind.key" :value="ind.key">
-                {{ ind.label }} ({{ formatPercent(ind.rate, 1) }})
-              </option>
-            </select>
-          </div>
-          <div class="space-y-1">
-            <label class="text-tiny font-medium text-muted-foreground">퇴직급여 포함</label>
-            <select v-model="includeRetirement" aria-label="퇴직급여 포함 여부" class="retro-input w-full">
-              <option :value="true">포함 (1/12)</option>
-              <option :value="false">미포함</option>
-            </select>
+          <div class="retro-panel-content space-y-2">
+            <p class="text-body text-muted-foreground">월급을 입력하면 사업주 부담 4대보험, 퇴직급여, 총 인건비를 계산합니다.</p>
           </div>
         </div>
-        <p v-if="validationError" id="labor-cost-error" class="text-caption font-semibold text-destructive" role="alert">
-          {{ validationError }}
-        </p>
-      </div>
-    </CalculatorInteractionTracker>
 
-    <BizResultHero
-      label="1인 실제 인건비"
-      :value="formatWon(result.totalCostPerEmployee)"
-      :sub="`급여 대비 +${formatPercent(result.overheadRate, 1)}`"
-    />
+        <CalculatorInteractionTracker calculator-id="labor_cost" page-path="/biz/labor-cost">
+          <div class="retro-panel p-4 sm:p-5 space-y-4" role="group" :aria-describedby="validationError ? 'labor-cost-error' : undefined">
+            <div class="space-y-1">
+              <label class="text-tiny font-medium text-muted-foreground">월 급여 (세전)</label>
+              <input v-model.number="monthlySalary" aria-label="월 급여" type="number" min="100000" class="retro-input w-full" />
+              <ShPresetGroup
+                v-model="monthlySalary"
+                :options="LABOR_COST_SALARY_PRESETS"
+                label="월 급여 빠른 선택"
+              />
+            </div>
 
-    <div class="grid grid-cols-1 gap-3 sm:grid-cols-3">
-      <div class="retro-stat text-center">
-        <p class="retro-stat-label">근로자 실수령</p>
-        <p class="retro-stat-value">{{ formatWon(result.employeeNetPay) }}</p>
-        <p class="mt-0.5 text-tiny text-muted-foreground">4대보험 공제 후</p>
-      </div>
-      <div class="retro-stat text-center">
-        <p class="retro-stat-label">전체 월 인건비</p>
-        <p class="retro-stat-value">{{ formatWon(result.totalMonthlyCost) }}</p>
-        <p class="mt-0.5 text-tiny text-muted-foreground">{{ employeeCount }}명 기준</p>
-      </div>
-      <div class="retro-stat text-center">
-        <p class="retro-stat-label">연간 인건비 합계</p>
-        <p class="retro-stat-value">{{ formatWon(result.totalAnnualCost) }}</p>
-        <p class="mt-0.5 text-tiny text-muted-foreground">12개월 기준</p>
-      </div>
-    </div>
+            <div class="grid gap-3 sm:grid-cols-3">
+              <div class="space-y-1">
+                <label class="text-tiny font-medium text-muted-foreground">직원 수</label>
+                <input v-model.number="employeeCount" aria-label="직원 수" type="number" min="1" max="10000" class="retro-input w-full" />
+              </div>
+              <div class="space-y-1">
+                <label class="text-tiny font-medium text-muted-foreground">업종 (산재보험)</label>
+                <select v-model="industryKey" aria-label="업종" class="retro-input w-full">
+                  <option v-for="ind in INDUSTRY_ACCIDENT_RATES" :key="ind.key" :value="ind.key">
+                    {{ ind.label }} ({{ formatPercent(ind.rate, 1) }})
+                  </option>
+                </select>
+              </div>
+              <div class="space-y-1">
+                <label class="text-tiny font-medium text-muted-foreground">퇴직급여 포함</label>
+                <select v-model="includeRetirement" aria-label="퇴직급여 포함 여부" class="retro-input w-full">
+                  <option :value="true">포함 (1/12)</option>
+                  <option :value="false">미포함</option>
+                </select>
+              </div>
+            </div>
+            <p v-if="validationError" id="labor-cost-error" class="text-caption font-semibold text-destructive" role="alert">
+              {{ validationError }}
+            </p>
+          </div>
+        </CalculatorInteractionTracker>
+      </template>
 
+      <template #result>
+        <section class="retro-panel overflow-hidden" aria-labelledby="labor-cost-result-title">
+          <div class="retro-titlebar rounded-t-2xl">
+            <h2 id="labor-cost-result-title" class="retro-title">인건비 계산 결과</h2>
+          </div>
+          <div class="retro-panel-content space-y-4">
+            <BizResultHero
+              flat
+              label="1인 실제 인건비"
+              :value="formatWon(result.totalCostPerEmployee)"
+              :sub="`급여 대비 +${formatPercent(result.overheadRate, 1)}`"
+            />
+
+            <div class="grid grid-cols-1 gap-3 sm:grid-cols-3">
+              <div class="retro-stat text-center">
+                <p class="retro-stat-label">근로자 실수령</p>
+                <p class="retro-stat-value">{{ formatWon(result.employeeNetPay) }}</p>
+                <p class="mt-0.5 text-tiny text-muted-foreground">4대보험 공제 후</p>
+              </div>
+              <div class="retro-stat text-center">
+                <p class="retro-stat-label">전체 월 인건비</p>
+                <p class="retro-stat-value">{{ formatWon(result.totalMonthlyCost) }}</p>
+                <p class="mt-0.5 text-tiny text-muted-foreground">{{ employeeCount }}명 기준</p>
+              </div>
+              <div class="retro-stat text-center">
+                <p class="retro-stat-label">연간 인건비 합계</p>
+                <p class="retro-stat-value">{{ formatWon(result.totalAnnualCost) }}</p>
+                <p class="mt-0.5 text-tiny text-muted-foreground">12개월 기준</p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </template>
+    </ShCalculatorSplit>
+
+    <!-- 차트·상세표는 결과 칸(반폭)에 두면 1440px 실측에서 결과가 입력보다 크게 길어져 왼쪽 칸이 빈다 —
+         1×2 아래 전폭으로 내리고 결과 칸엔 요약(히어로+통계 3종)만 남긴다. -->
     <div class="grid gap-4 lg:grid-cols-2">
       <ShBreakdownBar
         label="직원 1명 월 인건비 구성"
