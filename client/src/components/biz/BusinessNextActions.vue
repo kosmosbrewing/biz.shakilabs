@@ -28,7 +28,8 @@ function trackRelatedClick(toTool: string): void {
     <ShText id="business-next-actions-title" as="h2" variant="heading" class="mb-3">
       사업자 형태 비교 후 실제 비용을 이어서 확인하세요
     </ShText>
-    <div class="grid gap-3 md:grid-cols-3">
+    <!-- ShPairRow 반폭 칸에 들어가므로 lg(칸 폭 축소 지점)에서 1열로 되돌린다(사용자 결정 2026-09-25) -->
+    <div class="grid gap-3 md:grid-cols-3 lg:grid-cols-1">
       <ShSurface
         v-for="action in actions"
         :key="action.key"

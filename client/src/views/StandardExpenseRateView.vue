@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { mergeFaqs } from "@/lib/faqMerge";
-import { ShPresetGroup } from "@shakilabs/ui";
+import { ShCalculatorSplit, ShPresetGroup } from "@shakilabs/ui";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import CalculatorInteractionTracker from "@/components/analytics/CalculatorInteractionTracker.vue";
@@ -107,115 +107,121 @@ const methodMetrics = computed(() => [
   <div class="sh-container sh-container--tool space-y-5 py-5">
     <CalculatorPageHeader title="기준경비율 계산기" />
 
-    <!-- 헤더 -->
-    <div class="retro-panel overflow-hidden">
-      <div class="retro-titlebar rounded-t-2xl">
-        <h2 class="retro-title">계산 기준 안내</h2>
-        <FreshBadge :message="`${BIZ_EXPENSE_RATE_UPDATED} 기준`" />
-      </div>
-      <div class="retro-panel-content space-y-2">
-        <p class="text-body text-muted-foreground">매출과 업종을 선택하면 기준경비율·단순경비율 방식별 소득세를 비교합니다.</p>
-      </div>
-    </div>
+    <ShCalculatorSplit>
+      <template #input>
+        <!-- 헤더 -->
+        <div class="retro-panel overflow-hidden">
+          <div class="retro-titlebar rounded-t-2xl">
+            <h2 class="retro-title">계산 기준 안내</h2>
+            <FreshBadge :message="`${BIZ_EXPENSE_RATE_UPDATED} 기준`" />
+          </div>
+          <div class="retro-panel-content space-y-2">
+            <p class="text-body text-muted-foreground">매출과 업종을 선택하면 기준경비율·단순경비율 방식별 소득세를 비교합니다.</p>
+          </div>
+        </div>
 
-    <CalculatorInteractionTracker calculator-id="standard_expense_rate" page-path="/biz/standard-expense-rate">
-    <div class="retro-panel p-4 sm:p-5 space-y-4" role="group" :aria-describedby="validationError ? 'expense-rate-error' : undefined">
-      <div class="space-y-1">
-        <label for="expense-revenue" class="text-tiny font-medium text-muted-foreground">연간 매출액</label>
-        <input id="expense-revenue" v-model.number="revenue" type="number" min="0" class="retro-input w-full" />
-        <ShPresetGroup
-          v-model="revenue"
-          :options="EXPENSE_RATE_REVENUE_PRESETS"
-          label="연간 매출액 빠른 선택"
+        <CalculatorInteractionTracker calculator-id="standard_expense_rate" page-path="/biz/standard-expense-rate">
+        <div class="retro-panel p-4 sm:p-5 space-y-4" role="group" :aria-describedby="validationError ? 'expense-rate-error' : undefined">
+          <div class="space-y-1">
+            <label for="expense-revenue" class="text-tiny font-medium text-muted-foreground">연간 매출액</label>
+            <input id="expense-revenue" v-model.number="revenue" type="number" min="0" class="retro-input w-full" />
+            <ShPresetGroup
+              v-model="revenue"
+              :options="EXPENSE_RATE_REVENUE_PRESETS"
+              label="연간 매출액 빠른 선택"
+            />
+          </div>
+
+          <div class="space-y-1">
+            <label for="expense-industry" class="text-tiny font-medium text-muted-foreground">업종 선택</label>
+            <select id="expense-industry" v-model="industryKey" class="retro-input w-full">
+              <option v-for="ind in INDUSTRY_EXPENSE_RATES" :key="ind.key" :value="ind.key">
+                {{ ind.label }} (기준 {{ ind.standardRate }}% / 단순 {{ ind.simpleRate }}%)
+              </option>
+            </select>
+          </div>
+
+          <div class="space-y-1">
+            <p class="text-tiny font-medium text-muted-foreground">주요경비 (기준경비율 적용 시)</p>
+            <div class="grid gap-3 sm:grid-cols-3">
+              <div>
+                <label for="expense-purchase-cost" class="text-tiny text-muted-foreground">매입비용</label>
+                <input id="expense-purchase-cost" v-model.number="purchaseCost" type="number" min="0" class="retro-input w-full" />
+              </div>
+              <div>
+                <label for="expense-rent-cost" class="text-tiny text-muted-foreground">임차료 (연)</label>
+                <input id="expense-rent-cost" v-model.number="rentCost" type="number" min="0" class="retro-input w-full" />
+              </div>
+              <div>
+                <label for="expense-labor-cost" class="text-tiny text-muted-foreground">인건비 (연)</label>
+                <input id="expense-labor-cost" v-model.number="laborCost" type="number" min="0" class="retro-input w-full" />
+              </div>
+            </div>
+          </div>
+          <p v-if="validationError" id="expense-rate-error" class="text-caption font-semibold text-destructive" role="alert">
+            {{ validationError }}
+          </p>
+        </div>
+        </CalculatorInteractionTracker>
+      </template>
+
+      <template #result>
+        <div class="grid gap-3 md:grid-cols-2">
+          <div class="retro-panel p-4 sm:p-5 space-y-3" :class="result.recommendation === 'standard' ? 'ring-2 ring-primary/30' : ''">
+            <div class="flex items-center justify-between">
+              <h2 class="text-body font-semibold">기준경비율 방식</h2>
+              <span v-if="result.recommendation === 'standard'" class="rounded-full bg-primary/10 px-2.5 py-0.5 text-tiny font-medium text-primary">유리</span>
+            </div>
+            <div class="space-y-2 text-caption">
+              <div class="flex justify-between"><span class="text-muted-foreground">경비 합계</span><span>{{ formatWon(result.standard.expenses) }}</span></div>
+              <div class="flex justify-between"><span class="text-muted-foreground">소득금액</span><span class="font-medium">{{ formatWon(result.standard.taxableIncome) }}</span></div>
+              <div class="flex justify-between"><span class="text-muted-foreground">소득세</span><span>{{ formatWon(result.standard.incomeTax) }}</span></div>
+              <div class="flex justify-between"><span class="text-muted-foreground">지방소득세</span><span>{{ formatWon(result.standard.localTax) }}</span></div>
+            </div>
+            <div class="border-t pt-2">
+              <div class="flex justify-between text-body font-bold">
+                <span>총 세금</span>
+                <span class="text-primary">{{ formatWon(result.standard.totalTax) }}</span>
+              </div>
+              <p class="text-tiny text-muted-foreground">실효세율 {{ formatPercent(result.standard.effectiveRate, 1) }}</p>
+            </div>
+          </div>
+
+          <div class="retro-panel p-4 sm:p-5 space-y-3" :class="result.recommendation === 'simple' ? 'ring-2 ring-primary/30' : ''">
+            <div class="flex items-center justify-between">
+              <h2 class="text-body font-semibold">단순경비율 방식</h2>
+              <span v-if="result.recommendation === 'simple'" class="rounded-full bg-primary/10 px-2.5 py-0.5 text-tiny font-medium text-primary">유리</span>
+            </div>
+            <div class="space-y-2 text-caption">
+              <div class="flex justify-between"><span class="text-muted-foreground">경비 합계</span><span>{{ formatWon(result.simple.expenses) }}</span></div>
+              <div class="flex justify-between"><span class="text-muted-foreground">소득금액</span><span class="font-medium">{{ formatWon(result.simple.taxableIncome) }}</span></div>
+              <div class="flex justify-between"><span class="text-muted-foreground">소득세</span><span>{{ formatWon(result.simple.incomeTax) }}</span></div>
+              <div class="flex justify-between"><span class="text-muted-foreground">지방소득세</span><span>{{ formatWon(result.simple.localTax) }}</span></div>
+            </div>
+            <div class="border-t pt-2">
+              <div class="flex justify-between text-body font-bold">
+                <span>총 세금</span>
+                <span class="text-primary">{{ formatWon(result.simple.totalTax) }}</span>
+              </div>
+              <p class="text-tiny text-muted-foreground">실효세율 {{ formatPercent(result.simple.effectiveRate, 1) }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 차이 요약 -->
+        <BizResultHero
+          :label="`${result.recommendation === 'standard' ? '기준경비율' : '단순경비율'} 방식이`"
+          :value="formatWon(Math.abs(result.taxDifference))"
+          sub="더 절세됩니다"
         />
-      </div>
-
-      <div class="space-y-1">
-        <label for="expense-industry" class="text-tiny font-medium text-muted-foreground">업종 선택</label>
-        <select id="expense-industry" v-model="industryKey" class="retro-input w-full">
-          <option v-for="ind in INDUSTRY_EXPENSE_RATES" :key="ind.key" :value="ind.key">
-            {{ ind.label }} (기준 {{ ind.standardRate }}% / 단순 {{ ind.simpleRate }}%)
-          </option>
-        </select>
-      </div>
-
-      <div class="space-y-1">
-        <p class="text-tiny font-medium text-muted-foreground">주요경비 (기준경비율 적용 시)</p>
-        <div class="grid gap-3 sm:grid-cols-3">
-          <div>
-            <label for="expense-purchase-cost" class="text-tiny text-muted-foreground">매입비용</label>
-            <input id="expense-purchase-cost" v-model.number="purchaseCost" type="number" min="0" class="retro-input w-full" />
-          </div>
-          <div>
-            <label for="expense-rent-cost" class="text-tiny text-muted-foreground">임차료 (연)</label>
-            <input id="expense-rent-cost" v-model.number="rentCost" type="number" min="0" class="retro-input w-full" />
-          </div>
-          <div>
-            <label for="expense-labor-cost" class="text-tiny text-muted-foreground">인건비 (연)</label>
-            <input id="expense-labor-cost" v-model.number="laborCost" type="number" min="0" class="retro-input w-full" />
-          </div>
-        </div>
-      </div>
-      <p v-if="validationError" id="expense-rate-error" class="text-caption font-semibold text-destructive" role="alert">
-        {{ validationError }}
-      </p>
-    </div>
-    </CalculatorInteractionTracker>
-
-    <div class="grid gap-3 md:grid-cols-2">
-      <div class="retro-panel p-4 sm:p-5 space-y-3" :class="result.recommendation === 'standard' ? 'ring-2 ring-primary/30' : ''">
-        <div class="flex items-center justify-between">
-          <h2 class="text-body font-semibold">기준경비율 방식</h2>
-          <span v-if="result.recommendation === 'standard'" class="rounded-full bg-primary/10 px-2.5 py-0.5 text-tiny font-medium text-primary">유리</span>
-        </div>
-        <div class="space-y-2 text-caption">
-          <div class="flex justify-between"><span class="text-muted-foreground">경비 합계</span><span>{{ formatWon(result.standard.expenses) }}</span></div>
-          <div class="flex justify-between"><span class="text-muted-foreground">소득금액</span><span class="font-medium">{{ formatWon(result.standard.taxableIncome) }}</span></div>
-          <div class="flex justify-between"><span class="text-muted-foreground">소득세</span><span>{{ formatWon(result.standard.incomeTax) }}</span></div>
-          <div class="flex justify-between"><span class="text-muted-foreground">지방소득세</span><span>{{ formatWon(result.standard.localTax) }}</span></div>
-        </div>
-        <div class="border-t pt-2">
-          <div class="flex justify-between text-body font-bold">
-            <span>총 세금</span>
-            <span class="text-primary">{{ formatWon(result.standard.totalTax) }}</span>
-          </div>
-          <p class="text-tiny text-muted-foreground">실효세율 {{ formatPercent(result.standard.effectiveRate, 1) }}</p>
-        </div>
-      </div>
-
-      <div class="retro-panel p-4 sm:p-5 space-y-3" :class="result.recommendation === 'simple' ? 'ring-2 ring-primary/30' : ''">
-        <div class="flex items-center justify-between">
-          <h2 class="text-body font-semibold">단순경비율 방식</h2>
-          <span v-if="result.recommendation === 'simple'" class="rounded-full bg-primary/10 px-2.5 py-0.5 text-tiny font-medium text-primary">유리</span>
-        </div>
-        <div class="space-y-2 text-caption">
-          <div class="flex justify-between"><span class="text-muted-foreground">경비 합계</span><span>{{ formatWon(result.simple.expenses) }}</span></div>
-          <div class="flex justify-between"><span class="text-muted-foreground">소득금액</span><span class="font-medium">{{ formatWon(result.simple.taxableIncome) }}</span></div>
-          <div class="flex justify-between"><span class="text-muted-foreground">소득세</span><span>{{ formatWon(result.simple.incomeTax) }}</span></div>
-          <div class="flex justify-between"><span class="text-muted-foreground">지방소득세</span><span>{{ formatWon(result.simple.localTax) }}</span></div>
-        </div>
-        <div class="border-t pt-2">
-          <div class="flex justify-between text-body font-bold">
-            <span>총 세금</span>
-            <span class="text-primary">{{ formatWon(result.simple.totalTax) }}</span>
-          </div>
-          <p class="text-tiny text-muted-foreground">실효세율 {{ formatPercent(result.simple.effectiveRate, 1) }}</p>
-        </div>
-      </div>
-    </div>
+      </template>
+    </ShCalculatorSplit>
 
     <MetricComparisonBars
       title="경비율 방식별 결과 비교"
       note="총 세금과 세후 소득은 단위는 같지만 기준값이 달라 각 지표 안에서 비교합니다."
       :metrics="methodMetrics"
       :format-value="formatWon"
-    />
-
-    <!-- 차이 요약 -->
-    <BizResultHero
-      :label="`${result.recommendation === 'standard' ? '기준경비율' : '단순경비율'} 방식이`"
-      :value="formatWon(Math.abs(result.taxDifference))"
-      sub="더 절세됩니다"
     />
 
     <div class="retro-panel px-4 py-4 space-y-2 text-caption text-muted-foreground">

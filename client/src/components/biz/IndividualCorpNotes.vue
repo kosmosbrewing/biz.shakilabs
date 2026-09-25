@@ -1,13 +1,8 @@
 <script setup lang="ts">
+// 짝(ShPairRow) 우측 칸에 다음 계산 카드와 함께 쌓이는 유의사항 패널만 담당한다.
+// FAQ 아코디언은 전폭 유지 대상이라 IndividualVsCorpView에서 별도로 렌더한다(2026-09-25 데이터 블록 2열화).
 import { AlertCircle } from "lucide-vue-next";
 import { Card, CardContent } from "@/components/ui/card";
-import FaqAccordionPanel from "@/components/common/FaqAccordionPanel.vue";
-
-const props = defineProps<{
-  faqs: ReadonlyArray<{ q: string; a: string }>;
-  // SEO 가이드 FAQ — 중복 문항만 걸러 이 아코디언에 병합 노출한다
-  extra?: ReadonlyArray<{ q: string; a: string }>;
-}>();
 </script>
 
 <template>
@@ -25,5 +20,4 @@ const props = defineProps<{
       </ul>
     </CardContent>
   </Card>
-  <FaqAccordionPanel :items="faqs" :extra="props.extra" />
 </template>

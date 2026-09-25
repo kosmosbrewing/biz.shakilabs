@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { mergeFaqs } from "@/lib/faqMerge";
-import { ShBreakdownBar } from "@shakilabs/ui";
+import { ShBreakdownBar, ShCalculatorSplit } from "@shakilabs/ui";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import FaqAccordionPanel from "@/components/common/FaqAccordionPanel.vue";
@@ -73,36 +73,51 @@ const expenseSegments = computed(() => [
   <div class="sh-container sh-container--tool space-y-5 py-5">
     <CalculatorPageHeader title="업무용 차량 경비 계산기" />
 
-    <div class="retro-panel overflow-hidden">
-      <div class="retro-titlebar rounded-t-2xl">
-        <h2 class="retro-title">차량비 조건 입력</h2>
-        <FreshBadge :message="`${BIZ_SERVICE_UPDATED_AT} 기준`" />
-      </div>
-      <CalculatorInteractionTracker calculator-id="car_expense" page-path="/biz/car-expense">
-        <div class="retro-panel-content grid gap-3 md:grid-cols-3" role="group" :aria-describedby="validationError ? 'car-expense-error' : undefined">
-          <input v-model.number="annualCost" aria-label="연간 차량비" type="number" min="100000" class="retro-input" placeholder="연간 차량비" />
-          <input v-model.number="businessUseRate" aria-label="업무 사용비율" type="number" min="0.1" max="1" step="0.05" class="retro-input" placeholder="업무 사용비율" />
-          <input v-model.number="taxRate" aria-label="법인세율" type="number" min="0.06" max="0.5" step="0.01" class="retro-input" placeholder="법인세율" />
-          <p v-if="validationError" id="car-expense-error" class="text-caption font-semibold text-destructive md:col-span-3" role="alert">
-            {{ validationError }}
-          </p>
+    <ShCalculatorSplit>
+      <template #input>
+        <div class="retro-panel overflow-hidden">
+          <div class="retro-titlebar rounded-t-2xl">
+            <h2 class="retro-title">차량비 조건 입력</h2>
+            <FreshBadge :message="`${BIZ_SERVICE_UPDATED_AT} 기준`" />
+          </div>
+          <CalculatorInteractionTracker calculator-id="car_expense" page-path="/biz/car-expense">
+            <div class="retro-panel-content grid gap-3 md:grid-cols-3" role="group" :aria-describedby="validationError ? 'car-expense-error' : undefined">
+              <input v-model.number="annualCost" aria-label="연간 차량비" type="number" min="100000" class="retro-input" placeholder="연간 차량비" />
+              <input v-model.number="businessUseRate" aria-label="업무 사용비율" type="number" min="0.1" max="1" step="0.05" class="retro-input" placeholder="업무 사용비율" />
+              <input v-model.number="taxRate" aria-label="법인세율" type="number" min="0.06" max="0.5" step="0.01" class="retro-input" placeholder="법인세율" />
+              <p v-if="validationError" id="car-expense-error" class="text-caption font-semibold text-destructive md:col-span-3" role="alert">
+                {{ validationError }}
+              </p>
+            </div>
+          </CalculatorInteractionTracker>
         </div>
-      </CalculatorInteractionTracker>
-    </div>
+      </template>
 
-    <BizResultHero label="손금 인정액" :value="formatWon(result.deductibleAmount)" />
+      <template #result>
+        <section class="retro-panel overflow-hidden" aria-labelledby="car-expense-result-title">
+          <div class="retro-titlebar rounded-t-2xl">
+            <h2 id="car-expense-result-title" class="retro-title">차량비 계산 결과</h2>
+          </div>
+          <div class="retro-panel-content space-y-4">
+            <BizResultHero flat label="손금 인정액" :value="formatWon(result.deductibleAmount)" />
 
-    <div class="grid grid-cols-2 gap-3">
-      <div class="retro-stat text-center">
-        <p class="retro-stat-label">사적 사용분</p>
-        <p class="retro-stat-value">{{ formatWon(result.nonDeductibleAmount) }}</p>
-      </div>
-      <div class="retro-stat text-center">
-        <p class="retro-stat-label">예상 절세 효과</p>
-        <p class="retro-stat-value">{{ formatWon(result.taxSaving) }}</p>
-      </div>
-    </div>
+            <div class="grid grid-cols-2 gap-3">
+              <div class="retro-stat text-center">
+                <p class="retro-stat-label">사적 사용분</p>
+                <p class="retro-stat-value">{{ formatWon(result.nonDeductibleAmount) }}</p>
+              </div>
+              <div class="retro-stat text-center">
+                <p class="retro-stat-label">예상 절세 효과</p>
+                <p class="retro-stat-value">{{ formatWon(result.taxSaving) }}</p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </template>
+    </ShCalculatorSplit>
 
+    <!-- 차트·안내문은 결과 칸(반폭)에 두면 1440px 실측에서 결과가 입력보다 317px 길어져
+         왼쪽 칸이 빈다 — 1×2 아래 전폭으로 내리고 결과 칸엔 요약(히어로+통계)만 남긴다. -->
     <ShBreakdownBar
       label="연간 차량비 경비 인정 구성"
       note="입력한 업무 사용비율에 따라 연간 차량비를 손금 인정액과 사적 사용분으로 나눴습니다."

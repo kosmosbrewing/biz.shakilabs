@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { mergeFaqs } from "@/lib/faqMerge";
-import { ShBreakdownBar } from "@shakilabs/ui";
+import { ShBreakdownBar, ShCalculatorSplit, ShPairRow } from "@shakilabs/ui";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import FaqAccordionPanel from "@/components/common/FaqAccordionPanel.vue";
@@ -84,49 +84,70 @@ const faqJsonLd = computed(() => ({
   <div class="sh-container sh-container--tool space-y-5 py-5">
     <CalculatorPageHeader title="법인세 계산기" />
 
-    <div class="retro-panel overflow-hidden">
-      <div class="retro-titlebar rounded-t-2xl">
-        <h2 class="retro-title">과세표준 입력</h2>
-        <FreshBadge :message="`${BIZ_SERVICE_UPDATED_AT} 기준`" />
-      </div>
-      <CalculatorInteractionTracker calculator-id="corp_tax" page-path="/biz/corp-tax">
-        <div class="retro-panel-content space-y-4" role="group" :aria-describedby="validationError ? 'corp-tax-error' : undefined">
-          <input v-model.number="taxableIncome" aria-label="과세표준" type="number" min="1000000" class="retro-input w-full" placeholder="과세표준" />
-          <p v-if="validationError" id="corp-tax-error" class="text-caption font-semibold text-destructive" role="alert">
-            {{ validationError }}
+    <ShCalculatorSplit>
+      <template #input>
+        <div class="retro-panel overflow-hidden">
+          <div class="retro-titlebar rounded-t-2xl">
+            <h2 class="retro-title">과세표준 입력</h2>
+            <FreshBadge :message="`${BIZ_SERVICE_UPDATED_AT} 기준`" />
+          </div>
+          <CalculatorInteractionTracker calculator-id="corp_tax" page-path="/biz/corp-tax">
+            <div class="retro-panel-content space-y-4" role="group" :aria-describedby="validationError ? 'corp-tax-error' : undefined">
+              <input v-model.number="taxableIncome" aria-label="과세표준" type="number" min="1000000" class="retro-input w-full" placeholder="과세표준" />
+              <p v-if="validationError" id="corp-tax-error" class="text-caption font-semibold text-destructive" role="alert">
+                {{ validationError }}
+              </p>
+            </div>
+          </CalculatorInteractionTracker>
+        </div>
+      </template>
+
+      <template #result>
+        <section class="retro-panel overflow-hidden" aria-labelledby="corp-tax-result-title">
+          <div class="retro-titlebar rounded-t-2xl">
+            <h2 id="corp-tax-result-title" class="retro-title">법인세 계산 결과</h2>
+          </div>
+          <div class="retro-panel-content space-y-4">
+            <BizResultHero flat label="법인세 + 지방소득세" :value="formatWon(result.tax)" />
+
+            <div class="grid grid-cols-2 gap-3">
+              <div class="retro-stat text-center">
+                <p class="retro-stat-label">세후 이익</p>
+                <p class="retro-stat-value">{{ formatWon(result.afterTaxIncome) }}</p>
+              </div>
+              <div class="retro-stat text-center">
+                <p class="retro-stat-label">실효세율</p>
+                <p class="retro-stat-value">{{ formatPercent(result.effectiveRate, 1) }}</p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </template>
+    </ShCalculatorSplit>
+
+    <!-- 차트·근거 노트는 결과 칸(반폭)에 두면 1440px 실측에서 결과가 입력보다 340px 길어져
+         왼쪽 칸이 빈다 — 1×2 아래 전폭으로 내리고 결과 칸엔 요약(히어로+통계)만 남긴다.
+         둘은 아래 데이터 블록 2열(ShPairRow, 사용자 결정 2026-09-25)로 짝짓는다. -->
+    <ShPairRow>
+      <template #start>
+        <ShBreakdownBar
+          label="과세표준의 세금·세후 이익 구성"
+          note="입력한 과세표준에서 예상 법인세를 제외한 금액을 한 막대에 표시합니다."
+          :segments="incomeSegments"
+          :format-value="formatWon"
+          surface="outlined"
+        />
+      </template>
+      <template #end>
+        <div class="retro-panel px-4 py-4 text-caption text-foreground space-y-1">
+          <p>현재 과세 구간은 {{ result.bracketLabel }}이며 지방소득세 포함 한계세율은 {{ formatPercent(result.marginalRate, 1) }}입니다.</p>
+          <p class="text-muted-foreground">
+            공식 근거:
+            <a :href="CORP_TAX_SOURCE_URL" target="_blank" rel="noopener noreferrer" class="retro-link">국세청 법인세 세율</a>
           </p>
         </div>
-      </CalculatorInteractionTracker>
-    </div>
-
-    <BizResultHero label="법인세 + 지방소득세" :value="formatWon(result.tax)" />
-
-    <div class="grid grid-cols-2 gap-3">
-      <div class="retro-stat text-center">
-        <p class="retro-stat-label">세후 이익</p>
-        <p class="retro-stat-value">{{ formatWon(result.afterTaxIncome) }}</p>
-      </div>
-      <div class="retro-stat text-center">
-        <p class="retro-stat-label">실효세율</p>
-        <p class="retro-stat-value">{{ formatPercent(result.effectiveRate, 1) }}</p>
-      </div>
-    </div>
-
-    <ShBreakdownBar
-      label="과세표준의 세금·세후 이익 구성"
-      note="입력한 과세표준에서 예상 법인세를 제외한 금액을 한 막대에 표시합니다."
-      :segments="incomeSegments"
-      :format-value="formatWon"
-      surface="outlined"
-    />
-
-    <div class="retro-panel px-4 py-4 text-caption text-foreground space-y-1">
-      <p>현재 과세 구간은 {{ result.bracketLabel }}이며 지방소득세 포함 한계세율은 {{ formatPercent(result.marginalRate, 1) }}입니다.</p>
-      <p class="text-muted-foreground">
-        공식 근거:
-        <a :href="CORP_TAX_SOURCE_URL" target="_blank" rel="noopener noreferrer" class="retro-link">국세청 법인세 세율</a>
-      </p>
-    </div>
+      </template>
+    </ShPairRow>
 
     <FaqAccordionPanel :items="mergedFaqs" />
 
