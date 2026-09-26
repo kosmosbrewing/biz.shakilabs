@@ -5,7 +5,7 @@
   "serialNumber": "urn:uuid:***",
   "version": 1,
   "metadata": {
-    "timestamp": "2026-09-26T03:20:12.755Z",
+    "timestamp": "2026-09-26T04:15:32.730Z",
     "lifecycles": [
       {
         "phase": "build"
@@ -581,23 +581,23 @@
       ]
     },
     {
-      "bom-ref": "@shakilabs/ui@0.3.40",
+      "bom-ref": "@shakilabs/ui@0.3.41",
       "type": "library",
       "name": "@shakilabs/ui",
-      "version": "0.3.40",
+      "version": "0.3.41",
       "scope": "required",
-      "purl": "pkg:npm/%40shakilabs/ui@0.3.40",
+      "purl": "pkg:npm/%40shakilabs/ui@0.3.41",
       "properties": [],
       "externalReferences": [
         {
           "type": "distribution",
-          "url": "file:client/vendor/shakilabs-ui-0.3.40.tgz"
+          "url": "file:client/vendor/shakilabs-ui-0.3.41.tgz"
         }
       ],
       "hashes": [
         {
           "alg": "SHA-512",
-          "content": "1a1b8b841ee5328ee31c17b4b9e1cdac60422bd3b48159ffbce581519af7482f213b94a0e5231a378bcb9937c87393c147cdccc5f7e71e632b66508981a349c1"
+          "content": "12930c8f237a65cfe361257803d1b9f74323ec6914e6aed049e64fd8c96a9f0ce78b774a2c2bde5abc865b7973e056ec5afd28f0fc20bfd6159cb1ed0981f950"
         }
       ]
     },
@@ -3295,7 +3295,7 @@
       "ref": "biz-calculator@0.0.0",
       "dependsOn": [
         "@sentry/vue@10.65.0",
-        "@shakilabs/ui@0.3.40",
+        "@shakilabs/ui@0.3.41",
         "autoprefixer@10.5.2",
         "class-variance-authority@0.7.1",
         "clsx@2.1.1",
@@ -3429,7 +3429,7 @@
       ]
     },
     {
-      "ref": "@shakilabs/ui@0.3.40",
+      "ref": "@shakilabs/ui@0.3.41",
       "dependsOn": []
     },
     {
