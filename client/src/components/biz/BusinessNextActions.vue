@@ -1,14 +1,20 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
-import { ArrowRight } from "lucide-vue-next";
-import { ShSurface, ShText } from "@shakilabs/ui";
+import { RouterLink } from "vue-router";
+import { ShNextActions, type NextActionItem } from "@shakilabs/ui";
 import { trackEvent } from "@/lib/analytics";
 
-const actions = [
-  { key: "corp_tax", title: "법인세 구간별 세액 계산", description: "전환 후 과세표준에 적용되는 법인세와 지방소득세를 확인합니다.", href: "/biz/corp-tax" },
-  { key: "labor_cost", title: "대표·직원 인건비 총비용 계산", description: "급여 외 4대보험과 퇴직급여까지 포함한 사업주 부담을 봅니다.", href: "/biz/labor-cost" },
-  { key: "vat_compare", title: "일반·간이과세 부가세 비교", description: "매출 구조에 따라 예상 부가세 부담이 어떻게 달라지는지 비교합니다.", href: "/biz/vat-compare" },
-] as const;
+// 공통 블록(ShNextActions)은 카드 전체가 링크라 소개 제목·카드별 설명 문장·"이어서 계산" 줄이 필요 없다
+// (사용자 피드백 "텍스트가 너무 많다"). 반폭 칸이면 목록으로 스스로 바뀌어 격자 클래스도 달지 않는다.
+// key는 분석 이벤트 to_tool 값이라 바꾸지 않는다. to는 라우터 경로 — base(/biz/)가 붙어 이전과 같은 /biz/corp-tax 등.
+// 제목은 도착 계산기 이름(bizNavigation 탭 이름, 인건비는 탭에 없어 같은 규칙으로 "인건비 계산기"에서).
+// 인건비 계산기에는 대표 항목이 없고 직원 월급·직원 수를 근로자 기준(고용·산재보험·퇴직급여 1/12)으로 매긴다
+// — 옛 제목 "대표·직원 인건비"의 "대표"는 사실과 달라 뺐다.
+const actions: readonly NextActionItem[] = [
+  { key: "corp_tax", title: "법인세 계산", note: "과세표준 기준 · 지방소득세 포함", to: "/corp-tax" },
+  { key: "labor_cost", title: "인건비 계산", note: "직원 4대보험·퇴직급여 사업주 부담", to: "/labor-cost" },
+  { key: "vat_compare", title: "부가세 비교", note: "간이 vs 일반과세 · 매출·업종 기준", to: "/vat-compare" },
+];
 
 onMounted(() => {
   actions.forEach((action) => trackEvent("related_tool_impression", {
@@ -16,36 +22,13 @@ onMounted(() => {
   }));
 });
 
-function trackRelatedClick(toTool: string): void {
+function trackRelatedClick(item: NextActionItem): void {
   trackEvent("related_tool_click", {
-    app_id: "biz", from_tool: "individual_vs_corp", to_tool: toTool, placement: "after_result",
+    app_id: "biz", from_tool: "individual_vs_corp", to_tool: item.key, placement: "after_result",
   });
 }
 </script>
 
 <template>
-  <section class="mb-6" aria-labelledby="business-next-actions-title">
-    <ShText id="business-next-actions-title" as="h2" variant="heading" class="mb-3">
-      사업자 형태 비교 후 실제 비용을 이어서 확인하세요
-    </ShText>
-    <!-- ShPairRow 반폭 칸에 들어가므로 lg(칸 폭 축소 지점)에서 1열로 되돌린다(사용자 결정 2026-09-25) -->
-    <div class="grid gap-3 md:grid-cols-3 lg:grid-cols-1">
-      <ShSurface
-        v-for="action in actions"
-        :key="action.key"
-        as="a"
-        :href="action.href"
-        variant="outlined"
-        padding="md"
-        class="group flex flex-col no-underline hover:border-primary"
-        @click="trackRelatedClick(action.key)"
-      >
-        <ShText as="h3" variant="heading">{{ action.title }}</ShText>
-        <ShText variant="caption" tone="muted" class="mt-2 flex-1">{{ action.description }}</ShText>
-        <span class="mt-4 inline-flex items-center gap-1 text-caption font-semibold text-primary">
-          이어서 계산 <ArrowRight class="h-4 w-4" aria-hidden="true" />
-        </span>
-      </ShSurface>
-    </div>
-  </section>
+  <ShNextActions :items="actions" :link-component="RouterLink" @select="trackRelatedClick" />
 </template>

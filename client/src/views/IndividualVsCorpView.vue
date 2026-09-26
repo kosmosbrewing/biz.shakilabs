@@ -6,7 +6,8 @@ import { User, Building2 } from "lucide-vue-next";
 import { Card, CardContent } from "@/components/ui/card";
 import SEOHead from "@/components/common/SEOHead.vue";
 import BizResultHero from "@/components/biz/BizResultHero.vue";
-import BusinessSessionDraftControl from "@/components/biz/BusinessSessionDraftControl.vue";
+import CalculatorPageHeader from "@/components/biz/CalculatorPageHeader.vue";
+import IndividualVsCorpMemoryControl from "@/components/biz/IndividualVsCorpMemoryControl.vue";
 import BusinessNextActions from "@/components/biz/BusinessNextActions.vue";
 import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
 import FaqAccordionPanel from "@/components/common/FaqAccordionPanel.vue";
@@ -39,18 +40,13 @@ const canonicalPath = computed(() => (props.initialRevenue ? "/individual-vs-cor
 const {
   revenue,
   expenseRate,
+  corpSalary,
   revenueDisplay,
   corpSalaryDisplay,
   individual,
   corp,
   difference,
   betterOption,
-  draftLoaded,
-  draftTracking,
-  hasRestorableDraft,
-  enableDraft,
-  restoreDraft,
-  clearDraft,
 } = useIndividualVsCorp(props.initialRevenue);
 
 // 색 판정의 기준값 — 화면에 이미 노출되는 실효세율을 그대로 쓴다
@@ -88,20 +84,19 @@ const faqJsonLd = computed(() => ({
   />
 
   <div class="text-resize-layout sh-container sh-container--tool py-6 sm:py-8">
-    <h1 class="text-h1 font-bold text-foreground mb-1">개인사업자 vs 법인 세후소득</h1>
+    <!-- 입력 기억은 제목과 한 그룹(v3 §7.3, finance·loan과 같은 문법) — 앱 자체 카드를 대신한다 -->
+    <CalculatorPageHeader title="개인사업자 vs 법인 세후소득" class="mb-1">
+      <template #control>
+        <IndividualVsCorpMemoryControl
+          v-model:revenue="revenue"
+          v-model:expense-rate="expenseRate"
+          v-model:corp-salary="corpSalary"
+        />
+      </template>
+    </CalculatorPageHeader>
     <p class="text-caption text-muted-foreground mb-6">
       동일 매출·경비율 기준으로 세후 실수령을 비교합니다.
     </p>
-
-    <BusinessSessionDraftControl
-      class="mb-6"
-      :loaded="draftLoaded"
-      :tracking="draftTracking"
-      :has-restorable-draft="hasRestorableDraft"
-      @enable="enableDraft"
-      @restore="restoreDraft"
-      @clear="clearDraft"
-    />
 
     <ShCalculatorSplit class="mb-6">
       <template #input>

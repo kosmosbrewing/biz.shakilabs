@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, ref, useId } from "vue";
 import { mergeFaqs } from "@/lib/faqMerge";
 import { ShBreakdownBar, ShCalculatorSplit, ShPairRow, ShPresetGroup } from "@shakilabs/ui";
 import FreshBadge from "@/components/common/FreshBadge.vue";
@@ -31,6 +31,11 @@ const monthlySalary = ref(props.initialSalary ?? 3_000_000);
 const employeeCount = ref(1);
 const industryKey = ref("office");
 const includeRetirement = ref(true);
+// 작은 제목은 보였지만 칸과 이어지지 않아 라벨 클릭·보조기기 이름이 따로 놀았다 — for/id로 잇는다
+const salaryId = useId();
+const employeeCountId = useId();
+const industryId = useId();
+const retirementId = useId();
 
 const { result, validationError } = useSafeCalculation(
   () => calculateLaborCost({
@@ -114,8 +119,8 @@ const insuranceMetrics = computed(() => [{
         <CalculatorInteractionTracker calculator-id="labor_cost" page-path="/biz/labor-cost">
           <div class="retro-panel p-4 sm:p-5 space-y-4" role="group" :aria-describedby="validationError ? 'labor-cost-error' : undefined">
             <div class="space-y-1">
-              <label class="text-tiny font-medium text-muted-foreground">월 급여 (세전)</label>
-              <input v-model.number="monthlySalary" aria-label="월 급여" type="number" min="100000" class="retro-input w-full" />
+              <label :for="salaryId" class="text-tiny font-medium text-muted-foreground">월 급여 (세전)</label>
+              <input :id="salaryId" v-model.number="monthlySalary" type="number" min="100000" class="retro-input w-full" />
               <ShPresetGroup
                 v-model="monthlySalary"
                 :options="LABOR_COST_SALARY_PRESETS"
@@ -123,26 +128,26 @@ const insuranceMetrics = computed(() => [{
               />
             </div>
 
-            <div class="grid gap-3 sm:grid-cols-3">
-              <div class="space-y-1">
-                <label class="text-tiny font-medium text-muted-foreground">직원 수</label>
-                <input v-model.number="employeeCount" aria-label="직원 수" type="number" min="1" max="10000" class="retro-input w-full" />
-              </div>
-              <div class="space-y-1">
-                <label class="text-tiny font-medium text-muted-foreground">업종 (산재보험)</label>
-                <select v-model="industryKey" aria-label="업종" class="retro-input w-full">
-                  <option v-for="ind in INDUSTRY_ACCIDENT_RATES" :key="ind.key" :value="ind.key">
-                    {{ ind.label }} ({{ formatPercent(ind.rate, 1) }})
-                  </option>
-                </select>
-              </div>
-              <div class="space-y-1">
-                <label class="text-tiny font-medium text-muted-foreground">퇴직급여 포함</label>
-                <select v-model="includeRetirement" aria-label="퇴직급여 포함 여부" class="retro-input w-full">
-                  <option :value="true">포함 (1/12)</option>
-                  <option :value="false">미포함</option>
-                </select>
-              </div>
+            <!-- 반폭 칸(약 500px)에서 3열이면 칸이 159px라 업종 선택값이 잘렸다(라이브 실측) -->
+            <!-- 셀렉트는 선택값이 다 보이게 칸 전체 폭, 짝이 될 숫자 칸이 없어 한 줄에 하나씩 -->
+            <div class="space-y-1">
+              <label :for="employeeCountId" class="text-tiny font-medium text-muted-foreground">직원 수</label>
+              <input :id="employeeCountId" v-model.number="employeeCount" type="number" min="1" max="10000" class="retro-input w-full" />
+            </div>
+            <div class="space-y-1">
+              <label :for="industryId" class="text-tiny font-medium text-muted-foreground">업종 (산재보험)</label>
+              <select :id="industryId" v-model="industryKey" class="retro-input w-full">
+                <option v-for="ind in INDUSTRY_ACCIDENT_RATES" :key="ind.key" :value="ind.key">
+                  {{ ind.label }} ({{ formatPercent(ind.rate, 1) }})
+                </option>
+              </select>
+            </div>
+            <div class="space-y-1">
+              <label :for="retirementId" class="text-tiny font-medium text-muted-foreground">퇴직급여 포함</label>
+              <select :id="retirementId" v-model="includeRetirement" class="retro-input w-full">
+                <option :value="true">포함 (1/12)</option>
+                <option :value="false">미포함</option>
+              </select>
             </div>
             <p v-if="validationError" id="labor-cost-error" class="text-caption font-semibold text-destructive" role="alert">
               {{ validationError }}

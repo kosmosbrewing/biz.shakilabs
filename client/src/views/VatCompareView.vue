@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed, useId } from "vue";
 import { mergeFaqs } from "@/lib/faqMerge";
 import { ShCalculatorSplit, ShPresetGroup, ShSlider } from "@shakilabs/ui";
 import { Store, Receipt, AlertCircle } from "lucide-vue-next";
@@ -36,6 +36,9 @@ const canonicalPath = computed(() => (props.initialRevenue ? "/vat-compare" : un
 const annualRevenue = ref(props.initialRevenue ?? 80_000_000);
 const industryKey = ref("food");
 const purchaseRate = ref(0.40);
+// 보이던 라벨이 칸과 이어지지 않아 다른 aria-label("연 매출액")이 이름이 됐다 — for/id로 잇고 aria-label은 뺀다
+const revenueInputId = useId();
+const purchaseRateId = useId();
 
 const revenueDisplay = computed({
   get: () => annualRevenue.value.toLocaleString("ko-KR"),
@@ -136,10 +139,10 @@ const vatMetrics = computed(() => [{
         <CalculatorInteractionTracker calculator-id="vat_compare" page-path="/biz/vat-compare">
         <div class="retro-panel p-4 sm:p-5 space-y-4">
           <div>
-            <label class="block text-caption font-semibold text-foreground mb-1.5">연 매출액 (공급가액 기준)</label>
+            <label :for="revenueInputId" class="block text-caption font-semibold text-foreground mb-1.5">연 매출액 (공급가액 기준)</label>
             <div class="relative">
               <input
-                aria-label="연 매출액"
+                :id="revenueInputId"
                 v-model="revenueDisplay"
                 type="text"
                 inputmode="numeric"
@@ -165,11 +168,12 @@ const vatMetrics = computed(() => [{
           </div>
 
           <div>
-            <label class="block text-caption font-semibold text-foreground mb-1.5">
+            <label :for="purchaseRateId" class="block text-caption font-semibold text-foreground mb-1.5">
               매입 비율: {{ (purchaseRate * 100).toFixed(0) }}%
               <span class="text-tiny text-muted-foreground font-normal ml-1">(세금계산서 매입분)</span>
             </label>
             <ShSlider
+              :id="purchaseRateId"
               v-model="purchaseRate"
               :min="0.05"
               :max="0.8"

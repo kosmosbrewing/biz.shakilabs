@@ -80,9 +80,9 @@ const CALCULATOR_INPUTS = [
         <h2 class="text-heading font-bold">4. 브라우저에 남는 값</h2>
         <ul class="text-body text-muted-foreground space-y-1 list-disc list-inside">
           <li>
-            개인 vs 법인 계산기에는 "입력 기억 켜기" 버튼이 있습니다.
-            이 버튼을 누른 경우에만 연 매출액·경비율·대표이사 급여가 브라우저의 세션 저장소에 저장되어
-            같은 탭에서 최대 8시간 동안 복원됩니다. 기본값은 꺼짐이고, "입력 기억 끄기"를 누르거나
+            개인 vs 법인 계산기에는 "이 탭에 입력 기억하기" 스위치가 있습니다.
+            이 스위치를 켠 경우에만 연 매출액·경비율·대표이사 급여가 브라우저의 세션 저장소에 저장되어
+            같은 탭에서 최대 8시간 동안 복원됩니다. 기본값은 꺼짐이고, 스위치를 다시 눌러 끄거나
             탭을 닫으면 즉시 사라지며, 8시간이 지난 값은 불러오지 않고 폐기합니다.
           </li>
           <li>화면 테마(밝게·어둡게) 선택값은 로컬 저장소에 남아 다음 방문 때 같은 테마로 열립니다.</li>
@@ -162,7 +162,7 @@ const CALCULATOR_INPUTS = [
           </a>
         </p>
 
-        <p class="text-tiny text-muted-foreground mt-6">시행일: 2026년 3월 15일 · 최종 개정일: 2026년 8월 10일</p>
+        <p class="text-tiny text-muted-foreground mt-6">시행일: 2026년 3월 15일 · 최종 개정일: 2026년 9월 26일</p>
       </div>
     </div>
   </div>

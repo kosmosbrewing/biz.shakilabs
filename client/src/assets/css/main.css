@@ -112,11 +112,6 @@
 }
 
 @layer components {
-  /* SessionDraftControl 등에서 쓰이지만 정의가 없어 맨 텍스트로 보이던 버튼 (finance 정의와 동일) */
-  .retro-button {
-    @apply inline-flex min-h-[44px] items-center justify-center rounded-lg border border-primary bg-primary px-4 py-2 text-body font-semibold text-primary-foreground transition-colors duration-200 hover:bg-primary/90;
-  }
-
   .retro-panel-content {
     @apply px-4 py-3 sm:px-5 sm:py-4;
   }
@@ -428,4 +423,42 @@
 .design-system-shell .sh-preset-chip[data-selected]::before {
   border-color: hsl(var(--primary));
   background: hsl(var(--accent));
+}
+
+/* ── MemoryControl은 PageHeader의 유일한 보조 슬롯 (v3 §7.3) ──
+   finance·loan과 같은 배치·같은 값이다. 앱마다 다르게 두면 사용자가
+   "이 앱에도 있나"를 매번 찾아야 한다. */
+.biz-page-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+
+.biz-page-header__control {
+  /* 모바일: H1 아래 8px, 왼쪽 정렬, 풀폭 아님 — 스위치 안쪽 여백(0.25rem)만큼 당겨 제목 글자와 맞춘다 */
+  margin-inline-start: -0.25rem;
+}
+
+@media (min-width: 640px) {
+  .biz-page-header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .biz-page-header__control {
+    margin-inline-start: 0;
+  }
+}
+
+/* 스위치는 링크가 아니다 — 밑줄·링크색이 새어 들어오지 않게 못 박는다 (v3 §7.7) */
+.biz-page-header .sh-memory-control__switch {
+  color: hsl(var(--muted-foreground));
+  text-decoration: none;
+}
+
+.biz-page-header .sh-memory-control__switch:hover:not(:disabled) {
+  color: hsl(var(--foreground));
 }

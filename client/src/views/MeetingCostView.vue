@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, useId } from "vue";
 import { mergeFaqs } from "@/lib/faqMerge";
 import { ShCalculatorSplit } from "@shakilabs/ui";
 import FreshBadge from "@/components/common/FreshBadge.vue";
@@ -54,6 +54,11 @@ const costPerPerson = ref(30_000);
 const meetingsPerMonth = ref(4);
 const months = ref(12);
 const vatIncluded = ref(true);
+// 보이는 라벨을 칸에 for/id로 잇는다 — placeholder만으로는 값을 넣는 순간 무슨 칸인지 사라진다
+const attendeesId = useId();
+const costPerPersonId = useId();
+const meetingsPerMonthId = useId();
+const monthsId = useId();
 
 const { result, validationError } = useSafeCalculation(
   () => calculateMeetingCost({
@@ -81,16 +86,32 @@ const { result, validationError } = useSafeCalculation(
             <FreshBadge :message="`${BIZ_SERVICE_UPDATED_AT} 기준`" />
           </div>
           <CalculatorInteractionTracker calculator-id="meeting_cost" page-path="/biz/meeting-cost">
-          <div class="retro-panel-content grid gap-3 md:grid-cols-3" role="group" :aria-describedby="validationError ? 'meeting-cost-error' : undefined">
-            <input v-model.number="attendees" aria-label="참석 인원" type="number" min="2" class="retro-input" placeholder="참석 인원" />
-            <input v-model.number="costPerPerson" aria-label="1인당 비용" type="number" min="5000" class="retro-input" placeholder="1인당 비용" />
-            <input v-model.number="meetingsPerMonth" aria-label="월 회의 횟수" type="number" min="1" class="retro-input" placeholder="월 회의 횟수" />
-            <input v-model.number="months" aria-label="개월 수" type="number" min="1" max="12" class="retro-input" placeholder="개월 수" />
-            <label class="retro-panel-muted flex items-center gap-2 px-3 py-3 text-caption font-semibold text-foreground md:col-span-2">
+          <!-- 반폭 칸(약 500px)에서 3열이면 칸이 159px에 라벨도 없어 값만 보였다 — 짧은 숫자 쌍(인원·비용 / 횟수·개월)끼리 2열 -->
+          <div class="retro-panel-content grid gap-3 sm:grid-cols-2" role="group" :aria-describedby="validationError ? 'meeting-cost-error' : undefined">
+            <div>
+              <label :for="attendeesId" class="mb-1.5 block text-caption font-semibold text-foreground">참석 인원</label>
+              <input :id="attendeesId" v-model.number="attendees" type="number" min="2" class="retro-input" placeholder="참석 인원" />
+            </div>
+            <div>
+              <label :for="costPerPersonId" class="mb-1.5 block text-caption font-semibold text-foreground">1인당 비용</label>
+              <div class="relative">
+                <input :id="costPerPersonId" v-model.number="costPerPerson" type="number" min="5000" class="retro-input pr-8" placeholder="1인당 비용" />
+                <span class="absolute right-3 top-1/2 -translate-y-1/2 text-tiny text-muted-foreground">원</span>
+              </div>
+            </div>
+            <div>
+              <label :for="meetingsPerMonthId" class="mb-1.5 block text-caption font-semibold text-foreground">월 회의 횟수</label>
+              <input :id="meetingsPerMonthId" v-model.number="meetingsPerMonth" type="number" min="1" class="retro-input" placeholder="월 회의 횟수" />
+            </div>
+            <div>
+              <label :for="monthsId" class="mb-1.5 block text-caption font-semibold text-foreground">개월 수</label>
+              <input :id="monthsId" v-model.number="months" type="number" min="1" max="12" class="retro-input" placeholder="개월 수" />
+            </div>
+            <label class="retro-panel-muted flex items-center gap-2 px-3 py-3 text-caption font-semibold text-foreground sm:col-span-2">
               <input v-model="vatIncluded" type="checkbox" class="h-4 w-4 rounded border-border" />
               부가세 포함 영수증 기준
             </label>
-            <p v-if="validationError" id="meeting-cost-error" class="text-caption font-semibold text-destructive md:col-span-3" role="alert">
+            <p v-if="validationError" id="meeting-cost-error" class="text-caption font-semibold text-destructive sm:col-span-2" role="alert">
               {{ validationError }}
             </p>
           </div>
