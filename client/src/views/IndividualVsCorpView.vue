@@ -243,9 +243,15 @@ const faqJsonLd = computed(() => ({
                       <span class="text-muted-foreground">급여 소득세</span>
                       <span class="text-foreground">{{ formatWon(corp.salaryIncomeTax + corp.salaryLocalTax) }}</span>
                     </div>
+                    <!-- 대표이사 급여에는 국민연금·건강보험(장기요양)만 붙는다 — 고용·산재는 대표이사에게 없어 '4대보험'이라 쓰지 않는다.
+                         개인사업자 카드와 같은 두 줄로 나눠 항목끼리 바로 비교되게 한다. -->
                     <div class="flex justify-between">
-                      <span class="text-muted-foreground">4대보험</span>
-                      <span class="text-foreground">{{ formatWon(corp.socialInsurance) }}</span>
+                      <span class="text-muted-foreground">국민연금</span>
+                      <span class="text-foreground">{{ formatWon(corp.nationalPension) }}</span>
+                    </div>
+                    <div class="flex justify-between">
+                      <span class="text-muted-foreground">건강+장기요양</span>
+                      <span class="text-foreground">{{ formatWon(corp.healthInsurance + corp.longTermCare) }}</span>
                     </div>
                     <div class="flex justify-between">
                       <span class="text-muted-foreground">배당소득세</span>

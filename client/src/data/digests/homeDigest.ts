@@ -75,6 +75,10 @@ function facts() {
     profit: ind.taxableIncome, indTax: ind.totalTax, corpTotal: corp.totalTax, indAfter: ind.afterTaxIncome, corpAfter: corp.afterTaxIncome,
     gap: corp.afterTaxIncome - ind.afterTaxIncome, indRate: ind.totalTax / ind.taxableIncome, corpRate: corp.totalTax / corp.operatingProfit,
     corpSocial: corp.socialInsurance, corpDividendTax: corp.dividendTax, corpCorpTax: corp.corpTax + corp.corpLocalTax,
+    corpSalaryTax: corp.salaryIncomeTax + corp.salaryLocalTax,
+    // 격차를 세금과 보험료로 가른다 — 세금은 법인 경로가 더 내고(taxGap>0) 보험료는 개인이 더 낸다(insGap>0). 부호는 엔진 테스트가 고정한다.
+    taxGap: corp.corpTax + corp.corpLocalTax + corp.dividendTax + corp.salaryIncomeTax + corp.salaryLocalTax - ind.incomeTax - ind.localTax,
+    insGap: ind.nationalPension + ind.healthInsurance + ind.longTermCare - corp.socialInsurance,
     ctTax: ct.tax, ctEff: ct.effectiveRate, indOnTaxableTax: indOnTaxable.standard.totalTax, indOnTaxableEff: indOnTaxable.standard.effectiveRate,
     ctGap: indOnTaxable.standard.totalTax - ct.tax, ctRatio: indOnTaxable.standard.totalTax / ct.tax,
     vatGeneral: vat.generalVat, vatSimple: vat.simplifiedVat, vatGap: vat.difference, vatExemptGeneral: vatExempt.generalVat,
@@ -103,12 +107,12 @@ export const HOME_DIGEST: Digest = {
   inputs: I,
   findings: [
     {
-      h2: `영업이익 ${manwon(F.profit)}에 붙는 부담은 개인 ${manwon(F.indTax)} 대 법인 ${manwon(F.corpTotal)} — 격차 ${manwon(F.gap)}의 출처는 세율이 아니라 배당과 보험료`,
+      h2: `영업이익 ${manwon(F.profit)}에 붙는 부담은 개인 ${manwon(F.indTax)} 대 법인 ${manwon(F.corpTotal)} — 격차 ${manwon(F.gap)}의 출처는 세율이 아니라 보험료`,
       body:
         `매출 ${manwon(I.revenue)}·경비율 ${pct(I.expenseRate)}·대표 급여 ${manwon(I.salary)}을 가정해 개인 vs 법인 엔진을 돌리면 영업이익 ${manwon(F.profit)}에서 개인사업자는 세금과 보험료로 ${won(F.indTax)}(이익의 ${pct(F.indRate, 1)}), 법인 경로는 ${won(F.corpTotal)}(${pct(F.corpRate, 1)})을 냅니다. ` +
-        `법인 쪽 합계를 뜯으면 법인세·지방소득세는 ${won(F.corpCorpTax)}에 그치고 배당소득세 ${won(F.corpDividendTax)}, 급여의 4대보험 ${won(F.corpSocial)}이 나머지를 채웁니다. ` +
-        `세후소득은 개인 ${manwon(F.indAfter)}, 법인 ${manwon(F.corpAfter)}으로 법인이 ${manwon(F.gap)} 많습니다. 법인세율이 낮아서가 아니라 개인 누진세율 구간이 배당 경로의 합산 세율보다 높아진 자리이기 때문입니다. ` +
-        `개인 vs 법인 비교 페이지는 이 경계가 어느 매출에서 열리는지를 전 구간 스캔으로 보여줍니다.`,
+        `법인 쪽 합계를 뜯으면 법인세·지방소득세 ${won(F.corpCorpTax)}, 배당소득세 ${won(F.corpDividendTax)}, 급여의 근로소득세·지방소득세 ${won(F.corpSalaryTax)}, 급여의 국민연금·건강보험 ${won(F.corpSocial)}입니다. ` +
+        `세후소득은 개인 ${manwon(F.indAfter)}, 법인 ${manwon(F.corpAfter)}으로 법인이 ${manwon(F.gap)} 많습니다. 세금만 합치면 오히려 법인 경로가 ${won(F.taxGap)} 더 내고, 보험료는 개인이 ${won(F.insGap)} 더 냅니다. ` +
+        `개인은 영업이익 전체에 국민연금·건강보험의 요율 전액을 내지만 법인 경로는 대표 급여에만 보험료가 붙기 때문이며, 개인 vs 법인 비교 페이지는 법인이 앞서기 시작하는 매출을 전 구간 스캔으로 찾아 보여줍니다.`,
     },
     {
       h2: `과세표준 ${manwon(I.corpTaxable)}을 법인으로 내면 ${manwon(F.ctTax)}, 종합소득으로 내면 ${manwon(F.indOnTaxableTax)} — ${times(F.indOnTaxableTax, F.ctTax)}`,

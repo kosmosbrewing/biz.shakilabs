@@ -7,6 +7,7 @@ import { calculateCarExpenseDeduction, calculateCorpTax, calculateMeetingCost } 
 import { calcVatCompare } from "@/utils/bizVatCalc";
 import { calculateLaborCost } from "@/utils/laborCostCalc";
 import { calculateStandardExpenseRate } from "@/utils/standardExpenseRateCalc";
+import { INCOME_TAX_BRACKETS, LOCAL_INCOME_TAX_RATE } from "../bizConstants";
 import { INDUSTRY_EXPENSE_RATES } from "../standardExpenseRate";
 import { BREAK_EVEN_DIGEST, BREAK_EVEN_INPUTS as BE } from "./breakEvenDigest";
 import { CAR_DIGEST, CAR_INPUTS as CAR } from "./carDigest";
@@ -33,18 +34,78 @@ describe("파생 다이제스트 — 인용 수치는 엔진 재계산과 일치
     const diff = (r: number, e = IVC.expenseRate, s = IVC.salary) => calcCorpAfterTax(r, e, s).afterTaxIncome - calcIndividualAfterTax(r, e).afterTaxIncome;
     expect(diff(F.cross)).toBeGreaterThan(0);
     expect(diff(F.cross - IVC.scanStep)).toBeLessThanOrEqual(0);
-    expect(F.lead2).toBeCloseTo(-diff(IVC.preset2), 6);
-    expect(F.lead4).toBeCloseTo(diff(IVC.preset4), 6);
-    expect(diff(IVC.preset2, F.eFlip)).toBeLessThan(0);
-    expect(diff(IVC.preset2, F.eFlip - IVC.expenseStep)).toBeGreaterThanOrEqual(0);
+    // "그 뒤로는 다시 뒤집히지 않습니다"·"멀어질수록 격차가 한쪽으로만 벌어지는 구조" — 스캔 전 구간에서 격차(법인−개인)가 줄지 않는다
+    const shrinks: number[] = [];
+    for (let r = IVC.scanStep, prev = -Infinity; r <= IVC.scanMax; r += IVC.scanStep) {
+      const d = diff(r);
+      if (d < prev) shrinks.push(r);
+      prev = d;
+    }
+    expect(shrinks).toEqual([]);
+    // 프리셋 부호 — 산문은 "개인이 앞서는 것은 1번뿐, 2~4번은 법인"이라고 쓴다(lead는 앞서는 쪽의 양수 격차)
+    expect(F.lead1).toBeGreaterThan(0);
+    expect(F.lead1).toBeCloseTo(-diff(IVC.preset1), 6);
+    for (const [lead, preset] of [[F.lead2, IVC.preset2], [F.lead3, IVC.preset3], [F.lead4, IVC.preset4]] as const) {
+      expect(lead).toBeGreaterThan(0);
+      expect(lead).toBeCloseTo(diff(preset), 6);
+    }
+    expect(IVC.preset1).toBeLessThan(F.cross);
+    expect(F.cross).toBeLessThanOrEqual(IVC.preset2);
+    // 경비율: eFlipPrev까지 전부 법인, eFlip부터 80%까지 전부 개인 — 기본 경비율 40%는 법인 쪽
+    const steps = Math.round((IVC.expenseMax - IVC.expenseMin) / IVC.expenseStep);
+    for (let k = 0; k <= steps; k += 1) {
+      const e = Number((IVC.expenseMin + k * IVC.expenseStep).toFixed(2));
+      if (e < F.eFlip) expect(diff(IVC.preset2, e), `경비율 ${e}`).toBeGreaterThan(0);
+      else expect(diff(IVC.preset2, e), `경비율 ${e}`).toBeLessThan(0);
+    }
+    expect(diff(IVC.preset2)).toBeGreaterThan(0);
+    expect(F.expenseMargin).toBeGreaterThan(0);
+    // 최적 급여 — 그 급여까지는 세후가 오르고 그 위로는 내려간다(산문: "그 위로는 급여를 올릴수록 줄어든다")
     for (let s = 0; s <= IVC.salaryMax; s += IVC.scanStep) {
-      expect(calcCorpAfterTax(IVC.preset2, IVC.expenseRate, s).afterTaxIncome).toBeLessThanOrEqual(F.bestAfter);
+      const at = calcCorpAfterTax(IVC.preset2, IVC.expenseRate, s).afterTaxIncome;
+      expect(at).toBeLessThanOrEqual(F.bestAfter);
+      if (s === 0) continue;
+      const before = calcCorpAfterTax(IVC.preset2, IVC.expenseRate, s - IVC.scanStep).afterTaxIncome;
+      if (s <= F.bestSalary) expect(at, `급여 ${s}`).toBeGreaterThan(before);
+      else expect(at, `급여 ${s}`).toBeLessThan(before);
     }
     expect(F.social2).toBeCloseTo(calcCorpAfterTax(IVC.preset2, IVC.expenseRate, IVC.salary).socialInsurance, 6);
+    // "보험료는 개인사업자 쪽이 더 큽니다" — 지역가입자 보험료가 법인 대표 급여 보험료보다 크다
+    expect(F.insGap2).toBeGreaterThan(0);
+    expect(F.insGap2).toBeCloseTo(F.indIns2 - F.social2, 6);
+    // 세율 역전보다 경계가 먼저 온다: 경계의 개인 과세소득이 5,000만원 구간 아래이고, 그 국면에서는 법인세·배당이 0이라
+    // 승부가 "개인 세금·보험료 > 급여 고정비"로만 갈린다
+    expect(F.crossProfit).toBeLessThan(IVC.indMidMin);
+    const atCross = calcCorpAfterTax(F.cross, IVC.expenseRate, IVC.salary);
+    expect(atCross.corpTax + atCross.dividendTax).toBe(0);
+    expect(calcIndividualAfterTax(F.cross, IVC.expenseRate).totalTax).toBeGreaterThan(F.fixedCorpCost);
+    expect(calcIndividualAfterTax(F.cross - IVC.scanStep, IVC.expenseRate).totalTax).toBeLessThanOrEqual(F.fixedCorpCost);
+    // h2 "개인 한계세율은 과세표준 5,000만원부터 앞의 것(배당 경로 저구간)을 넘는다" — 바로 아래 구간은 못 넘는다
+    expect(INCOME_TAX_BRACKETS[1].rate * (1 + LOCAL_INCOME_TAX_RATE)).toBeLessThan(F.routeLow);
+    expect(F.indMid).toBeGreaterThan(F.routeLow);
+    expect(INCOME_TAX_BRACKETS[2].min).toBe(IVC.indMidMin);
     const cap = calcIndividualAfterTax(F.capTaxable / (1 - IVC.expenseRate), IVC.expenseRate);
     expect(F.capPension).toBeCloseTo(cap.nationalPension, 6);
     expect(F.doublePension).toBeCloseTo(F.capPension, 6);
+    // 건강보험 상한: 그 과세소득 위로는 멈추고 아래에서는 아직 자라며, 매출 스캔 범위 안에서 걸린다
+    const healthAt = (taxable: number) => calcIndividualAfterTax(taxable / (1 - IVC.expenseRate), IVC.expenseRate).healthInsurance;
+    expect(healthAt(F.healthCapTaxable * 1.01)).toBeCloseTo(IVC.healthCapMonthly * 12, 4);
+    expect(healthAt(F.healthCapTaxable * 2)).toBeCloseTo(IVC.healthCapMonthly * 12, 4);
+    expect(healthAt(F.healthCapTaxable * 0.99)).toBeLessThan(IVC.healthCapMonthly * 12);
+    expect(F.doubleHealth).toBeCloseTo(F.capHealth * 2, 6);
+    expect(F.capTaxableDouble).toBeLessThan(F.healthCapTaxable);
+    expect(F.healthCapRevenue).toBeLessThan(IVC.scanMax);
     expect(F.divTax4).toBeCloseTo(calcCorpAfterTax(IVC.preset4, IVC.expenseRate, IVC.salary).dividendTax, 6);
+    // "순서가 뒤집힙니다" — 5천만원에서는 개인 부담률이 낮고 5억원에서는 법인 부담률이 낮다
+    expect(F.indBurden1).toBeLessThan(F.corpBurden1);
+    expect(F.indBurden4).toBeGreaterThan(F.corpBurden4);
+    // "배당소득세가 법인세·지방소득세와 맞먹습니다" — 어느 쪽이 크다고 쓰지 않으므로 10% 안에서만 허용한다
+    // (이전 산문은 3,510만원이 3,608만원"보다 크다"고 써서 부등호가 반대였다)
+    expect(Math.abs(F.divTax4 / F.corpTaxAll4 - 1)).toBeLessThan(0.1);
+    // "배당에 붙는 건강보험료가 빠져 있어 실제로 다 꺼내면 이보다 줄어든다" — 5억원 프리셋의 배당은 보수 외 소득 기준을 넘는다
+    expect(F.div4).toBeGreaterThan(IVC.dividendHealthThreshold);
+    // 금융소득종합과세 한계 문장도 같은 프리셋에서 실제로 해당될 때만 의미가 있다
+    expect(F.div4).toBeGreaterThan(IVC.financialIncomeTaxThreshold);
   });
 
   it("/corp-tax: 세액·실효세율 경계·세후 목표 역산·두 엔진 일치", () => {
@@ -157,6 +218,10 @@ describe("파생 다이제스트 — 인용 수치는 엔진 재계산과 일치
   it("/: 교차 도구 수치", () => {
     const F = HOME_DIGEST.facts;
     expect(F.gap).toBeCloseTo(calcCorpAfterTax(HOME.revenue, HOME.expenseRate, HOME.salary).afterTaxIncome - calcIndividualAfterTax(HOME.revenue, HOME.expenseRate).afterTaxIncome, 6);
+    // "격차의 출처는 세율이 아니라 보험료" — 세금만 합치면 법인 경로가 더 내고, 보험료 차이가 격차보다 크다
+    expect(F.taxGap).toBeGreaterThan(0);
+    expect(F.insGap).toBeGreaterThan(F.gap);
+    expect(F.gap).toBeCloseTo(F.insGap - F.taxGap, 6);
     expect(F.ctTax).toBe(ok(calculateCorpTax({ taxableIncome: HOME.corpTaxable })).tax);
     expect(F.cafeBep).toBeCloseTo(calcBreakEven(HOME.cafeFixed, HOME.cafeVar, HOME.cafeDays).breakEvenRevenue, 6);
     const labor = ok(calculateLaborCost({ monthlySalary: HOME.laborSalary, employeeCount: HOME.headcount, industryKey: "retail", includeRetirement: true }));

@@ -31,17 +31,23 @@ export const DIVIDEND_LOCAL_TAX_RATE = 0.014; // 지방소득세
 export const LOCAL_INCOME_TAX_RATE = 0.1;
 
 // 4대보험 요율 (2026년 기준, 사업주 부담분 포함)
+// 사업장 요율을 사업주·근로자 몫으로 나눠 적는다. 몫이 나뉘지 않는 지역가입자(개인사업자 본인)와
+// 두 몫을 다 내는 사용자는 employer + employee 합계를 쓴다 — 근로자 몫(절반)만 쓰면 보험료가 반토막 난다.
 export const SOCIAL_INSURANCE = {
-  // 국민연금: 사업주 4.75% + 근로자 4.75% = 9.5%
+  // 국민연금: 사업주 4.75% + 근로자 4.75% = 9.5%. 지역가입자는 9.5%를 본인이 전액 낸다
+  // (국민연금법 제88조제3항·제4항, 부칙 <제20903호, 2025.4.2.> 제4조 — 2026년 사업장 각 1만분의 475, 지역 1천분의 95)
   nationalPension: { employer: 0.0475, employee: 0.0475, upperLimit: 6_590_000 },
-  // 건강보험: 사업주 3.595% + 근로자 3.595% = 7.19%
-  healthInsurance: { employer: 0.03595, employee: 0.03595 },
-  // 장기요양: 건보의 13.14%
+  // 건강보험: 사업주 3.595% + 근로자 3.595% = 7.19%. 지역가입자 보험료율도 같은 1만분의 719다(국민건강보험법 시행령 제44조제1항)
+  // monthlyCap: 월별 보험료액 상한(국민건강보험법 제69조제6항·시행령 제32조 → 보건복지부 고시 제2025-222호 제2조, 2026.1.1. 시행).
+  //   workplace는 직장가입자 보수월액보험료(사업주·근로자 몫 합계), regional은 지역가입자 월별 보험료액에 걸린다.
+  healthInsurance: { employer: 0.03595, employee: 0.03595, monthlyCap: { workplace: 9_183_480, regional: 4_591_740 } },
+  // 장기요양: 건보의 13.14% — 상한이 걸린 뒤의 건강보험료에 곱한다(노인장기요양보험법 제9조제1항)
   longTermCare: { rate: 0.1314 },
   // 고용보험: 사업주 0.9% (150인 미만) + 근로자 0.9%
+  // 고용·산재의 '근로자'는 「근로기준법」상 근로자라(고용산재보험료징수법 제2조제2호) 직원 인건비에만 쓴다 —
+  // 법인 대표이사·개인사업자 본인에게는 당연 적용되지 않는다(bizCalc 참고).
+  // 산재보험은 업종별 요율이라 여기 두지 않고 laborCost.ts의 업종표(INDUSTRY_ACCIDENT_RATES)에서 읽는다.
   employmentInsurance: { employer: 0.009, employee: 0.009 },
-  // 산재보험: 업종별 상이, 평균 약 1.47% (사업주 전액)
-  industrialAccident: { employer: 0.0147 },
 } as const;
 
 export const DEFAULT_SIMPLIFIED_TAX_THRESHOLD = 104_000_000;
