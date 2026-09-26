@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, ref, useId } from "vue";
 import { mergeFaqs } from "@/lib/faqMerge";
 import { ShBreakdownBar, ShCalculatorSplit, ShPairRow } from "@shakilabs/ui";
 import FreshBadge from "@/components/common/FreshBadge.vue";
@@ -34,6 +34,8 @@ const seoDescription = computed(() =>
 const canonicalPath = computed(() => (props.initialTaxableIncome ? "/corp-tax" : undefined));
 
 const taxableIncome = ref(props.initialTaxableIncome ?? 500_000_000);
+// 보이는 라벨을 칸에 for/id로 잇는다 — placeholder·aria-label만으로는 값을 넣는 순간 무슨 칸인지 화면에서 사라진다
+const taxableIncomeId = useId();
 const { result, validationError } = useSafeCalculation(
   () => calculateCorpTax({ taxableIncome: taxableIncome.value }),
   calculateCorpTax({ taxableIncome: 500_000_000 }),
@@ -93,7 +95,10 @@ const faqJsonLd = computed(() => ({
           </div>
           <CalculatorInteractionTracker calculator-id="corp_tax" page-path="/biz/corp-tax">
             <div class="retro-panel-content space-y-4" role="group" :aria-describedby="validationError ? 'corp-tax-error' : undefined">
-              <input v-model.number="taxableIncome" aria-label="과세표준" type="number" min="1000000" class="retro-input w-full" placeholder="과세표준" />
+              <div>
+                <label :for="taxableIncomeId" class="mb-1.5 block text-caption font-semibold text-foreground">과세표준</label>
+                <input :id="taxableIncomeId" v-model.number="taxableIncome" type="number" min="1000000" class="retro-input w-full" placeholder="과세표준" />
+              </div>
               <p v-if="validationError" id="corp-tax-error" class="text-caption font-semibold text-destructive" role="alert">
                 {{ validationError }}
               </p>

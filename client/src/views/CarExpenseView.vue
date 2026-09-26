@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, ref, useId } from "vue";
 import { mergeFaqs } from "@/lib/faqMerge";
 import { ShBreakdownBar, ShCalculatorSplit } from "@shakilabs/ui";
 import FreshBadge from "@/components/common/FreshBadge.vue";
@@ -50,8 +50,15 @@ const faqJsonLd = {
 };
 
 const annualCost = ref(12_000_000);
-const businessUseRate = ref(0.8);
-const taxRate = ref(0.24);
+// 비율은 화면에서 %(80·24)로 받는다 — 소수(0.8·0.24) 칸은 값만 봐서는 단위를 알 수 없다.
+// 계산 함수·테스트·다이제스트는 소수 규약 그대로라 넘길 때만 /100 한다(URL·저장 입력 없음).
+const businessUsePercent = ref(80);
+const taxPercent = ref(24);
+const businessUseRate = computed(() => businessUsePercent.value / 100);
+const taxRate = computed(() => taxPercent.value / 100);
+const annualCostId = useId();
+const businessUseId = useId();
+const taxRateId = useId();
 const { result, validationError } = useSafeCalculation(
   () => calculateCarExpenseDeduction({
     annualCost: annualCost.value,
@@ -81,11 +88,30 @@ const expenseSegments = computed(() => [
             <FreshBadge :message="`${BIZ_SERVICE_UPDATED_AT} 기준`" />
           </div>
           <CalculatorInteractionTracker calculator-id="car_expense" page-path="/biz/car-expense">
-            <div class="retro-panel-content grid gap-3 md:grid-cols-3" role="group" :aria-describedby="validationError ? 'car-expense-error' : undefined">
-              <input v-model.number="annualCost" aria-label="연간 차량비" type="number" min="100000" class="retro-input" placeholder="연간 차량비" />
-              <input v-model.number="businessUseRate" aria-label="업무 사용비율" type="number" min="0.1" max="1" step="0.05" class="retro-input" placeholder="업무 사용비율" />
-              <input v-model.number="taxRate" aria-label="법인세율" type="number" min="0.06" max="0.5" step="0.01" class="retro-input" placeholder="법인세율" />
-              <p v-if="validationError" id="car-expense-error" class="text-caption font-semibold text-destructive md:col-span-3" role="alert">
+            <!-- 반폭 칸(약 500px)에서 3열이면 칸이 159px에 라벨도 없어 값만 보였다 — 금액은 한 줄, 비율 둘은 짧은 숫자 쌍이라 2열 -->
+            <div class="retro-panel-content grid gap-3 sm:grid-cols-2" role="group" :aria-describedby="validationError ? 'car-expense-error' : undefined">
+              <div class="sm:col-span-2">
+                <label :for="annualCostId" class="mb-1.5 block text-caption font-semibold text-foreground">연간 차량비</label>
+                <div class="relative">
+                  <input :id="annualCostId" v-model.number="annualCost" type="number" min="100000" class="retro-input pr-8" placeholder="연간 차량비" />
+                  <span class="absolute right-3 top-1/2 -translate-y-1/2 text-tiny text-muted-foreground">원</span>
+                </div>
+              </div>
+              <div>
+                <label :for="businessUseId" class="mb-1.5 block text-caption font-semibold text-foreground">업무 사용비율</label>
+                <div class="relative">
+                  <input :id="businessUseId" v-model.number="businessUsePercent" type="number" min="10" max="100" step="5" class="retro-input pr-8" placeholder="업무 사용비율" />
+                  <span class="absolute right-3 top-1/2 -translate-y-1/2 text-tiny text-muted-foreground">%</span>
+                </div>
+              </div>
+              <div>
+                <label :for="taxRateId" class="mb-1.5 block text-caption font-semibold text-foreground">법인세율</label>
+                <div class="relative">
+                  <input :id="taxRateId" v-model.number="taxPercent" type="number" min="6" max="50" step="1" class="retro-input pr-8" placeholder="법인세율" />
+                  <span class="absolute right-3 top-1/2 -translate-y-1/2 text-tiny text-muted-foreground">%</span>
+                </div>
+              </div>
+              <p v-if="validationError" id="car-expense-error" class="text-caption font-semibold text-destructive sm:col-span-2" role="alert">
                 {{ validationError }}
               </p>
             </div>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed, useId } from "vue";
 import { mergeFaqs } from "@/lib/faqMerge";
-import { ShBreakdownBar, ShPresetGroup, ShSlider } from "@shakilabs/ui";
+import { ShBreakdownBar, ShCalculatorSplit, ShPresetGroup, ShSlider } from "@shakilabs/ui";
 import SEOHead from "@/components/common/SEOHead.vue";
 import BizResultHero from "@/components/biz/BizResultHero.vue";
 import FaqAccordionPanel from "@/components/common/FaqAccordionPanel.vue";
@@ -18,6 +18,9 @@ import { formatWon, formatPercent } from "@/lib/utils";
 
 const orderAmount = ref(20_000);
 const monthlyOrders = ref(500);
+// 보이는 라벨을 칸에 for/id로 잇는다 — aria-label만 있으면 라벨 클릭·보조기기 이름이 화면 글자와 따로 논다
+const orderInputId = useId();
+const ordersSliderId = useId();
 
 const orderDisplay = computed({
   get: () => orderAmount.value.toLocaleString("ko-KR"),
@@ -105,77 +108,98 @@ const faqJsonLd = {
       주문 금액과 월 주문 건수로 배달앱별 수수료를 비교합니다.
     </p>
 
-    <!-- 입력 -->
-    <CalculatorInteractionTracker calculator-id="delivery_fee" page-path="/biz/delivery-fee">
-      <div class="retro-panel p-4 sm:p-5 space-y-4 mb-6">
-        <div>
-          <label class="block text-caption font-semibold text-foreground mb-1.5">건당 주문 금액</label>
-          <div class="relative">
-            <input
-              aria-label="건당 주문 금액"
-              v-model="orderDisplay"
-              type="text"
-              inputmode="numeric"
-              class="retro-input w-full pr-8"
-            />
-            <span class="absolute right-3 top-1/2 -translate-y-1/2 text-tiny text-muted-foreground">원</span>
+    <ShCalculatorSplit class="mb-6">
+      <template #input>
+        <!-- 입력 -->
+        <CalculatorInteractionTracker calculator-id="delivery_fee" page-path="/biz/delivery-fee">
+          <div class="retro-panel p-4 sm:p-5 space-y-4">
+            <div>
+              <label :for="orderInputId" class="block text-caption font-semibold text-foreground mb-1.5">건당 주문 금액</label>
+              <div class="relative">
+                <input
+                  :id="orderInputId"
+                  v-model="orderDisplay"
+                  type="text"
+                  inputmode="numeric"
+                  class="retro-input w-full pr-8"
+                />
+                <span class="absolute right-3 top-1/2 -translate-y-1/2 text-tiny text-muted-foreground">원</span>
+              </div>
+              <ShPresetGroup
+                v-model="orderAmount"
+                :options="presets"
+                label="건당 주문 금액 빠른 선택"
+                class="mt-2"
+              />
+            </div>
+
+            <div>
+              <label :for="ordersSliderId" class="block text-caption font-semibold text-foreground mb-1.5">
+                월 주문 건수: {{ monthlyOrders.toLocaleString('ko-KR') }}건
+              </label>
+              <ShSlider
+                :id="ordersSliderId"
+                v-model="monthlyOrders"
+                :min="50"
+                :max="3000"
+                :step="50"
+                :value-text="`${monthlyOrders.toLocaleString('ko-KR')}건`"
+                aria-label="월 주문 건수 슬라이더"
+              />
+              <div class="grid grid-cols-2 text-tiny text-muted-foreground tabular-nums">
+                <span class="justify-self-start">50건</span>
+                <span class="justify-self-end">3,000건</span>
+              </div>
+            </div>
           </div>
-          <ShPresetGroup
-            v-model="orderAmount"
-            :options="presets"
-            label="건당 주문 금액 빠른 선택"
-            class="mt-2"
-          />
+        </CalculatorInteractionTracker>
+      </template>
+
+      <template #result>
+        <!-- 요약 -->
+        <BizResultHero
+          v-if="bestApp"
+          :label="`총비용 최저 — ${bestApp.appName} 월 총비용`"
+          :value="formatWon(bestApp.totalFee)"
+          :sub="`입력한 가정 · 월 매출 ${formatWon(totalRevenue)} 기준`"
+        />
+        <GapComparisonBars
+          title="앱별 월 비용과 순수익"
+          note="막대는 1위보다 덜 남는 월 순수익입니다. 매출이 같아 순수익 차이는 수수료 차이와 같습니다."
+          :items="deliveryItems"
+          :format-value="formatWon"
+          better="higher"
+        />
+        <ShBreakdownBar
+          v-if="bestApp"
+          :label="`${bestApp.appName} 수수료 구성`"
+          note="최저 비용 앱의 월 총 수수료를 항목별로 나눴습니다."
+          :segments="bestAppSegments"
+          :format-value="formatWon"
+          surface="outlined"
+        />
+      </template>
+
+      <!-- 유의사항은 계산에 넣은 수수료율 가정과 출처라 입력 아래 왼쪽 칸에 둔다(모바일은 결과 뒤·비교표 앞) -->
+      <!-- 입력만 두면 결과(히어로+앱별 막대+수수료 구성)가 입력보다 367px 길어 왼쪽이 빈다(1440px 실측, 둔 뒤 204px) -->
+      <template #below-input>
+        <div class="retro-panel p-4 text-tiny text-muted-foreground space-y-1">
+          <p class="font-semibold text-foreground">유의사항</p>
+          <ul class="list-disc pl-4 space-y-0.5">
+            <li>배달의민족·쿠팡이츠는 2.0~7.8% 차등 수수료 중 6.8%를 대표값으로 계산합니다.</li>
+            <li>요기요는 상생안의 최대 인하폭을 반영한 7.8%를 비교 가정으로 사용합니다.</li>
+            <li>결제수수료·배달대행료는 공개된 단일 확정값이 아닌 비교 가정입니다.</li>
+            <li>배달대행료는 평균값이며, 거리·시간대에 따라 달라집니다.</li>
+            <li>
+              {{ BIZ_DATA_VERIFIED }} 확인 ·
+              <a :href="DELIVERY_FEE_SOURCE_URL" target="_blank" rel="noopener noreferrer" class="retro-link">중소벤처기업부 상생방안</a>
+            </li>
+          </ul>
         </div>
+      </template>
+    </ShCalculatorSplit>
 
-        <div>
-          <label class="block text-caption font-semibold text-foreground mb-1.5">
-            월 주문 건수: {{ monthlyOrders.toLocaleString('ko-KR') }}건
-          </label>
-          <ShSlider
-            v-model="monthlyOrders"
-            :min="50"
-            :max="3000"
-            :step="50"
-            :value-text="`${monthlyOrders.toLocaleString('ko-KR')}건`"
-            aria-label="월 주문 건수 슬라이더"
-          />
-          <div class="grid grid-cols-2 text-tiny text-muted-foreground tabular-nums">
-            <span class="justify-self-start">50건</span>
-            <span class="justify-self-end">3,000건</span>
-          </div>
-        </div>
-      </div>
-    </CalculatorInteractionTracker>
-
-    <!-- 요약 -->
-    <BizResultHero
-      v-if="bestApp"
-      class="mb-4"
-      :label="`총비용 최저 — ${bestApp.appName} 월 총비용`"
-      :value="formatWon(bestApp.totalFee)"
-      :sub="`입력한 가정 · 월 매출 ${formatWon(totalRevenue)} 기준`"
-    />
-
-    <div class="mb-6 grid gap-4">
-      <GapComparisonBars
-        title="앱별 월 비용과 순수익"
-        note="막대는 1위보다 덜 남는 월 순수익입니다. 매출이 같아 순수익 차이는 수수료 차이와 같습니다."
-        :items="deliveryItems"
-        :format-value="formatWon"
-        better="higher"
-      />
-      <ShBreakdownBar
-        v-if="bestApp"
-        :label="`${bestApp.appName} 수수료 구성`"
-        note="최저 비용 앱의 월 총 수수료를 항목별로 나눴습니다."
-        :segments="bestAppSegments"
-        :format-value="formatWon"
-        surface="outlined"
-      />
-    </div>
-
-    <!-- 비교 테이블 -->
+    <!-- 비교 테이블: 6열이라 반폭 칸에 넣으면 가로로 잘린다(#72 반폭 시도 때 1440px 20px·1024px 84px 가려짐) — 1×2 아래 전폭 -->
     <div class="retro-panel overflow-hidden mb-6">
       <div class="overflow-x-auto">
         <table aria-label="배달앱 수수료 비교" class="w-max min-w-full text-tiny tabular-nums">
@@ -222,20 +246,6 @@ const faqJsonLd = {
           </tbody>
         </table>
       </div>
-    </div>
-
-    <div class="retro-panel p-4 text-tiny text-muted-foreground space-y-1">
-      <p class="font-semibold text-foreground">유의사항</p>
-      <ul class="list-disc pl-4 space-y-0.5">
-        <li>배달의민족·쿠팡이츠는 2.0~7.8% 차등 수수료 중 6.8%를 대표값으로 계산합니다.</li>
-        <li>요기요는 상생안의 최대 인하폭을 반영한 7.8%를 비교 가정으로 사용합니다.</li>
-        <li>결제수수료·배달대행료는 공개된 단일 확정값이 아닌 비교 가정입니다.</li>
-        <li>배달대행료는 평균값이며, 거리·시간대에 따라 달라집니다.</li>
-        <li>
-          {{ BIZ_DATA_VERIFIED }} 확인 ·
-          <a :href="DELIVERY_FEE_SOURCE_URL" target="_blank" rel="noopener noreferrer" class="retro-link">중소벤처기업부 상생방안</a>
-        </li>
-      </ul>
     </div>
 
     <FaqAccordionPanel :items="mergedFaqs" />
