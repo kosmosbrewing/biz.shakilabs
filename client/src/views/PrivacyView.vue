@@ -162,7 +162,7 @@ const CALCULATOR_INPUTS = [
           </a>
         </p>
 
-        <p class="text-tiny text-muted-foreground mt-6">시행일: 2026년 3월 15일 · 최종 개정일: 2026년 8월 10일</p>
+        <p class="text-tiny text-muted-foreground mt-6">시행일: 2026년 3월 15일 · 최종 개정일: 2026년 9월 26일</p>
       </div>
     </div>
   </div>
