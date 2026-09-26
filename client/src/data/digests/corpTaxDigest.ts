@@ -145,7 +145,7 @@ export const CORP_TAX_DIGEST: Digest = {
         `같은 ${manwon(I.defaultTaxable)}을 개인사업자 과세표준으로 넣어 이 앱의 소득세 엔진을 돌리면 소득세와 지방소득세 합계 ${won(F.indTax)}, 실효세율 ${pct(F.indEff, 1)}가 나옵니다. 법인세 ${manwon(F.tax)}(${pct(F.eff, 1)})보다 ${manwon(F.indGap)} 많습니다. ` +
         `법인이 세후 ${manwon(F.after)}을 전부 배당하면 배당소득세 ${pct(I.dividendRate)}로 ${manwon(F.dividendTax)}이 추가되어 합계 ${manwon(F.withDividend)}, 실효 ${pct(F.withDividendEff, 1)}가 되지만, 그래도 종합소득세보다 ${manwon(F.stillLess)} 적습니다. ` +
         `이 격차는 과세표준 ${manwon(I.defaultTaxable)}이 개인 누진세율의 높은 구간에 걸리는 반면 법인은 ${manwon(I.bracket1)} 초과분에도 ${pct(I.rate2)}만 붙기 때문입니다. ` +
-        `다만 이 비교는 4대보험과 대표 급여를 뺀 세금만의 비교이므로, 보험료까지 넣은 답은 개인 vs 법인 비교 페이지가 따로 냅니다.`,
+        `다만 이 비교는 보험료(국민연금·건강보험)와 대표 급여를 뺀 세금만의 비교이므로, 보험료까지 넣은 답은 개인 vs 법인 비교 페이지가 따로 냅니다.`,
     },
     {
       h2: `${manwon(I.bracket1)}까지는 1억원당 ${manwon(F.perEokLow)}, 그 위는 1억원당 ${manwon(F.perEokHigh)} — 같은 1억원의 값이 두 배가 된다`,
