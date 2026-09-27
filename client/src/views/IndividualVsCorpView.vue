@@ -17,6 +17,7 @@ import { BIZ_INDIVIDUAL_VS_CORP_GUIDE } from "@/data/seoGuides";
 import { withDigest } from "@/data/digests";
 import { IVC_DIGEST } from "@/data/digests/ivcDigest";
 import { INDIVIDUAL_VS_CORP_FAQS, INDIVIDUAL_VS_CORP_PRESETS } from "@/data/individualVsCorpContent";
+import { EXPENSE_RATE_SLIDER } from "@/data/bizConstants";
 import CalculatorInteractionTracker from "@/components/analytics/CalculatorInteractionTracker.vue";
 import { useIndividualVsCorp } from "@/composables/useIndividualVsCorp";
 import { deductionTextClass, formatWon, formatPercent, formatManWon } from "@/lib/utils";
@@ -130,15 +131,15 @@ const faqJsonLd = computed(() => ({
               <ShSlider
                 id="biz-expense-rate"
                 v-model="expenseRate"
-                :min="0.1"
-                :max="0.8"
-                :step="0.05"
+                :min="EXPENSE_RATE_SLIDER.min"
+                :max="EXPENSE_RATE_SLIDER.max"
+                :step="EXPENSE_RATE_SLIDER.step"
                 :value-text="`경비율 ${(expenseRate * 100).toFixed(0)}%`"
                 aria-label="경비율 슬라이더"
               />
               <div class="flex justify-between text-tiny text-muted-foreground">
-                <span>10%</span>
-                <span>80%</span>
+                <span>{{ Math.round(EXPENSE_RATE_SLIDER.min * 100) }}%</span>
+                <span>{{ Math.round(EXPENSE_RATE_SLIDER.max * 100) }}%</span>
               </div>
             </div>
 

@@ -11,6 +11,7 @@ import {
   CORP_TAX_BRACKETS,
   DIVIDEND_LOCAL_TAX_RATE,
   DIVIDEND_TAX_RATE,
+  EXPENSE_RATE_SLIDER,
   INCOME_TAX_BRACKETS,
   LOCAL_INCOME_TAX_RATE,
   SOCIAL_INSURANCE,
@@ -29,9 +30,11 @@ export const IVC_INPUTS = {
   scanStep: 1_000_000,
   scanMax: 3_000_000_000,
   salaryMax: 60_000_000,
-  expenseMin: 0.1,
-  expenseMax: 0.8,
+  expenseMin: EXPENSE_RATE_SLIDER.min,
+  expenseMax: EXPENSE_RATE_SLIDER.max,
+  // 경계는 1%p로 찾되(실제 경비율은 아무 값이나 될 수 있다), 슬라이더는 sliderStep 칸만 고른다
   expenseStep: 0.01,
+  sliderStep: EXPENSE_RATE_SLIDER.step,
   pensionCapMonthly: SOCIAL_INSURANCE.nationalPension.upperLimit,
   healthCapMonthly: SOCIAL_INSURANCE.healthInsurance.monthlyCap.regional,
   // 직장가입자의 배당 등 보수 외 소득이 이 금액을 넘으면 넘는 부분에 건강보험료가 붙는다(국민건강보험법 시행령 제41조제4항).
@@ -84,6 +87,8 @@ function facts() {
   const corp = presets.map((r) => calcCorpAfterTax(r, I.expenseRate, I.salary));
   const best = bestSalary(I.preset2);
   const eFlip = expenseFlip();
+  // 슬라이더로는 eFlip 이상인 첫 칸에서 결론이 바뀌어 보인다
+  const sliderFlip = Number((I.expenseMin + Math.ceil((eFlip - I.expenseMin) / I.sliderStep - 1e-9) * I.sliderStep).toFixed(2));
   const corpLow = CORP_TAX_BRACKETS[0].rate * (1 + LOCAL_INCOME_TAX_RATE);
   const corpHigh = CORP_TAX_BRACKETS[1].rate * (1 + LOCAL_INCOME_TAX_RATE);
   const divRate = DIVIDEND_TAX_RATE + DIVIDEND_LOCAL_TAX_RATE;
@@ -120,6 +125,7 @@ function facts() {
     healthCapTaxable, healthCapRevenue: healthCapTaxable / (1 - I.expenseRate),
     // 기본 경비율에서 결론(법인 유리)이 개인 쪽으로 뒤집히려면 경비율이 얼마나 더 높아야 하는가
     eFlip, eFlipPrev: eFlip - I.expenseStep, expenseMargin: eFlip - I.expenseRate,
+    sliderFlip, sliderPrev: Number((sliderFlip - I.sliderStep).toFixed(2)),
     profitBefore: calcCorpAfterTax(I.preset2, eFlip - I.expenseStep, I.salary).operatingProfit,
     profitAtFlip: calcCorpAfterTax(I.preset2, eFlip, I.salary).operatingProfit,
     corpTax1: corp[0].corpTax, profit1: corp[0].operatingProfit, profit4: corp[3].operatingProfit,
@@ -184,7 +190,8 @@ export const IVC_DIGEST: Digest = {
     {
       h2: `매출 ${manwon(I.preset2)}의 승자는 경비율이 정한다 — ${pct(F.eFlipPrev)}까지 법인, ${pct(F.eFlip)}부터 개인`,
       body:
-        `매출을 ${manwon(I.preset2)}에 고정하고 경비율 슬라이더를 ${pct(I.expenseMin)}부터 ${pct(I.expenseMax)}까지 ${pp(I.expenseStep)}씩 옮기면, 법인이 앞서는 것은 ${pct(F.eFlipPrev)}까지이고 ${pct(F.eFlip)}부터는 개인이 앞섭니다. ` +
+        `매출을 ${manwon(I.preset2)}에 고정하고 경비율을 ${pct(I.expenseMin)}부터 ${pct(I.expenseMax)}까지 ${pp(I.expenseStep)} 간격으로 계산하면, 법인이 앞서는 것은 ${pct(F.eFlipPrev)}까지이고 ${pct(F.eFlip)}부터는 개인이 앞섭니다. ` +
+        `화면의 경비율 슬라이더는 ${pp(I.sliderStep)} 단위라, 슬라이더에서는 ${pct(F.sliderPrev)}에서 ${pct(F.sliderFlip)}로 넘어갈 때 결론이 바뀝니다. ` +
         `경계의 영업이익은 ${manwon(F.profitAtFlip)}과 ${manwon(F.profitBefore)} 사이로, 첫 발견의 매출 경계 ${manwon(F.cross)}에 경비율 ${pct(I.expenseRate)}를 적용한 영업이익 ${manwon(F.crossProfit)}과 거의 같은 자리입니다. ` +
         `즉 승부를 가르는 것은 매출도 경비율도 아니고 둘이 만드는 영업이익 하나이며, 그 경계는 ${manwon(F.profitAtFlip)} 언저리에 있습니다. ` +
         `기본 경비율 ${pct(I.expenseRate)}로 본 결과는 법인 유리이고, 결론이 개인 쪽으로 뒤집히려면 실제 경비율이 ${pp(F.expenseMargin)} 높은 ${pct(F.eFlip)}에 이르러야 합니다.`,
