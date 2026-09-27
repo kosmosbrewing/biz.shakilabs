@@ -60,6 +60,14 @@ describe("파생 다이제스트 — 인용 수치는 엔진 재계산과 일치
     }
     expect(diff(IVC.preset2)).toBeGreaterThan(0);
     expect(F.expenseMargin).toBeGreaterThan(0);
+    // 슬라이더 문장: sliderFlip은 슬라이더 칸이고 eFlip 이상인 첫 칸, 한 칸 아래는 법인·그 칸은 개인
+    const cell = (F.sliderFlip - IVC.expenseMin) / IVC.sliderStep;
+    expect(Math.abs(cell - Math.round(cell))).toBeLessThan(1e-9);
+    expect(F.sliderFlip).toBeGreaterThanOrEqual(F.eFlip - 1e-9);
+    expect(F.sliderFlip - F.eFlip).toBeLessThan(IVC.sliderStep);
+    expect(F.sliderPrev).toBeCloseTo(F.sliderFlip - IVC.sliderStep, 9);
+    expect(diff(IVC.preset2, F.sliderPrev)).toBeGreaterThan(0);
+    expect(diff(IVC.preset2, F.sliderFlip)).toBeLessThan(0);
     // 최적 급여 — 그 급여까지는 세후가 오르고 그 위로는 내려간다(산문: "그 위로는 급여를 올릴수록 줄어든다")
     for (let s = 0; s <= IVC.salaryMax; s += IVC.scanStep) {
       const at = calcCorpAfterTax(IVC.preset2, IVC.expenseRate, s).afterTaxIncome;

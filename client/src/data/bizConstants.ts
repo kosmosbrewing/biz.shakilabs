@@ -155,3 +155,7 @@ export const INDUSTRY_EXPENSE_RATIOS: Record<string, { label: string; fixedRatio
   service: { label: "서비스업", fixedRatio: 0.40, variableRatio: 0.20 },
   beauty: { label: "미용실", fixedRatio: 0.45, variableRatio: 0.15 },
 };
+
+// 개인 vs 법인 경비율 슬라이더 — 화면(ShSlider)과 파생 다이제스트가 같은 값을 쓴다.
+// 다이제스트는 경계를 1%p로 찾지만, "슬라이더에서 결론이 바뀌는 칸"은 이 step으로만 말할 수 있다.
+export const EXPENSE_RATE_SLIDER = { min: 0.1, max: 0.8, step: 0.05 } as const;
