@@ -48,15 +48,17 @@ const { result, validationError } = useSafeCalculation(
 );
 
 const amountLabel = computed(() => (props.initialSalary ? formatManWon(props.initialSalary / 10000) : null));
+// 네이버 CTR 재작성(2026-10-03, 노출 1,022·클릭 22·CTR 2.2%): 엔진이 실제로 계산하는 항목
+// (사업주 4대보험 + 퇴직급여 적립, 소득세는 제외)과 정확히 일치시킨다 — 하지 않는 일을 넣지 않는다.
 const seoTitle = computed(() =>
   amountLabel.value
-    ? `월급 ${amountLabel.value} 인건비 계산기 | 4대보험 사업주 부담`
-    : "인건비 계산기 | 4대보험·퇴직금 포함 실제 고용비용 계산",
+    ? `월급 ${amountLabel.value} 인건비 계산기 · 4대보험 사업주 부담`
+    : "인건비 계산기 · 4대보험·퇴직금 포함 1인 고용비용",
 );
 const seoDescription = computed(() =>
   amountLabel.value
     ? `월급 ${amountLabel.value}원 기준 사업주 부담 4대보험료, 퇴직급여 적립분, 실제 인건비를 계산합니다.`
-    : "월급을 입력하면 사업주 부담 4대보험, 퇴직급여, 총 인건비와 근로자 실수령액을 한눈에 확인합니다.",
+    : "월급을 입력하면 사업주 부담 4대보험(국민연금·건강·고용·산재)과 퇴직급여 적립분을 더한 1인 실제 인건비를 계산합니다.",
 );
 // 금액 변형(/labor-cost/:amount)은 기본 계산기와 동일한 본문을 프리렌더하므로
 // 중복으로 경쟁하는 대신 기본 페이지로 canonical을 모은다.
