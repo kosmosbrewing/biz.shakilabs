@@ -40,7 +40,7 @@ onBeforeUnmount(() => {
   <Button
     type="button"
     variant="outline"
-    class="h-6 min-h-0 gap-0.5 rounded-lg px-1.5 text-[11px] leading-none"
+    class="h-6 min-h-0 gap-0.5 rounded-lg px-1.5 text-caption leading-none"
     :class="copied ? '!border-status-success/50 !text-status-success' : ''"
     @click="handleCopy"
   >
