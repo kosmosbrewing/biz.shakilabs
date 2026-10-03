@@ -1,4 +1,5 @@
 import { existsSync, readFileSync } from "node:fs";
+import { validateBuiltFontSizes } from "./validate-built-font-sizes.mjs";
 import { validateNoTinyTextUtilities } from "./validate-no-tiny-text.mjs";
 import { validateParagraphLength } from "./validate-paragraph-length.mjs";
 import { dirname, resolve } from "node:path";
@@ -269,3 +270,7 @@ console.log(`Validated ${SEO_ROUTES.length} prerendered routes (${SITEMAP_ROUTES
 // v8b(2026-10-03): 13px 미만 글자 소스 게이트 + 빌드 HTML 문단 ≤250자 게이트
 validateNoTinyTextUtilities({ projectRoot });
 validateParagraphLength({ distRoot });
+
+// v8c(2026-10-04): 배포되는 CSS·HTML의 글자 크기를 직접 잰다 — 13px 미만은 차트 축 눈금(__scale)·차트 전용 text-[12px]만.
+const builtFontDeclarations = validateBuiltFontSizes({ distRoot: distRoot });
+console.log(`Validated built font sizes — ${builtFontDeclarations} declarations, 0 under 13px outside the chart-axis allowance.`);
