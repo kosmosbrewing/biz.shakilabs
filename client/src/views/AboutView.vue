@@ -11,6 +11,7 @@ const constantsStore = useConstantsStore();
 <template>
   <SEOHead
     title="서비스 안내"
+    title-kind="site"
     description="shakilabs.com/biz은 사업자를 위한 세금·손익·수수료 계산 무료 도구입니다."
   />
 

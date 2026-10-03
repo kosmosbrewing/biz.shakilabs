@@ -7,6 +7,7 @@ import { ActionCard } from "@/components/ui/action-card";
 import { Card, CardContent } from "@/components/ui/card";
 import RelatedServices from "@/components/common/RelatedServices.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
+import { APP_NAME } from "@/composables/useSEO";
 import FaqAccordionPanel from "@/components/common/FaqAccordionPanel.vue";
 import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
 import { BIZ_HOME_GUIDE } from "@/data/seoGuides";
@@ -92,8 +93,9 @@ const faqJsonLd = {
 </script>
 
 <template>
+  <!-- 함대 제목 레시피(2026-10-03): 홈은 `<앱 이름> | ShakiLabs` (useSEO.buildPageTitle) -->
   <SEOHead
-    title="사업자 계산기 | 개인vs법인·손익분기·부가세·배달앱 수수료"
+    :title="APP_NAME"
     description="개인사업자 vs 법인 세후소득, 손익분기점, 간이과세 vs 일반과세, 배달앱 수수료를 무료로 계산하세요."
     :json-ld="faqJsonLd"
   />
