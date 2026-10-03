@@ -228,7 +228,7 @@ const faqJsonLd = {
                   <span class="font-medium text-foreground">{{ r.appName }}</span>
                   <span
                     v-if="bestApp?.appKey === r.appKey"
-                    class="text-[10px] font-bold text-primary bg-primary/10 px-1.5 py-0.5 rounded"
+                    class="text-caption font-bold text-primary bg-primary/10 px-1.5 py-0.5 rounded"
                   >
                     최저
                   </span>
@@ -239,7 +239,7 @@ const faqJsonLd = {
               <td class="text-right p-3 text-destructive">{{ formatWon(r.deliveryFee) }}</td>
               <td class="text-right p-3 font-semibold text-destructive">
                 {{ formatWon(r.totalFee) }}
-                <span class="block text-[10px] text-muted-foreground">({{ formatPercent(r.feeRate) }})</span>
+                <span class="block text-caption text-muted-foreground">({{ formatPercent(r.feeRate) }})</span>
               </td>
               <td class="text-right p-3 font-semibold text-foreground">{{ formatWon(r.netRevenue) }}</td>
             </tr>

@@ -13,7 +13,7 @@ defineProps<{
 
 <template>
   <div
-    class="rounded-2xl border border-border/60 bg-muted/30 px-3.5 py-3 text-[10px] leading-4 text-foreground/90 dark:border-border/70 dark:bg-muted/20 sm:px-4 sm:text-caption"
+    class="rounded-2xl border border-border/60 bg-muted/30 px-3.5 py-3 text-caption leading-4 text-foreground/90 dark:border-border/70 dark:bg-muted/20 sm:px-4 sm:text-caption"
   >
     <div class="flex flex-wrap items-center gap-1.5">
       <BookOpen class="h-4 w-4 shrink-0 text-muted-foreground" />

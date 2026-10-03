@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { chunkParagraph } from "../../data/paragraphs";
 /**
  * SEO 리치 가이드 섹션 컴포넌트
  * 각 계산기 뷰 하단에 도메인 가이드 + FAQ + 체크리스트를 출력하여
@@ -8,7 +9,7 @@ import { ExternalLink } from "lucide-vue-next";
 
 export interface GuideSection {
   h2: string;
-  body: string;
+  body: string | string[];
 }
 
 export interface GuideFaq {
@@ -35,6 +36,11 @@ defineProps<{
   sources?: GuideSource[];
   disclaimer?: string;
 }>();
+
+// v8b: 문자열 body는 렌더 시점에 ≤250자 문단으로 나눈다(문장 경계만, 원문 불변). 배열이면 그대로.
+function paragraphsOf(body: string | string[]): string[] {
+  return Array.isArray(body) ? body : chunkParagraph(body);
+}
 </script>
 
 <template>
@@ -51,7 +57,7 @@ defineProps<{
         class="space-y-2"
       >
         <h3 class="text-base font-semibold text-foreground">{{ s.h2 }}</h3>
-        <p class="max-w-[65ch] text-sm leading-relaxed text-muted-foreground">{{ s.body }}</p>
+        <p v-for="(paragraph, pIdx) in paragraphsOf(s.body)" :key="pIdx" class="max-w-[65ch] text-sm leading-relaxed text-muted-foreground">{{ paragraph }}</p>
       </article>
     </div>
 

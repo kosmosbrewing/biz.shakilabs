@@ -136,7 +136,7 @@ onBeforeUnmount(() => {
         <div
           v-if="isVisible"
           ref="panelRef"
-          class="fixed z-50 max-w-[calc(100vw-1rem)] rounded-lg border border-border/70 bg-popover text-[11px] leading-[1.45] text-popover-foreground shadow-lg"
+          class="fixed z-50 max-w-[calc(100vw-1rem)] rounded-lg border border-border/70 bg-popover text-caption leading-[1.45] text-popover-foreground shadow-lg"
           :class="panelSizeClass"
           :style="{ left: `${pos.x}px`, top: `${pos.y}px`, transform: showBelow ? 'translateY(0)' : 'translateY(-100%)' }"
           @mouseenter="keep"

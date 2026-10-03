@@ -22,7 +22,7 @@ export const buttonVariants = cva(
         sm: "min-h-10 rounded-lg px-3.5 py-2 text-[0.8125rem] leading-[1.45]",
         lg: "min-h-11 rounded-lg px-8 py-2.5 text-[0.875rem] leading-[1.5]",
         chip: "min-h-11 rounded-xl px-3 py-1.5 text-[0.8125rem] leading-[1.45]",
-        chipSm: "min-h-9 rounded-xl px-2.5 py-1 text-[0.6875rem] leading-[1.35]",
+        chipSm: "min-h-9 rounded-xl px-2.5 py-1 text-[0.8125rem] leading-[1.45]",
         icon: "h-10 w-10 rounded-lg",
         iconSm: "h-8 w-8 rounded-lg",
       },
