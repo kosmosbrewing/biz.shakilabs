@@ -102,7 +102,7 @@ const faqJsonLd = {
 
   <div class="sh-container sh-container--page py-8 sm:py-12">
     <section class="mx-auto mb-10 border-b border-border pb-6">
-      <ShText as="h1" variant="title">사업자 계산기</ShText>
+      <ShText as="h1" variant="display">사업자 계산기</ShText>
       <ShText class="mt-2 max-w-xl" variant="body" tone="muted">
         창업 준비부터 운영까지, 사업에 필요한 세금·손익·수수료를 빠르게 계산하세요.
       </ShText>
