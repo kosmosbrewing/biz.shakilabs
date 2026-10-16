@@ -47,8 +47,13 @@ export const SEO_ROUTES = [
 
 // 사이트맵에는 self-canonical 페이지만 올린다. canonical이 다른 곳을 가리키는
 // PARAM_ROUTES를 광고하면 크롤러를 "곧바로 딴 데를 가리키는 URL"로 보내게 된다.
+
+// 색인 소거(2026-10-16, 사용자 승인): 62일 활성 사용자 8명 미만 + 네이버 TOP 30 밖인 계산기·가이드.
+// 도구는 그대로 쓰이고(내부 링크 유지) 사이트맵·색인에서만 뺀다. 네이버 클릭이 월 10+ 되면 다시 넣는다.
+// validate-noindex.mjs가 사이트맵 ⇔ noindex 없음 / 사이트맵 밖 self-canonical ⇔ noindex를 빌드마다 대조한다.
+export const NOINDEX_ROUTES = ["/car-expense", "/delivery-fee"];
 export const SITEMAP_ROUTES = SEO_ROUTES.filter(
-  (route) => !PARAM_ROUTES.includes(route)
+  (route) => !PARAM_ROUTES.includes(route) && !NOINDEX_ROUTES.includes(route),
 );
 
 // 프리렌더된 라우트의 canonical 대상: 금액 변형은 마지막 세그먼트를 떼어낸
