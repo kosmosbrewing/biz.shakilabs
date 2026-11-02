@@ -199,12 +199,16 @@ function validateRouterRoutesAreListed(sitemapUrls) {
 // 뷰가 :sections 바인딩을 원래 가이드로 되돌리면 5로 떨어져 여기서 잡힌다.
 const DIGEST_ROUTES = SITEMAP_ROUTES.filter((route) => !["/about", "/terms", "/privacy"].includes(route));
 const MIN_GUIDE_ARTICLES = 13;
+// 허브(/)는 2026-11 UI 감사에서 일반 절 5개를 뺐다 — 다이제스트 8건만 싣는다(GA4 28일 허브 조회 8).
+// 그래도 다이제스트가 빠지면(0~7) 여기서 잡힌다.
+const MIN_HUB_GUIDE_ARTICLES = 8;
 function validateDigestRendered(route) {
   const html = readFileSync(routeOutputPath(route), "utf8");
   const guide = html.match(/<section class="seo-rich-guide[\s\S]*?<\/section>/)?.[0] ?? "";
   const articles = guide.match(/<article\b/g)?.length ?? 0;
-  assert(articles >= MIN_GUIDE_ARTICLES,
-    `${route}: expected at least ${MIN_GUIDE_ARTICLES} guide articles (digest + guide), found ${articles}`);
+  const minArticles = route === "/" ? MIN_HUB_GUIDE_ARTICLES : MIN_GUIDE_ARTICLES;
+  assert(articles >= minArticles,
+    `${route}: expected at least ${minArticles} guide articles (digest + guide), found ${articles}`);
 }
 
 validateVercelConfig(resolve(repositoryRoot, "vercel.json"));

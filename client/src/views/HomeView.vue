@@ -1,16 +1,13 @@
 <script setup lang="ts">
 import { RouterLink } from "vue-router";
-import { mergeFaqs } from "@/lib/faqMerge";
-import { Building2, TrendingUp, Receipt, Truck, CarFront, Calculator, HandCoins, ArrowRight, AlertCircle } from "lucide-vue-next";
+import { Building2, TrendingUp, Receipt, Truck, CarFront, Calculator, HandCoins, ArrowRight } from "lucide-vue-next";
 import { ShText } from "@shakilabs/ui";
 import { ActionCard } from "@/components/ui/action-card";
-import { Card, CardContent } from "@/components/ui/card";
 import RelatedServices from "@/components/common/RelatedServices.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import { APP_NAME } from "@/composables/useSEO";
-import FaqAccordionPanel from "@/components/common/FaqAccordionPanel.vue";
 import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
-import { BIZ_HOME_GUIDE } from "@/data/seoGuides";
+import { BIZ_HOME_GUIDE, type GuideData } from "@/data/seoGuides";
 import { withDigest } from "@/data/digests";
 import { HOME_DIGEST } from "@/data/digests/homeDigest";
 
@@ -59,37 +56,11 @@ const tools = [
   },
 ] as const;
 
-const faqItems = [
-  {
-    q: "shakilabs.com/biz에서는 어떤 계산기를 제공하나요?",
-    a: "개인사업자 vs 법인 비교, 손익분기점 계산, 부가세 비교, 배달앱 수수료 비교, 법인세 계산, 차량 경비와 회의비 계산까지 제공합니다.",
-  },
-  {
-    q: "개인사업자와 법인 비교 결과는 실제 신고액과 같나요?",
-    a: "아닙니다. 대표적인 세율과 비용 구조를 기준으로 단순화한 참고용 계산이며 실제 공제와 감면에 따라 달라질 수 있습니다.",
-  },
-  {
-    q: "배달앱 수수료 비교는 어떤 상황에서 유용한가요?",
-    a: "플랫폼별 수수료 차이로 같은 매출에서도 남는 금액이 어떻게 달라지는지 빠르게 가늠할 때 유용합니다.",
-  },
-] as const;
-
-// 화면에 실제 렌더되는 병합 FAQ와 구조화 데이터를 일치시킨다 (스키마 규칙)
-const mergedFaqs = mergeFaqs(faqItems, BIZ_HOME_GUIDE.faqs);
-// 엔진 파생 다이제스트를 일반 가이드 섹션 앞에 싣는다 (페이지 고유 내용 우선)
-const guideSections = withDigest(BIZ_HOME_GUIDE, HOME_DIGEST);
-const faqJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: mergedFaqs.map((faq) => ({
-    "@type": "Question",
-    name: faq.q,
-    acceptedAnswer: {
-      "@type": "Answer",
-      text: faq.a,
-    },
-  })),
-};
+// 허브 가이드는 엔진 파생 다이제스트만 싣는다. 일반 절 5개("개인사업자 vs 법인 선택 기준" 등)·허브 FAQ 8문항·
+// "안내사항" 카드는 2026-11 UI 감사에서 뺐다(GA4 28일 허브 조회 8) — 각 계산기 페이지가 같은 내용을 더 정확히 다룬다.
+// BIZ_HOME_GUIDE는 다섯 도구 뷰·/about이 공유하므로 데이터는 그대로 두고, 허브용 사본에서 일반 절만 비운다.
+const BIZ_HUB_GUIDE: GuideData = { ...BIZ_HOME_GUIDE, sections: [] };
+const guideSections = withDigest(BIZ_HUB_GUIDE, HOME_DIGEST);
 </script>
 
 <template>
@@ -97,7 +68,6 @@ const faqJsonLd = {
   <SEOHead
     :title="APP_NAME"
     description="개인사업자 vs 법인 세후소득, 손익분기점, 간이과세 vs 일반과세, 배달앱 수수료를 무료로 계산하세요."
-    :json-ld="faqJsonLd"
   />
 
   <div class="sh-container sh-container--page py-8 sm:py-12">
@@ -133,28 +103,6 @@ const faqJsonLd = {
         </RouterLink>
       </ActionCard>
     </div>
-
-    <section class="mt-12 mx-auto">
-      <Card class="border-border/60">
-        <CardContent class="p-5">
-          <div class="flex items-center gap-2 mb-3">
-            <span class="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground">
-              <AlertCircle class="h-3.5 w-3.5" />
-            </span>
-            <h2 class="text-heading font-semibold text-foreground">안내사항</h2>
-          </div>
-          <ul class="space-y-1.5 text-caption text-muted-foreground list-disc pl-4">
-            <li>2026년 세법 기준으로 계산합니다.</li>
-            <li>실제 세액은 개인 상황(공제, 감면 등)에 따라 달라질 수 있습니다.</li>
-            <li>법적 효력이 없는 참고용 계산입니다. 정확한 세무는 세무사 상담을 권장합니다.</li>
-          </ul>
-        </CardContent>
-      </Card>
-    </section>
-
-    <section class="mt-6 mx-auto">
-      <FaqAccordionPanel :items="mergedFaqs" />
-    </section>
 
     <section class="mt-6 mx-auto">
       <RelatedServices />
